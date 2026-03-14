@@ -11,5 +11,7 @@ export type Catechumene = {
   rencontre_individuelle_date: string | null;
   rencontre_individuelle_texte: string | null;
   date_entree_catechumenat: string;
+  frat_id: string | null;
+  photo_path: string | null;
   created_at: string;
 };

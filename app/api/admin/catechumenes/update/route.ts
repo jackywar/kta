@@ -14,7 +14,8 @@ const bodySchema = z.object({
   annee_bapteme_previsionnelle: z.number().int().min(1900).max(2100).optional().nullable(),
   rencontre_individuelle_date: z.string().optional().nullable(),
   rencontre_individuelle_texte: z.string().optional().nullable(),
-  date_entree_catechumenat: z.string().min(1)
+  date_entree_catechumenat: z.string().min(1),
+  frat_id: z.string().uuid().optional().nullable()
 });
 
 export async function POST(req: Request) {
@@ -60,7 +61,8 @@ export async function POST(req: Request) {
       annee_bapteme_previsionnelle: d.annee_bapteme_previsionnelle ?? null,
       rencontre_individuelle_date: d.rencontre_individuelle_date?.trim() || null,
       rencontre_individuelle_texte: d.rencontre_individuelle_texte?.trim() ?? null,
-      date_entree_catechumenat: d.date_entree_catechumenat.trim()
+      date_entree_catechumenat: d.date_entree_catechumenat.trim(),
+      frat_id: d.frat_id ?? null
     })
     .eq("id", d.id);
 

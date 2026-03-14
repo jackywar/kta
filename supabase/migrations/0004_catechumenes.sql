@@ -12,6 +12,7 @@ create table if not exists public.catechumenes (
   rencontre_individuelle_date date,
   rencontre_individuelle_texte text,
   date_entree_catechumenat date not null,
+  frat_id uuid references public.frats (id) on delete set null,
   created_at timestamptz not null default now()
 );
 

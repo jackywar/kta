@@ -4,6 +4,7 @@ import { CatechumeneCreateForm } from "@/components/admin/catechumene-create-for
 import { CatechumenesTable } from "@/components/admin/catechumenes-table";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Catechumene } from "@/lib/catechumenes";
+import type { Frat } from "@/lib/frats";
 
 export default async function AdminCatechumenesPage() {
   const supabase = await createSupabaseServerClient();
@@ -29,10 +30,26 @@ export default async function AdminCatechumenesPage() {
 
   const { data: catechumenes, error: catechumenesError } = await supabase
     .from("catechumenes")
-    .select("*")
+    .select(
+      `
+      *,
+      frat:frats (
+        id,
+        name,
+        color_oklch
+      )
+    `
+    )
     .order("date_entree_catechumenat", { ascending: false });
 
   if (catechumenesError) throw new Error(catechumenesError.message);
+
+  const { data: frats, error: fratsError } = await supabase
+    .from("frats")
+    .select("id, name, color_oklch")
+    .order("name");
+
+  if (fratsError) throw new Error(fratsError.message);
 
   return (
     <main className="min-h-screen bg-zinc-50">
@@ -56,7 +73,7 @@ export default async function AdminCatechumenesPage() {
               Saisissez les informations du catéchumène.
             </p>
             <div className="mt-5">
-              <CatechumeneCreateForm />
+              <CatechumeneCreateForm frats={(frats as Frat[]) ?? []} />
             </div>
           </section>
 
@@ -65,7 +82,10 @@ export default async function AdminCatechumenesPage() {
               Catéchumènes
             </h2>
             <div className="mt-5">
-              <CatechumenesTable catechumenes={(catechumenes as Catechumene[]) ?? []} />
+              <CatechumenesTable
+                catechumenes={(catechumenes as Catechumene[]) ?? []}
+                frats={(frats as Frat[]) ?? []}
+              />
             </div>
           </section>
         </div>

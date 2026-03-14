@@ -5,7 +5,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { CATECHUMENE_PHOTOS_BUCKET } from "@/lib/storage";
 
 const bodySchema = z.object({
-  id: z.string().uuid()
+  catechumene_id: z.string().uuid()
 });
 
 export async function POST(req: Request) {
@@ -38,26 +38,33 @@ export async function POST(req: Request) {
   }
 
   const admin = createSupabaseAdminClient();
-  const { data: row } = await admin
+  const { data: row, error: fetchError } = await admin
     .from("catechumenes")
-    .select("photo_path")
-    .eq("id", parsed.data.id)
+    .select("id, photo_path")
+    .eq("id", parsed.data.catechumene_id)
     .maybeSingle();
 
-  if (row?.photo_path) {
+  if (fetchError || !row) {
+    return NextResponse.json(
+      { error: "Catéchumène introuvable" },
+      { status: 404 }
+    );
+  }
+
+  if (row.photo_path) {
     await admin.storage
       .from(CATECHUMENE_PHOTOS_BUCKET)
       .remove([row.photo_path]);
   }
 
-  const { error: deleteError } = await admin
+  const { error: updateError } = await admin
     .from("catechumenes")
-    .delete()
-    .eq("id", parsed.data.id);
+    .update({ photo_path: null })
+    .eq("id", parsed.data.catechumene_id);
 
-  if (deleteError) {
+  if (updateError) {
     return NextResponse.json(
-      { error: deleteError.message ?? "Failed to delete catechumene" },
+      { error: updateError.message ?? "Failed to update" },
       { status: 500 }
     );
   }

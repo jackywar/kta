@@ -2,6 +2,9 @@
 
 import { useMemo, useState, useTransition } from "react";
 import type { Catechumene } from "@/lib/catechumenes";
+import type { Frat } from "@/lib/frats";
+import { getCatechumenePhotoUrl } from "@/lib/storage";
+import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-field";
 
 type FormValues = {
   nom: string;
@@ -15,6 +18,7 @@ type FormValues = {
   rencontre_individuelle_date: string;
   rencontre_individuelle_texte: string;
   date_entree_catechumenat: string;
+  frat_id: string;
 };
 
 function catechumeneToForm(c: Catechumene): FormValues {
@@ -26,10 +30,14 @@ function catechumeneToForm(c: Catechumene): FormValues {
     date_naissance: c.date_naissance ?? "",
     observations: c.observations ?? "",
     aine_dans_la_foi: c.aine_dans_la_foi ?? "",
-    annee_bapteme_previsionnelle: c.annee_bapteme_previsionnelle != null ? String(c.annee_bapteme_previsionnelle) : "",
+    annee_bapteme_previsionnelle:
+      c.annee_bapteme_previsionnelle != null
+        ? String(c.annee_bapteme_previsionnelle)
+        : "",
     rencontre_individuelle_date: c.rencontre_individuelle_date ?? "",
     rencontre_individuelle_texte: c.rencontre_individuelle_texte ?? "",
-    date_entree_catechumenat: c.date_entree_catechumenat ?? ""
+    date_entree_catechumenat: c.date_entree_catechumenat ?? "",
+    frat_id: c.frat_id ?? ""
   };
 }
 
@@ -47,9 +55,11 @@ function formatDate(s: string | null): string {
 }
 
 export function CatechumenesTable({
-  catechumenes
+  catechumenes,
+  frats
 }: {
   catechumenes: Catechumene[];
+  frats: Frat[];
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<FormValues | null>(null);
@@ -94,8 +104,10 @@ export function CatechumenesTable({
           ? parseInt(editValues.annee_bapteme_previsionnelle, 10)
           : undefined,
         rencontre_individuelle_date: editValues.rencontre_individuelle_date.trim() || undefined,
-        rencontre_individuelle_texte: editValues.rencontre_individuelle_texte.trim() || undefined,
-        date_entree_catechumenat: editValues.date_entree_catechumenat.trim()
+        rencontre_individuelle_texte:
+          editValues.rencontre_individuelle_texte.trim() || undefined,
+        date_entree_catechumenat: editValues.date_entree_catechumenat.trim(),
+        frat_id: editValues.frat_id || undefined
       };
 
       const res = await fetch("/api/admin/catechumenes/update", {
@@ -146,20 +158,61 @@ export function CatechumenesTable({
           <table className="min-w-full text-left text-sm">
             <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
               <tr>
+                <th className="w-14 px-4 py-3">Photo</th>
                 <th className="px-4 py-3">Nom</th>
                 <th className="px-4 py-3">Prénom</th>
                 <th className="px-4 py-3">Email</th>
+                <th className="px-4 py-3">Frat</th>
                 <th className="px-4 py-3">Entrée</th>
                 <th className="px-4 py-3">Baptême prév.</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 bg-white">
-              {catechumenes.map((c) => (
+              {catechumenes.map((c) => {
+                const photoUrl = getCatechumenePhotoUrl(c.photo_path);
+                return (
                 <tr key={c.id} className="hover:bg-zinc-50/70">
+                  <td className="px-4 py-3">
+                    <div className="h-10 w-10 overflow-hidden rounded-full border border-zinc-200 bg-zinc-100">
+                      {photoUrl ? (
+                        <img
+                          src={photoUrl}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-zinc-400 text-xs" aria-hidden>—</div>
+                      )}
+                    </div>
+                  </td>
                   <td className="px-4 py-3 text-zinc-900">{c.nom}</td>
                   <td className="px-4 py-3 text-zinc-900">{c.prenom}</td>
                   <td className="px-4 py-3 text-zinc-600">{c.email}</td>
+                  <td className="px-4 py-3">
+                    {c.frat_id ? (
+                      <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-900">
+                        <span
+                          className="h-2 w-2 rounded-full"
+                          style={{
+                            backgroundColor:
+                              frats.find((f) => f.id === c.frat_id)
+                                ?.color_oklch ?? "#e5e5e5"
+                          }}
+                        />
+                        <span>
+                          {
+                            frats.find((f) => f.id === c.frat_id)?.name ??
+                            "Frat inconnue"
+                          }
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="text-xs text-zinc-500">
+                        Aucune frat
+                      </span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-zinc-600">
                     {formatDate(c.date_entree_catechumenat)}
                   </td>
@@ -185,7 +238,8 @@ export function CatechumenesTable({
                     </div>
                   </td>
                 </tr>
-              ))}
+              );
+              })}
             </tbody>
           </table>
         </div>
@@ -204,6 +258,12 @@ export function CatechumenesTable({
             </h2>
 
             <div className="mt-6 space-y-4">
+              <CatechumenePhotoField
+                catechumeneId={editing.id}
+                photoPath={editing.photo_path}
+                onPhotoChange={() => window.location.reload()}
+              />
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-zinc-900" htmlFor="e-nom">
@@ -231,6 +291,29 @@ export function CatechumenesTable({
                     required
                   />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-zinc-900" htmlFor="e-frat">
+                  Frat
+                </label>
+                <select
+                  id="e-frat"
+                  value={editValues.frat_id}
+                  onChange={(e) => set("frat_id", e.target.value)}
+                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                >
+                  <option value="">Aucune frat</option>
+                  {frats.map((f) => (
+                    <option
+                      key={f.id}
+                      value={f.id}
+                      style={{ backgroundColor: f.color_oklch }}
+                    >
+                      {f.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="space-y-2">

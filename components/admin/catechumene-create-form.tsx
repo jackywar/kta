@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import type { Frat } from "@/lib/frats";
 
 type FormValues = {
   nom: string;
@@ -14,6 +15,7 @@ type FormValues = {
   rencontre_individuelle_date: string;
   rencontre_individuelle_texte: string;
   date_entree_catechumenat: string;
+  frat_id: string;
 };
 
 const emptyForm: FormValues = {
@@ -27,10 +29,11 @@ const emptyForm: FormValues = {
   annee_bapteme_previsionnelle: "",
   rencontre_individuelle_date: "",
   rencontre_individuelle_texte: "",
-  date_entree_catechumenat: ""
+  date_entree_catechumenat: "",
+  frat_id: ""
 };
 
-export function CatechumeneCreateForm() {
+export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -69,7 +72,8 @@ export function CatechumeneCreateForm() {
           : undefined,
         rencontre_individuelle_date: values.rencontre_individuelle_date.trim() || undefined,
         rencontre_individuelle_texte: values.rencontre_individuelle_texte.trim() || undefined,
-        date_entree_catechumenat: values.date_entree_catechumenat.trim()
+        date_entree_catechumenat: values.date_entree_catechumenat.trim(),
+        frat_id: values.frat_id || undefined
       };
 
       const res = await fetch("/api/admin/catechumenes/create", {
@@ -134,6 +138,29 @@ export function CatechumeneCreateForm() {
             required
           />
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-zinc-900" htmlFor="c-frat">
+          Frat
+        </label>
+        <select
+          id="c-frat"
+          value={values.frat_id}
+          onChange={(e) => set("frat_id", e.target.value)}
+          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+        >
+          <option value="">Aucune frat</option>
+          {frats.map((f) => (
+            <option
+              key={f.id}
+              value={f.id}
+              style={{ backgroundColor: f.color_oklch }}
+            >
+              {f.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="space-y-2">
