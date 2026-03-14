@@ -87,7 +87,7 @@ export default async function AdminFratsPage() {
             <h2 className="text-sm font-medium text-zinc-900">Frats</h2>
             <div className="mt-5">
               <FratsTable
-              frats={(frats as FratWithResponsables[]) ?? []}
+              frats={((frats ?? []) as unknown) as FratWithResponsables[]}
               availableResponsables={responsables ?? []}
             />
             </div>
