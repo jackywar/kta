@@ -15,6 +15,14 @@ export async function POST() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const email = user.email;
+    if (!email) {
+      return NextResponse.json(
+        { error: "Aucune adresse email associée à ce compte." },
+        { status: 400 }
+      );
+    }
+
     const env = getAdminEnv();
 
     const redirectTo = `${env.APP_URL.replace(
@@ -22,7 +30,7 @@ export async function POST() {
       ""
     )}/auth/confirm?next=/auth/update-password`;
 
-    const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo
     });
 
