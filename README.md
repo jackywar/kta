@@ -1,4 +1,4 @@
-# Secu (Next.js + Supabase)
+# KTA (Next.js + Supabase)
 
 Stack: **Next.js App Router**, **TypeScript (strict)**, **Tailwind CSS v4**, **Supabase Auth + RLS**, déployable sur **Vercel**.
 

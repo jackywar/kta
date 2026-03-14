@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Secu",
-  description: "Next.js + Supabase starter"
+  title: "KTA",
+  description: "Application KTA pour la gestion du catéchuménat"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

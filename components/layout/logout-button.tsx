@@ -22,9 +22,11 @@ export function LogoutButton() {
       type="button"
       onClick={onLogout}
       disabled={isPending}
-      className="inline-flex items-center rounded-xl bg-zinc-900 px-3 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-zinc-300 bg-white text-zinc-700 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+      title="Se déconnecter"
     >
-      {isPending ? "Déconnexion…" : "Se déconnecter"}
+      <span aria-hidden="true">{isPending ? "⏳" : "⏻"}</span>
+      <span className="sr-only">Se déconnecter</span>
     </button>
   );
 }

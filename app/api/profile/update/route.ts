@@ -1,38 +1,27 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { roleSchema } from "@/lib/roles";
 
 const bodySchema = z.object({
-  id: z.string().uuid(),
-  role: roleSchema,
   first_name: z.string().trim().optional().nullable(),
   last_name: z.string().trim().optional().nullable()
 });
 
 export async function POST(req: Request) {
   const supabase = await createSupabaseServerClient();
+
   const {
-    data: { session }
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (userError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { data: me, error: meError } = await supabase
-    .from("profiles")
-    .select("id, role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (meError || !me || me.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const json = await req.json().catch(() => null);
   const parsed = bodySchema.safeParse(json);
+
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid body", details: parsed.error.flatten() },
@@ -40,15 +29,10 @@ export async function POST(req: Request) {
     );
   }
 
-  const admin = createSupabaseAdminClient();
-
   const updatePayload: {
-    role: string;
     first_name?: string | null;
     last_name?: string | null;
-  } = {
-    role: parsed.data.role
-  };
+  } = {};
 
   if ("first_name" in parsed.data) {
     updatePayload.first_name =
@@ -64,14 +48,18 @@ export async function POST(req: Request) {
         : null;
   }
 
-  const { error: updateError } = await admin
+  const { error: updateError } = await supabase
     .from("profiles")
     .update(updatePayload)
-    .eq("id", parsed.data.id);
+    .eq("id", user.id);
 
   if (updateError) {
     return NextResponse.json(
-      { error: updateError.message ?? "Failed to update role" },
+      {
+        error:
+          updateError.message ??
+          "Une erreur est survenue lors de la mise à jour du profil."
+      },
       { status: 500 }
     );
   }

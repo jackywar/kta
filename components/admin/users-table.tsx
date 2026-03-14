@@ -6,11 +6,15 @@ import { roleSchema, type Role } from "@/lib/roles";
 export type ProfileRow = {
   id: string;
   email: string;
+  first_name: string | null;
+  last_name: string | null;
   role: Role;
   created_at: string;
 };
 
 type RowState = {
+  firstName: string;
+  lastName: string;
   role: Role;
   newPassword: string;
   savingRole: boolean;
@@ -30,6 +34,8 @@ export function UsersTable({ users }: { users: ProfileRow[] }) {
       users.map((u) => [
         u.id,
         {
+          firstName: u.first_name ?? "",
+          lastName: u.last_name ?? "",
           role: u.role,
           newPassword: "",
           savingRole: false,
@@ -67,10 +73,18 @@ export function UsersTable({ users }: { users: ProfileRow[] }) {
     }));
 
     startTransition(async () => {
+      const firstName = row.firstName.trim();
+      const lastName = row.lastName.trim();
+
       await fetch("/api/admin/users/update", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id, role: row.role })
+        body: JSON.stringify({
+          id,
+          role: row.role,
+          first_name: firstName.length > 0 ? firstName : null,
+          last_name: lastName.length > 0 ? lastName : null
+        })
       });
       window.location.reload();
     });
@@ -119,6 +133,7 @@ export function UsersTable({ users }: { users: ProfileRow[] }) {
         <table className="min-w-full text-left text-sm">
           <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
             <tr>
+              <th className="px-4 py-3 min-w-[240px]">Nom</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Rôle</th>
               <th className="px-4 py-3">Nouveau mot de passe</th>
@@ -129,6 +144,8 @@ export function UsersTable({ users }: { users: ProfileRow[] }) {
           <tbody className="divide-y divide-zinc-200 bg-white">
             {users.map((u) => {
               const row = state[u.id] ?? {
+                firstName: u.first_name ?? "",
+                lastName: u.last_name ?? "",
                 role: u.role,
                 newPassword: "",
                 savingRole: false,
@@ -141,6 +158,42 @@ export function UsersTable({ users }: { users: ProfileRow[] }) {
 
               return (
                 <tr key={u.id} className="hover:bg-zinc-50/70">
+                  <td className="px-4 py-3 text-zinc-900">
+                    <div className="flex flex-col gap-1">
+                      <input
+                        type="text"
+                        value={row.firstName}
+                        onChange={(e) =>
+                          setState((prev) => ({
+                            ...prev,
+                            [u.id]: {
+                              ...prev[u.id],
+                              firstName: e.target.value
+                            }
+                          }))
+                        }
+                        placeholder="Prénom"
+                        disabled={disabledGlobally || isRowBusy}
+                        className="h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                      />
+                      <input
+                        type="text"
+                        value={row.lastName}
+                        onChange={(e) =>
+                          setState((prev) => ({
+                            ...prev,
+                            [u.id]: {
+                              ...prev[u.id],
+                              lastName: e.target.value
+                            }
+                          }))
+                        }
+                        placeholder="Nom"
+                        disabled={disabledGlobally || isRowBusy}
+                        className="h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                      />
+                    </div>
+                  </td>
                   <td className="px-4 py-3 font-medium text-zinc-900">
                     {u.email}
                   </td>

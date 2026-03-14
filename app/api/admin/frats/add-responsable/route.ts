@@ -1,14 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { roleSchema } from "@/lib/roles";
 
 const bodySchema = z.object({
-  id: z.string().uuid(),
-  role: roleSchema,
-  first_name: z.string().trim().optional().nullable(),
-  last_name: z.string().trim().optional().nullable()
+  frat_id: z.string().uuid(),
+  email: z.string().email()
 });
 
 export async function POST(req: Request) {
@@ -33,6 +29,7 @@ export async function POST(req: Request) {
 
   const json = await req.json().catch(() => null);
   const parsed = bodySchema.safeParse(json);
+
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid body", details: parsed.error.flatten() },
@@ -40,38 +37,38 @@ export async function POST(req: Request) {
     );
   }
 
-  const admin = createSupabaseAdminClient();
+  const email = parsed.data.email.toLowerCase();
 
-  const updatePayload: {
-    role: string;
-    first_name?: string | null;
-    last_name?: string | null;
-  } = {
-    role: parsed.data.role
-  };
-
-  if ("first_name" in parsed.data) {
-    updatePayload.first_name =
-      parsed.data.first_name && parsed.data.first_name.length > 0
-        ? parsed.data.first_name
-        : null;
-  }
-
-  if ("last_name" in parsed.data) {
-    updatePayload.last_name =
-      parsed.data.last_name && parsed.data.last_name.length > 0
-        ? parsed.data.last_name
-        : null;
-  }
-
-  const { error: updateError } = await admin
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .update(updatePayload)
-    .eq("id", parsed.data.id);
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
 
-  if (updateError) {
+  if (profileError || !profile) {
     return NextResponse.json(
-      { error: updateError.message ?? "Failed to update role" },
+      { error: "Utilisateur introuvable pour cet email." },
+      { status: 404 }
+    );
+  }
+
+  const { error: insertError } = await supabase
+    .from("frat_responsables")
+    .upsert(
+      {
+        frat_id: parsed.data.frat_id,
+        profile_id: profile.id
+      },
+      { onConflict: "frat_id,profile_id" }
+    );
+
+  if (insertError) {
+    return NextResponse.json(
+      {
+        error:
+          insertError.message ??
+          "Une erreur est survenue lors de l’ajout du responsable."
+      },
       { status: 500 }
     );
   }

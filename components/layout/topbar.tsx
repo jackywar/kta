@@ -15,16 +15,27 @@ export async function Topbar() {
 
   let profileRole: string | null = null;
   let isAdmin = false;
+  let displayName = "Utilisateur";
 
   if (!userError && user) {
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role, first_name, last_name")
       .eq("id", user.id)
       .maybeSingle();
 
-      profileRole = profile?.role ?? null;
+    profileRole = profile?.role ?? null;
     isAdmin = profile?.role === "admin";
+
+    if (profile) {
+      const fullName = [profile.first_name, profile.last_name]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
+      if (fullName.length > 0) {
+        displayName = fullName;
+      }
+    }
   }
 
   return (
@@ -35,18 +46,34 @@ export async function Topbar() {
             href="/"
             className="text-sm font-semibold tracking-tight text-zinc-900"
           >
-            Secu
+            KTA
           </Link>
           {isAdmin ? (
-            <Link
-              href="/admin/users"
-              className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-            >
-              Administration
-            </Link>
+            <>
+              <Link
+                href="/admin/users"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Users
+              </Link>
+              <Link
+                href="/admin/frats"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Frats
+              </Link>
+            </>
           ) : null}
         </div>
-        <LogoutButton />
+        <div className="flex items-center gap-3">
+          <Link
+            href="/profile"
+            className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+          >
+            {displayName}
+          </Link>
+          <LogoutButton />
+        </div>
       </div>
     </header>
   );
