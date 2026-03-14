@@ -62,6 +62,12 @@ export async function Topbar() {
               >
                 Frats
               </Link>
+              <Link
+                href="/admin/catechumenes"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Catéchumènes
+              </Link>
             </>
           ) : null}
         </div>
