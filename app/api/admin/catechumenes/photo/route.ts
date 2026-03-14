@@ -24,7 +24,8 @@ export async function POST(req: Request) {
     .eq("id", session.user.id)
     .maybeSingle();
 
-  if (meError || !me || me.role !== "admin") {
+  const allowedRoles = ["admin", "responsable"];
+  if (meError || !me || !allowedRoles.includes(me.role)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

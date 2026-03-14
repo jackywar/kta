@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Frat } from "@/lib/frats";
 
@@ -33,7 +34,14 @@ const emptyForm: FormValues = {
   frat_id: ""
 };
 
-export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
+export function CatechumeneCreateForm({
+  frats,
+  redirectOnSuccess
+}: {
+  frats: Frat[];
+  redirectOnSuccess?: string;
+}) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -41,16 +49,8 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
 
   const canSubmit = useMemo(
     () =>
-      values.nom.trim().length > 0 &&
-      values.prenom.trim().length > 0 &&
-      values.email.trim().length > 0 &&
-      values.date_entree_catechumenat.trim().length > 0,
-    [
-      values.nom,
-      values.prenom,
-      values.email,
-      values.date_entree_catechumenat
-    ]
+      values.nom.trim().length > 0 && values.prenom.trim().length > 0,
+    [values.nom, values.prenom]
   );
 
   async function onSubmit(e: React.FormEvent) {
@@ -62,7 +62,7 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
       const body = {
         nom: values.nom.trim(),
         prenom: values.prenom.trim(),
-        email: values.email.trim(),
+        email: values.email.trim() || undefined,
         telephone: values.telephone.trim() || undefined,
         date_naissance: values.date_naissance.trim() || undefined,
         observations: values.observations.trim() || undefined,
@@ -72,7 +72,7 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
           : undefined,
         rencontre_individuelle_date: values.rencontre_individuelle_date.trim() || undefined,
         rencontre_individuelle_texte: values.rencontre_individuelle_texte.trim() || undefined,
-        date_entree_catechumenat: values.date_entree_catechumenat.trim(),
+        date_entree_catechumenat: values.date_entree_catechumenat.trim() || undefined,
         frat_id: values.frat_id || undefined
       };
 
@@ -98,7 +98,12 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
 
       setValues({ ...emptyForm });
       setSuccess("Catéchumène créé.");
-      window.location.reload();
+      if (redirectOnSuccess) {
+        router.push(redirectOnSuccess);
+        router.refresh();
+      } else {
+        window.location.reload();
+      }
     });
   }
 
@@ -165,7 +170,7 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
 
       <div className="space-y-2">
         <label className="text-sm font-medium text-zinc-900" htmlFor="c-email">
-          Email
+          Email <span className="text-zinc-400">(facultatif)</span>
         </label>
         <input
           id="c-email"
@@ -175,7 +180,6 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
           onChange={(e) => set("email", e.target.value)}
           className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
           placeholder="marie@exemple.fr"
-          required
         />
       </div>
 
@@ -197,7 +201,7 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <label className="text-sm font-medium text-zinc-900" htmlFor="c-date-naissance">
-            Date de naissance
+            Date de naissance <span className="text-zinc-400">(facultatif)</span>
           </label>
           <input
             id="c-date-naissance"
@@ -209,7 +213,7 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
         </div>
         <div className="space-y-2">
           <label className="text-sm font-medium text-zinc-900" htmlFor="c-date-entree">
-            Date d&apos;entrée en catéchuménat
+            Date d&apos;entrée en catéchuménat <span className="text-zinc-400">(facultatif)</span>
           </label>
           <input
             id="c-date-entree"
@@ -217,7 +221,6 @@ export function CatechumeneCreateForm({ frats }: { frats: Frat[] }) {
             value={values.date_entree_catechumenat}
             onChange={(e) => set("date_entree_catechumenat", e.target.value)}
             className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
-            required
           />
         </div>
       </div>

@@ -95,7 +95,7 @@ export function CatechumenesTable({
         id: editingId,
         nom: editValues.nom.trim(),
         prenom: editValues.prenom.trim(),
-        email: editValues.email.trim(),
+        email: editValues.email.trim() || undefined,
         telephone: editValues.telephone.trim() || undefined,
         date_naissance: editValues.date_naissance.trim() || undefined,
         observations: editValues.observations.trim() || undefined,
@@ -106,7 +106,7 @@ export function CatechumenesTable({
         rencontre_individuelle_date: editValues.rencontre_individuelle_date.trim() || undefined,
         rencontre_individuelle_texte:
           editValues.rencontre_individuelle_texte.trim() || undefined,
-        date_entree_catechumenat: editValues.date_entree_catechumenat.trim(),
+        date_entree_catechumenat: editValues.date_entree_catechumenat.trim() || undefined,
         frat_id: editValues.frat_id || undefined
       };
 
@@ -188,7 +188,7 @@ export function CatechumenesTable({
                   </td>
                   <td className="px-4 py-3 text-zinc-900">{c.nom}</td>
                   <td className="px-4 py-3 text-zinc-900">{c.prenom}</td>
-                  <td className="px-4 py-3 text-zinc-600">{c.email}</td>
+                  <td className="px-4 py-3 text-zinc-600">{c.email ?? "—"}</td>
                   <td className="px-4 py-3">
                     {c.frat_id ? (
                       <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-900">

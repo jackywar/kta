@@ -15,6 +15,7 @@ export async function Topbar() {
 
   let profileRole: string | null = null;
   let isAdmin = false;
+  let isResponsable = false;
   let displayName = "Utilisateur";
 
   if (!userError && user) {
@@ -26,6 +27,7 @@ export async function Topbar() {
 
     profileRole = profile?.role ?? null;
     isAdmin = profile?.role === "admin";
+    isResponsable = profile?.role === "responsable";
 
     if (profile) {
       const fullName = [profile.first_name, profile.last_name]
@@ -69,6 +71,14 @@ export async function Topbar() {
                 Catéchumènes
               </Link>
             </>
+          ) : null}
+          {isResponsable ? (
+            <Link
+              href="/responsable/catechumenes"
+              className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+            >
+              {isAdmin ? "Mes catéchumènes" : "Catéchumènes"}
+            </Link>
           ) : null}
         </div>
         <div className="flex items-center gap-3">
