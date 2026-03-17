@@ -71,7 +71,13 @@ function eventToEditValues(e: Event): EditValues {
   };
 }
 
-export function ResponsableEventsCalendar({ events }: { events: Event[] }) {
+export function ResponsableEventsCalendar({
+  events,
+  readOnly = false
+}: {
+  events: Event[];
+  readOnly?: boolean;
+}) {
   const [viewMode, setViewMode] = useState<ViewMode>("calendar");
   const [month, setMonth] = useState<Date>(() => startOfMonth(new Date()));
   const [dateFrom, setDateFrom] = useState<string>("");
@@ -445,20 +451,24 @@ export function ResponsableEventsCalendar({ events }: { events: Event[] }) {
             ) : null}
 
             <div className="mt-6 flex gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  setEditing(eventToEditValues(selected));
-                  setSelected(null);
-                }}
-                className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800"
-              >
-                Modifier
-              </button>
+              {!readOnly ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditing(eventToEditValues(selected));
+                    setSelected(null);
+                  }}
+                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800"
+                >
+                  Modifier
+                </button>
+              ) : null}
               <button
                 type="button"
                 onClick={() => setSelected(null)}
-                className="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                className={`inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50 ${
+                  readOnly ? "flex-1" : ""
+                }`}
               >
                 Fermer
               </button>
@@ -522,7 +532,7 @@ export function ResponsableEventsCalendar({ events }: { events: Event[] }) {
         </div>
       ) : null}
 
-      {editing ? (
+      {!readOnly && editing ? (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
