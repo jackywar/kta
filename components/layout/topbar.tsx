@@ -53,6 +53,12 @@ export async function Topbar() {
           {isAdmin ? (
             <>
               <Link
+                href="/admin/events"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Évènements
+              </Link>
+              <Link
                 href="/admin/users"
                 className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
               >
@@ -72,13 +78,28 @@ export async function Topbar() {
               </Link>
             </>
           ) : null}
+          {null}
           {isResponsable ? (
-            <Link
-              href="/responsable/catechumenes"
-              className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-            >
-              {isAdmin ? "Mes catéchumènes" : "Catéchumènes"}
-            </Link>
+            <>
+              <Link
+                href="/responsable/frats"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Frats
+              </Link>
+              <Link
+                href="/responsable/events"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Évènements
+              </Link>
+              <Link
+                href="/responsable/catechumenes"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                {isAdmin ? "Mes catéchumènes" : "Catéchumènes"}
+              </Link>
+            </>
           ) : null}
         </div>
         <div className="flex items-center gap-3">
