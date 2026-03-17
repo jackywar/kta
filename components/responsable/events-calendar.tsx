@@ -77,6 +77,10 @@ export function ResponsableEventsCalendar({ events }: { events: Event[] }) {
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
   const [selected, setSelected] = useState<Event | null>(null);
+  const [dayPicker, setDayPicker] = useState<{
+    iso: string;
+    events: Event[];
+  } | null>(null);
   const [editing, setEditing] = useState<EditValues | null>(null);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -332,22 +336,41 @@ export function ResponsableEventsCalendar({ events }: { events: Event[] }) {
                     </div>
                   </div>
                   <div className="mt-2 space-y-1">
-                    {dayEvents.slice(0, 3).map((e) => (
+                    {/* Desktop/tablet: afficher le texte des évènements */}
+                    <div className="hidden sm:block space-y-1">
+                      {dayEvents.slice(0, 3).map((e) => (
+                        <button
+                          key={e.id}
+                          type="button"
+                          onClick={() => setSelected(e)}
+                          className="block w-full truncate rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 text-left text-xs text-zinc-800 hover:bg-zinc-100"
+                          title={e.libelle}
+                        >
+                          <span className="font-medium">{e.type}</span>{" "}
+                          <span className="text-zinc-600">— {e.libelle}</span>
+                        </button>
+                      ))}
+                      {dayEvents.length > 3 ? (
+                        <div className="text-xs text-zinc-500">
+                          +{dayEvents.length - 3}
+                        </div>
+                      ) : null}
+                    </div>
+
+                    {/* Mobile: icône cliquable + compteur */}
+                    {dayEvents.length > 0 ? (
                       <button
-                        key={e.id}
                         type="button"
-                        onClick={() => setSelected(e)}
-                        className="block w-full truncate rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 text-left text-xs text-zinc-800 hover:bg-zinc-100"
-                        title={e.libelle}
+                        onClick={() => setDayPicker({ iso, events: dayEvents })}
+                        className="sm:hidden inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+                        aria-label={`Voir les évènements du ${formatDateLong(iso)}`}
                       >
-                        <span className="font-medium">{e.type}</span>{" "}
-                        <span className="text-zinc-600">— {e.libelle}</span>
+                        <span
+                          className="inline-block h-2.5 w-2.5 rounded-full bg-zinc-700"
+                          aria-hidden
+                        />
+                        <span>{dayEvents.length}</span>
                       </button>
-                    ))}
-                    {dayEvents.length > 3 ? (
-                      <div className="text-xs text-zinc-500">
-                        +{dayEvents.length - 3}
-                      </div>
                     ) : null}
                   </div>
                 </div>
@@ -439,6 +462,61 @@ export function ResponsableEventsCalendar({ events }: { events: Event[] }) {
               >
                 Fermer
               </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {dayPicker ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="day-events-title"
+        >
+          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
+            <div className="flex items-start justify-between gap-4">
+              <h2
+                id="day-events-title"
+                className="text-lg font-semibold text-zinc-900 capitalize"
+              >
+                {formatDateLong(dayPicker.iso)}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setDayPicker(null)}
+                className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+              >
+                Fermer
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-2">
+              {dayPicker.events.map((e) => (
+                <button
+                  key={e.id}
+                  type="button"
+                  onClick={() => {
+                    setDayPicker(null);
+                    setSelected(e);
+                  }}
+                  className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-left text-sm shadow-sm transition hover:bg-zinc-50"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="truncate font-medium text-zinc-900">
+                        {e.libelle}
+                      </div>
+                      <div className="mt-0.5 truncate text-xs text-zinc-600">
+                        {e.lieu}
+                      </div>
+                    </div>
+                    <span className="shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-xs font-medium text-zinc-700">
+                      {e.type}
+                    </span>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         </div>
