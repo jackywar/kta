@@ -64,6 +64,19 @@ export default async function AdminCatechumeneDetailPage({
 
   const catechumene = row as unknown as CatechumeneWithFrat;
 
+  const { data: linkedProfile, error: linkedProfileError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("role", "catechumene")
+    .eq("catechumene_id", id)
+    .maybeSingle();
+
+  if (linkedProfileError) {
+    throw new Error(linkedProfileError.message);
+  }
+
+  const isUserLinked = !!linkedProfile;
+
   const { data: events, error: eventsError } = await supabase
     .from("events")
     .select("id, date, libelle")
@@ -91,7 +104,11 @@ export default async function AdminCatechumeneDetailPage({
           </Link>
         </div>
 
-        <CatechumeneDetail catechumene={catechumene} formatDate={formatDate} />
+        <CatechumeneDetail
+          catechumene={catechumene}
+          formatDate={formatDate}
+          isUserLinked={isUserLinked}
+        />
 
         <CatechumeneAttendanceRead
           catechumeneId={id}
