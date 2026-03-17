@@ -1,10 +1,12 @@
 import { getCatechumenePhotoUrl } from "@/lib/storage";
+import { CatechumeneLinkUserButton } from "@/components/catechumene/catechumene-link-user-button";
 import { MarkdownContent } from "@/components/ui/markdown-content";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
 
 type Props = {
   catechumene: CatechumeneWithFrat;
   formatDate: (s: string | null) => string;
+  isUserLinked: boolean;
 };
 
 function Field({
@@ -27,7 +29,11 @@ function Field({
   );
 }
 
-export function CatechumeneDetail({ catechumene, formatDate }: Props) {
+export function CatechumeneDetail({
+  catechumene,
+  formatDate,
+  isUserLinked
+}: Props) {
   const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path);
   const borderColor =
     catechumene.frat?.color_oklch?.trim() || "rgb(161 161 170)";
@@ -73,6 +79,13 @@ export function CatechumeneDetail({ catechumene, formatDate }: Props) {
                 </span>
               </p>
             ) : null}
+          </div>
+          <div className="mt-4 sm:mt-0">
+            <CatechumeneLinkUserButton
+              catechumeneId={catechumene.id}
+              email={catechumene.email ?? null}
+              isLinked={isUserLinked}
+            />
           </div>
         </div>
       </div>

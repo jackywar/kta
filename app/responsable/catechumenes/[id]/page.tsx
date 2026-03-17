@@ -64,6 +64,20 @@ export default async function ResponsableCatechumeneDetailPage({
 
   const catechumene = row as unknown as CatechumeneWithFrat;
 
+  const { data: linkedProfile, error: linkedProfileError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("role", "catechumene")
+    .eq("catechumene_id", id)
+    .maybeSingle();
+
+  if (linkedProfileError && linkedProfileError.code !== "PGRST116") {
+    // PGRST116 = not found / no rows, which is fine
+    throw new Error(linkedProfileError.message);
+  }
+
+  const isUserLinked = !!linkedProfile;
+
   const { data: events, error: eventsError } = await supabase
     .from("events")
     .select("id, date, libelle")
@@ -97,7 +111,11 @@ export default async function ResponsableCatechumeneDetailPage({
           </Link>
         </div>
 
-        <CatechumeneDetail catechumene={catechumene} formatDate={formatDate} />
+        <CatechumeneDetail
+          catechumene={catechumene}
+          formatDate={formatDate}
+          isUserLinked={isUserLinked}
+        />
 
         <CatechumeneAttendanceRead
           catechumeneId={id}

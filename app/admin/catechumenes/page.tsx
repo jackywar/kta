@@ -51,6 +51,20 @@ export default async function AdminCatechumenesPage() {
 
   if (fratsError) throw new Error(fratsError.message);
 
+  const { data: linkedProfiles, error: linkedProfilesError } = await supabase
+    .from("profiles")
+    .select("catechumene_id")
+    .eq("role", "catechumene")
+    .not("catechumene_id", "is", null);
+
+  if (linkedProfilesError) throw new Error(linkedProfilesError.message);
+
+  const linkedByCatechumeneId = new Set(
+    (linkedProfiles ?? [])
+      .map((p) => (p as { catechumene_id: string | null }).catechumene_id)
+      .filter((id): id is string => !!id)
+  );
+
   return (
     <main className="min-h-screen bg-zinc-50">
       <Topbar />
@@ -85,6 +99,7 @@ export default async function AdminCatechumenesPage() {
               <CatechumenesTable
                 catechumenes={(catechumenes as Catechumene[]) ?? []}
                 frats={(frats as Frat[]) ?? []}
+                linkedByCatechumeneId={linkedByCatechumeneId}
               />
             </div>
           </section>

@@ -56,10 +56,12 @@ function formatDate(s: string | null): string {
 
 export function CatechumenesTable({
   catechumenes,
-  frats
+  frats,
+  linkedByCatechumeneId
 }: {
   catechumenes: Catechumene[];
   frats: Frat[];
+  linkedByCatechumeneId: Set<string>;
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<FormValues | null>(null);
@@ -143,6 +145,33 @@ export function CatechumenesTable({
     if (res.ok) window.location.reload();
   }
 
+  async function handleCreateUser(catechumeneId: string) {
+    const confirmMsg =
+      "Créer un utilisateur lié à ce catéchumène et lui envoyer un email d'activation ?";
+    if (!confirm(confirmMsg)) return;
+    setError(null);
+    startTransition(async () => {
+      const res = await fetch("/api/admin/catechumenes/create-user", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ catechumene_id: catechumeneId })
+      });
+      const data: unknown = await res.json().catch(() => null);
+      if (!res.ok) {
+        const msg =
+          (typeof data === "object" &&
+            data &&
+            "error" in data &&
+            typeof (data as { error: unknown }).error === "string" &&
+            (data as { error: string }).error) ||
+          "Erreur lors de la création de l'utilisateur.";
+        setError(msg);
+        return;
+      }
+      window.location.reload();
+    });
+  }
+
   if (catechumenes.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-zinc-200 p-6 text-sm text-zinc-600">
@@ -165,6 +194,7 @@ export function CatechumenesTable({
                 <th className="px-4 py-3">Frat</th>
                 <th className="px-4 py-3">Entrée</th>
                 <th className="px-4 py-3">Baptême prév.</th>
+                <th className="px-4 py-3">User</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
@@ -218,6 +248,27 @@ export function CatechumenesTable({
                   </td>
                   <td className="px-4 py-3 text-zinc-600">
                     {c.annee_bapteme_previsionnelle ?? "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {linkedByCatechumeneId.has(c.id) ? (
+                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                        Utilisateur lié
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleCreateUser(c.id)}
+                        disabled={isPending || !c.email}
+                        className="inline-flex h-8 items-center justify-center rounded-lg border border-blue-200 bg-blue-50 px-3 text-xs font-medium text-blue-700 shadow-sm transition hover:bg-blue-100 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-zinc-50 disabled:text-zinc-400"
+                        title={
+                          c.email
+                            ? "Créer un utilisateur pour ce catéchumène"
+                            : "Renseignez un email avant de créer l'utilisateur"
+                        }
+                      >
+                        Créer l&apos;utilisateur
+                      </button>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
