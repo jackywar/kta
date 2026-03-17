@@ -16,6 +16,7 @@ export async function Topbar() {
   let profileRole: string | null = null;
   let isAdmin = false;
   let isResponsable = false;
+  let isCatechumene = false;
   let displayName = "Utilisateur";
 
   if (!userError && user) {
@@ -28,6 +29,7 @@ export async function Topbar() {
     profileRole = profile?.role ?? null;
     isAdmin = profile?.role === "admin";
     isResponsable = profile?.role === "responsable";
+    isCatechumene = profile?.role === "catechumene";
 
     if (profile) {
       const fullName = [profile.first_name, profile.last_name]
@@ -100,6 +102,14 @@ export async function Topbar() {
                 {isAdmin ? "Mes catéchumènes" : "Catéchumènes"}
               </Link>
             </>
+          ) : null}
+          {isCatechumene ? (
+            <Link
+              href="/catechumene/frat"
+              className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+            >
+              Ma frat
+            </Link>
           ) : null}
         </div>
         <div className="flex items-center gap-3">
