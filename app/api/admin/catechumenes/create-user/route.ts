@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { getAdminEnv } from "@/lib/supabase/env";
 
 const bodySchema = z.object({
   catechumene_id: z.string().uuid()
@@ -61,10 +62,17 @@ export async function POST(req: Request) {
   }
 
   const admin = createSupabaseAdminClient();
+  const env = getAdminEnv();
+
+  const redirectTo = `${env.APP_URL.replace(
+    /\/$/,
+    ""
+  )}/auth/confirm?next=/auth/update-password`;
 
   // Crée l'utilisateur + envoie le mail d'activation
   const { data: invited, error: inviteError } =
     await admin.auth.admin.inviteUserByEmail(c.email.toLowerCase(), {
+      redirectTo,
       data: {
         first_name: c.prenom,
         last_name: c.nom
