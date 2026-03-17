@@ -231,7 +231,7 @@ export function EventsTable({ events }: { events: Event[] }) {
         >
           <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
             <h2 id="edit-event-title" className="text-lg font-semibold text-zinc-900">
-              Modifier l'évènement
+              Modifier l&apos;évènement
             </h2>
 
             <div className="mt-5 space-y-4">
@@ -252,7 +252,7 @@ export function EventsTable({ events }: { events: Event[] }) {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-zinc-900" htmlFor="ee-type">
-                    Type d'évènement
+                    Type d&apos;évènement
                   </label>
                   <select
                     id="ee-type"
