@@ -308,7 +308,80 @@ export function CatechumeneAttendanceAdd({
               </button>
             </div>
 
-            <div className="mt-4 overflow-hidden rounded-xl border border-zinc-200">
+            {/* Mobile: cartes */}
+            <div className="mt-4 space-y-3 sm:hidden">
+              {candidates.length === 0 ? (
+                <div className="rounded-xl border border-zinc-200 bg-white px-4 py-4 text-center text-sm text-zinc-500">
+                  Aucun évènement disponible.
+                </div>
+              ) : (
+                candidates.map((e) => {
+                  const row = state[e.id] ?? {
+                    selected: false,
+                    absence_justifiee: false,
+                    justificatif: ""
+                  };
+                  return (
+                    <div
+                      key={e.id}
+                      className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm"
+                    >
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          checked={row.selected}
+                          onChange={(ev) =>
+                            setRow(e.id, { selected: ev.target.checked })
+                          }
+                          className="mt-1 h-4 w-4 shrink-0 accent-zinc-900"
+                          aria-label="Sélectionner l'évènement"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm font-medium text-zinc-900">
+                            {formatDateShort(e.date)} — {e.libelle}
+                          </div>
+
+                          <div className="mt-2 flex items-center gap-2 text-sm text-zinc-700">
+                            <input
+                              id={`aj-${e.id}`}
+                              type="checkbox"
+                              checked={row.absence_justifiee}
+                              onChange={(ev) =>
+                                setRow(e.id, {
+                                  absence_justifiee: ev.target.checked,
+                                  justificatif: ev.target.checked
+                                    ? row.justificatif
+                                    : ""
+                                })
+                              }
+                              className="h-4 w-4 accent-zinc-900"
+                            />
+                            <label htmlFor={`aj-${e.id}`}>Absence justifiée</label>
+                          </div>
+
+                          {row.absence_justifiee ? (
+                            <div className="mt-2">
+                              <input
+                                type="text"
+                                value={row.justificatif}
+                                onChange={(ev) =>
+                                  setRow(e.id, { justificatif: ev.target.value })
+                                }
+                                placeholder="Justificatif (optionnel)"
+                                className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                              />
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Desktop: tableau */}
+            <div className="mt-4 hidden overflow-hidden rounded-xl border border-zinc-200 sm:block">
               <div className="overflow-x-auto">
                 <table className="min-w-full text-left text-sm">
                   <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
@@ -325,7 +398,7 @@ export function CatechumeneAttendanceAdd({
                       <tr>
                         <td
                           className="px-4 py-4 text-center text-sm text-zinc-500"
-                          colSpan={6}
+                          colSpan={5}
                         >
                           Aucun évènement disponible.
                         </td>
@@ -337,7 +410,6 @@ export function CatechumeneAttendanceAdd({
                           absence_justifiee: false,
                           justificatif: ""
                         };
-
                         return (
                           <tr key={e.id} className="hover:bg-zinc-50/70">
                             <td className="px-4 py-3">
@@ -369,7 +441,7 @@ export function CatechumeneAttendanceAdd({
                                       : ""
                                   })
                                 }
-                                className="h-4 w-4 accent-zinc-900 disabled:opacity-50"
+                                className="h-4 w-4 accent-zinc-900"
                                 aria-label="Absence justifiée"
                               />
                             </td>

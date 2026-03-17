@@ -51,6 +51,7 @@ export function CatechumeneAttendanceRead({
         date: e.date,
         libelle: e.libelle,
         status,
+        isJustifiedAbsence: att.absence_justifiee,
         justificatif: att.justificatif ?? ""
       };
     })
@@ -59,6 +60,7 @@ export function CatechumeneAttendanceRead({
     date: string;
     libelle: string;
     status: string;
+    isJustifiedAbsence: boolean;
     justificatif: string;
   }[];
 
@@ -85,32 +87,46 @@ export function CatechumeneAttendanceRead({
         Liste des évènements pour lesquels une présence a été saisie.
       </p>
 
-      <div className="mt-4 space-y-2">
+      <div className="mt-4 space-y-2 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
         {rows.map((r) => (
           <div
             key={r.id}
-            className="flex flex-col gap-1 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-800 sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-800"
           >
-            <div className="space-y-0.5">
-              <div className="font-medium">
-                {formatDateShort(r.date)} — {r.libelle}
-              </div>
-              <div className="text-xs text-zinc-600">{r.status}</div>
-              {r.justificatif ? (
-                <div className="text-xs text-zinc-500">
-                  Justificatif : {r.justificatif}
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className="font-medium text-zinc-900 break-words">
+                  {formatDateShort(r.date)} — {r.libelle}
                 </div>
-              ) : null}
+                <div className="mt-1">
+                  <span
+                    className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${
+                      r.isJustifiedAbsence
+                        ? "border-amber-200 bg-amber-50 text-amber-900"
+                        : "border-emerald-200 bg-emerald-50 text-emerald-800"
+                    }`}
+                  >
+                    {r.status}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleDelete(r.id)}
+                className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                title="Supprimer la présence"
+                aria-label="Supprimer la présence"
+              >
+                🗑️
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => handleDelete(r.id)}
-              className="mt-2 inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50 sm:mt-0"
-              title="Supprimer la présence"
-              aria-label="Supprimer la présence"
-            >
-              🗑️
-            </button>
+
+            {r.justificatif ? (
+              <div className="text-xs text-zinc-600">
+                <span className="font-medium text-zinc-700">Justificatif :</span>{" "}
+                {r.justificatif}
+              </div>
+            ) : null}
           </div>
         ))}
       </div>
