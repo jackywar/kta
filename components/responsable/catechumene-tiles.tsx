@@ -98,9 +98,11 @@ export function CatechumeneTilesWithFilter({
 }
 
 export function CatechumeneTiles({
-  catechumenes
+  catechumenes,
+  clickable = true
 }: {
   catechumenes: CatechumeneWithFrat[];
+  clickable?: boolean;
 }) {
   if (catechumenes.length === 0) {
     return (
@@ -114,26 +116,38 @@ export function CatechumeneTiles({
     <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {catechumenes.map((c) => (
         <li key={c.id}>
-          <Link
-            href={`/responsable/catechumenes/${c.id}`}
-            className="block focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 rounded-2xl"
-          >
-            <CatechumeneTile catechumene={c} />
-          </Link>
+          {clickable ? (
+            <Link
+              href={`/responsable/catechumenes/${c.id}`}
+              className="block rounded-2xl focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2"
+            >
+              <CatechumeneTile catechumene={c} clickable />
+            </Link>
+          ) : (
+            <CatechumeneTile catechumene={c} clickable={false} />
+          )}
         </li>
       ))}
     </ul>
   );
 }
 
-function CatechumeneTile({ catechumene }: { catechumene: CatechumeneWithFrat }) {
+function CatechumeneTile({
+  catechumene,
+  clickable = true
+}: {
+  catechumene: CatechumeneWithFrat;
+  clickable?: boolean;
+}) {
   const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path);
   const borderColor =
     catechumene.frat?.color_oklch?.trim() || DEFAULT_BORDER_COLOR;
 
   return (
     <article
-      className="flex aspect-square flex-col overflow-hidden rounded-2xl border-[3px] bg-white shadow-sm transition-shadow hover:shadow-md cursor-pointer"
+      className={`flex aspect-square flex-col overflow-hidden rounded-2xl border-[3px] bg-white shadow-sm transition-shadow hover:shadow-md ${
+        clickable ? "cursor-pointer" : ""
+      }`}
       style={{ borderColor }}
     >
       <div className="relative flex-1 shrink-0 overflow-hidden bg-zinc-100">

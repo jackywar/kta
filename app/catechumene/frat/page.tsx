@@ -131,7 +131,7 @@ export default async function CatechumeneFratPage() {
           <h2 className="text-sm font-semibold text-zinc-900">
             Membres de la frat ({members.length})
           </h2>
-          <CatechumeneTiles catechumenes={members} />
+          <CatechumeneTiles catechumenes={members} clickable={false} />
         </section>
       </div>
     </main>

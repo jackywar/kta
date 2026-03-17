@@ -104,12 +104,20 @@ export async function Topbar() {
             </>
           ) : null}
           {isCatechumene ? (
-            <Link
-              href="/catechumene/frat"
-              className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-            >
-              Ma frat
-            </Link>
+            <>
+              <Link
+                href="/catechumene/frat"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Ma frat
+              </Link>
+              <Link
+                href="/catechumene/events"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Évènements
+              </Link>
+            </>
           ) : null}
         </div>
         <div className="flex items-center gap-3">
