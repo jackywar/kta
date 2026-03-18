@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { CatechumeneTiles } from "@/components/responsable/catechumene-tiles";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
 import type { FratWithResponsables } from "@/lib/frats";
+
+export const metadata: Metadata = {
+  title: "Ma frat | KTA"
+};
 
 export default async function CatechumeneFratPage() {
   const supabase = await createSupabaseServerClient();

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Event } from "@/lib/events";
 import { MarkdownContent } from "@/components/ui/markdown-content";
@@ -46,6 +47,7 @@ function formatDate(s: string): string {
 }
 
 export function EventsTable({ events }: { events: Event[] }) {
+  const router = useRouter();
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -122,7 +124,7 @@ export function EventsTable({ events }: { events: Event[] }) {
         return;
       }
       closeEdit();
-      window.location.reload();
+      router.refresh();
     });
   }
 
@@ -133,7 +135,7 @@ export function EventsTable({ events }: { events: Event[] }) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ id })
     });
-    if (res.ok) window.location.reload();
+    if (res.ok) router.refresh();
   }
 
   if (events.length === 0) {

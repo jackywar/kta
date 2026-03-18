@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { ResponsableEventsCalendar } from "@/components/responsable/events-calendar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Event } from "@/lib/events";
+
+export const metadata: Metadata = {
+  title: "Évènements | KTA"
+};
 
 export default async function CatechumeneEventsPage() {
   const supabase = await createSupabaseServerClient();

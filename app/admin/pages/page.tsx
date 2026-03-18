@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { PageContentEditor } from "@/components/admin/page-content-editor";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { PageContent } from "@/lib/page-contents";
+
+export const metadata: Metadata = {
+  title: "Pages | Admin | KTA"
+};
 
 export default async function AdminPagesPage() {
   const supabase = await createSupabaseServerClient();

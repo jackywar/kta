@@ -1,20 +1,68 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function ServiceWorkerRegistration() {
+  const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [registration, setRegistration] =
+    useState<ServiceWorkerRegistration | null>(null);
+
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((registration) => {
-          console.log("SW registered:", registration.scope);
-        })
-        .catch((error) => {
-          console.log("SW registration failed:", error);
+    if (!("serviceWorker" in navigator)) return;
+
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((reg) => {
+        setRegistration(reg);
+
+        reg.addEventListener("updatefound", () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+
+          newWorker.addEventListener("statechange", () => {
+            if (
+              newWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              setUpdateAvailable(true);
+            }
+          });
         });
-    }
+
+        if (reg.waiting && navigator.serviceWorker.controller) {
+          setUpdateAvailable(true);
+        }
+      })
+      .catch((error) => {
+        console.log("SW registration failed:", error);
+      });
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
   }, []);
 
-  return null;
+  function handleUpdate() {
+    if (!registration?.waiting) return;
+    registration.waiting.postMessage({ type: "SKIP_WAITING" });
+  }
+
+  if (!updateAvailable) return null;
+
+  return (
+    <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-sm rounded-lg border border-zinc-200 bg-white p-4 shadow-lg sm:left-auto sm:right-4">
+      <p className="text-sm text-zinc-700">
+        Une nouvelle version est disponible.
+      </p>
+      <button
+        onClick={handleUpdate}
+        className="mt-2 w-full rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+      >
+        Mettre à jour
+      </button>
+    </div>
+  );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Event } from "@/lib/events";
 import type { EventAttendance } from "@/lib/event-attendances";
@@ -55,6 +56,7 @@ export function CatechumeneAttendanceAdd({
   events: Pick<Event, "id" | "date" | "libelle">[];
   attendances: Pick<EventAttendance, "event_id">[];
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [useRangeFilter, setUseRangeFilter] = useState(false);
   const [month, setMonth] = useState<Date>(() => startOfMonth(new Date()));
@@ -147,7 +149,7 @@ export function CatechumeneAttendanceAdd({
         return;
       }
       setSuccess("Présences enregistrées.");
-      window.location.reload();
+      router.refresh();
     });
   }
 

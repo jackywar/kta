@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { z } from "zod";
 import { roleSchema } from "@/lib/roles";
@@ -18,6 +19,7 @@ const roleLabels: Record<FormValues["role"], string> = {
 };
 
 export function UserCreateForm() {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export function UserCreateForm() {
       setValues({ email: "", role: "catechumene" });
       setSuccess("Utilisateur créé. Un email a été envoyé.");
       // Refresh server data (table) by reloading route cache
-      window.location.reload();
+      router.refresh();
     });
   }
 

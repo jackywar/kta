@@ -1,6 +1,10 @@
 "use client";
 
-import ReactMarkdown from "react-markdown";
+import dynamic from "next/dynamic";
+
+const ReactMarkdown = dynamic(() => import("react-markdown"), {
+  loading: () => <div className="animate-pulse h-4 bg-zinc-200 rounded w-3/4" />
+});
 
 type Props = {
   content: string;

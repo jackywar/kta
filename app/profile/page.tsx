@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ProfileForm } from "@/components/profile/profile-form";
 import { ProfileResponsabilites } from "@/components/profile/profile-responsabilites";
 import type { Responsabilite } from "@/lib/responsabilites";
+
+export const metadata: Metadata = {
+  title: "Mon profil | KTA"
+};
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServerClient();

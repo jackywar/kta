@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { roleSchema, type Role } from "@/lib/roles";
 import type { Responsabilite, ResponsableResponsabilite } from "@/lib/responsabilites";
@@ -38,6 +39,7 @@ export function UsersTable({
   responsabilites: Responsabilite[];
   associations: ResponsableResponsabilite[];
 }) {
+  const router = useRouter();
   const [state, setState] = useState<Record<string, RowState>>(() =>
     Object.fromEntries(
       users.map((u) => [
@@ -103,7 +105,7 @@ export function UsersTable({
           responsabilite_ids: Array.from(editingResponsabilites.selectedIds)
         })
       });
-      window.location.reload();
+      router.refresh();
     });
   }
 
@@ -138,7 +140,7 @@ export function UsersTable({
           last_name: lastName.length > 0 ? lastName : null
         })
       });
-      window.location.reload();
+      router.refresh();
     });
   }
 
@@ -154,7 +156,7 @@ export function UsersTable({
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email })
       });
-      window.location.reload();
+      router.refresh();
     });
   }
 
@@ -175,7 +177,7 @@ export function UsersTable({
         body: JSON.stringify({ id })
       });
       setConfirmingUser(null);
-      window.location.reload();
+      router.refresh();
     });
   }
 

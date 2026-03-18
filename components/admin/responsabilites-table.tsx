@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import type { Responsabilite } from "@/lib/responsabilites";
 import { MarkdownContent } from "@/components/ui/markdown-content";
@@ -15,6 +16,7 @@ export function ResponsabilitesTable({
 }: {
   responsabilites: Responsabilite[];
 }) {
+  const router = useRouter();
   const [editing, setEditing] = useState<EditValues | null>(null);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +60,7 @@ export function ResponsabilitesTable({
         setError(msg);
         return;
       }
-      window.location.reload();
+      router.refresh();
     });
   }
 
@@ -69,7 +71,7 @@ export function ResponsabilitesTable({
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ id })
     });
-    if (res.ok) window.location.reload();
+    if (res.ok) router.refresh();
   }
 
   if (responsabilites.length === 0) {

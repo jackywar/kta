@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { FratWithResponsables } from "@/lib/frats";
 
@@ -24,6 +25,7 @@ export function FratsTable({
   frats: FratWithResponsables[];
   availableResponsables: ResponsableOption[];
 }) {
+  const router = useRouter();
   const [state, setState] = useState<Record<string, RowState>>(() =>
     Object.fromEntries(
       frats.map((f) => [
@@ -81,7 +83,7 @@ export function FratsTable({
           color_oklch: row.color_oklch.trim()
         })
       });
-      window.location.reload();
+      router.refresh();
     });
   }
 
@@ -160,7 +162,7 @@ export function FratsTable({
                                       })
                                     }
                                   );
-                                  window.location.reload();
+                                  router.refresh();
                                 }}
                                 className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-3 py-1 text-xs text-zinc-800 shadow-sm hover:bg-zinc-200"
                                 title="Retirer ce responsable"
@@ -224,7 +226,7 @@ export function FratsTable({
                                 email: profile.email
                               })
                             });
-                            window.location.reload();
+                            router.refresh();
                           }}
                           disabled={
                             disabledGlobally ||

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 type Props = {
@@ -13,6 +14,7 @@ export function CatechumeneLinkUserButton({
   email,
   isLinked
 }: Props) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -54,7 +56,7 @@ export function CatechumeneLinkUserButton({
         setError(msg);
         return;
       }
-      window.location.reload();
+      router.refresh();
     });
   }
 

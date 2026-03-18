@@ -102,7 +102,7 @@ export function EventCreateForm({
         router.push(redirectOnSuccess);
         router.refresh();
       } else {
-        window.location.reload();
+        router.refresh();
       }
     });
   }

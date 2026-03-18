@@ -1,9 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { MarkdownContent } from "@/components/ui/markdown-content";
 
 export function ResponsabiliteCreateForm() {
+  const router = useRouter();
   const [libelle, setLibelle] = useState("");
   const [descriptif, setDescriptif] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -37,7 +39,7 @@ export function ResponsabiliteCreateForm() {
         setError(msg);
         return;
       }
-      window.location.reload();
+      router.refresh();
     });
   }
 

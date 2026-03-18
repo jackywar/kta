@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { ResponsabiliteCreateForm } from "@/components/admin/responsabilite-create-form";
 import { ResponsabilitesTable } from "@/components/admin/responsabilites-table";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Responsabilite } from "@/lib/responsabilites";
+
+export const metadata: Metadata = {
+  title: "Responsabilités | Admin | KTA"
+};
 
 export default async function AdminResponsabilitesPage() {
   const supabase = await createSupabaseServerClient();

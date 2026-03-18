@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { CatechumeneCreateForm } from "@/components/admin/catechumene-create-form";
@@ -5,6 +6,10 @@ import { CatechumenesTable } from "@/components/admin/catechumenes-table";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Catechumene } from "@/lib/catechumenes";
 import type { Frat } from "@/lib/frats";
+
+export const metadata: Metadata = {
+  title: "Catéchumènes | Admin | KTA"
+};
 
 export default async function AdminCatechumenesPage() {
   const supabase = await createSupabaseServerClient();

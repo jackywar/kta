@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import Image from "next/image";
 import type { Catechumene } from "@/lib/catechumenes";
@@ -64,6 +65,7 @@ export function CatechumenesTable({
   frats: Frat[];
   linkedByCatechumeneId: Set<string>;
 }) {
+  const router = useRouter();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<FormValues | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -132,7 +134,7 @@ export function CatechumenesTable({
         return;
       }
       closeEdit();
-      window.location.reload();
+      router.refresh();
     });
   }
 
@@ -143,7 +145,7 @@ export function CatechumenesTable({
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ id })
     });
-    if (res.ok) window.location.reload();
+    if (res.ok) router.refresh();
   }
 
   async function handleCreateUser(catechumeneId: string) {
@@ -169,7 +171,7 @@ export function CatechumenesTable({
         setError(msg);
         return;
       }
-      window.location.reload();
+      router.refresh();
     });
   }
 
@@ -315,7 +317,7 @@ export function CatechumenesTable({
               <CatechumenePhotoField
                 catechumeneId={editing.id}
                 photoPath={editing.photo_path}
-                onPhotoChange={() => window.location.reload()}
+                onPhotoChange={() => router.refresh()}
               />
 
               <div className="grid gap-4 sm:grid-cols-2">

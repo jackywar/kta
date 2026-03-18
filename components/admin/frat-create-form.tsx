@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Frat } from "@/lib/frats";
 
@@ -9,6 +10,7 @@ type FormValues = {
 };
 
 export function FratCreateForm() {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -50,7 +52,7 @@ export function FratCreateForm() {
 
       setValues({ name: "", color_oklch: "#7f5af0" });
       setSuccess("Frat créée.");
-      window.location.reload();
+      router.refresh();
     });
   }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import type { Event } from "@/lib/events";
 import type { EventAttendance } from "@/lib/event-attendances";
 
@@ -27,6 +28,7 @@ export function CatechumeneAttendanceRead({
     "event_id" | "absence_justifiee" | "justificatif"
   >[];
 }) {
+  const router = useRouter();
   const attendanceByEvent = new Map<
     string,
     Pick<
@@ -75,7 +77,7 @@ export function CatechumeneAttendanceRead({
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ event_id: eventId, catechumene_id: catechumeneId })
     });
-    if (res.ok) window.location.reload();
+    if (res.ok) router.refresh();
   }
 
   return (

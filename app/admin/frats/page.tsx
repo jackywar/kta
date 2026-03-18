@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { FratCreateForm } from "@/components/admin/frat-create-form";
 import { FratsTable } from "@/components/admin/frats-table";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { FratWithResponsables } from "@/lib/frats";
+
+export const metadata: Metadata = {
+  title: "Frats | Admin | KTA"
+};
 
 export default async function AdminFratsPage() {
   const supabase = await createSupabaseServerClient();

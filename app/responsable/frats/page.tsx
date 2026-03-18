@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { FratTiles, type FratTileData } from "@/components/responsable/frat-tiles";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { FratWithResponsables } from "@/lib/frats";
+
+export const metadata: Metadata = {
+  title: "Frats | KTA"
+};
 
 export default async function ResponsableFratsPage() {
   const supabase = await createSupabaseServerClient();

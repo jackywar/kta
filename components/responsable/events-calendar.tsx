@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Event } from "@/lib/events";
 import { MarkdownContent } from "@/components/ui/markdown-content";
@@ -78,6 +79,7 @@ export function ResponsableEventsCalendar({
   events: Event[];
   readOnly?: boolean;
 }) {
+  const router = useRouter();
   const [viewMode, setViewMode] = useState<ViewMode>("calendar");
   const [month, setMonth] = useState<Date>(() => startOfMonth(new Date()));
   const [dateFrom, setDateFrom] = useState<string>("");
@@ -187,7 +189,7 @@ export function ResponsableEventsCalendar({
         setError(msg);
         return;
       }
-      window.location.reload();
+      router.refresh();
     });
   }
 

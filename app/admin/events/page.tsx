@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { EventCreateForm } from "@/components/admin/event-create-form";
 import { EventsTable } from "@/components/admin/events-table";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Event } from "@/lib/events";
+
+export const metadata: Metadata = {
+  title: "Évènements | Admin | KTA"
+};
 
 export default async function AdminEventsPage() {
   const supabase = await createSupabaseServerClient();

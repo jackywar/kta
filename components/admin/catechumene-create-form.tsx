@@ -102,7 +102,7 @@ export function CatechumeneCreateForm({
         router.push(redirectOnSuccess);
         router.refresh();
       } else {
-        window.location.reload();
+        router.refresh();
       }
     });
   }

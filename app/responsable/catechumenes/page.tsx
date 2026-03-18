@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { CatechumeneTilesWithFilter } from "@/components/responsable/catechumene-tiles";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
+
+export const metadata: Metadata = {
+  title: "Catéchumènes | KTA"
+};
 
 export default async function ResponsableCatechumenesPage() {
   const supabase = await createSupabaseServerClient();

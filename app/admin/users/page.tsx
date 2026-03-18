@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { UserCreateForm } from "@/components/admin/user-create-form";
 import { UsersTable } from "@/components/admin/users-table";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Responsabilite, ResponsableResponsabilite } from "@/lib/responsabilites";
+
+export const metadata: Metadata = {
+  title: "Utilisateurs | Admin | KTA"
+};
 
 export default async function AdminUsersPage() {
   const supabase = await createSupabaseServerClient();
