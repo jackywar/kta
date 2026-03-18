@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
@@ -152,10 +153,12 @@ function CatechumeneTile({
     >
       <div className="relative flex-1 shrink-0 overflow-hidden bg-zinc-100">
         {photoUrl ? (
-          <img
+          <Image
             src={photoUrl}
             alt=""
-            className="h-full w-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
           />
         ) : (
           <div

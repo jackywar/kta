@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import imageCompression from "browser-image-compression";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 
@@ -95,12 +96,14 @@ export function CatechumenePhotoField({
     <div className="space-y-2">
       <span className="text-sm font-medium text-zinc-900">Photo</span>
       <div className="flex flex-wrap items-start gap-4">
-        <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
+        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
           {photoUrl ? (
-            <img
+            <Image
               src={photoUrl}
               alt="Photo du catéchumène"
-              className="h-full w-full object-cover"
+              fill
+              className="object-cover"
+              sizes="96px"
             />
           ) : (
             <div

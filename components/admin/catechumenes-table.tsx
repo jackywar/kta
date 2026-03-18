@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import Image from "next/image";
 import type { Catechumene } from "@/lib/catechumenes";
 import type { Frat } from "@/lib/frats";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
@@ -204,12 +205,14 @@ export function CatechumenesTable({
                 return (
                 <tr key={c.id} className="hover:bg-zinc-50/70">
                   <td className="px-4 py-3">
-                    <div className="h-10 w-10 overflow-hidden rounded-full border border-zinc-200 bg-zinc-100">
+                    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-zinc-200 bg-zinc-100">
                       {photoUrl ? (
-                        <img
+                        <Image
                           src={photoUrl}
                           alt=""
-                          className="h-full w-full object-cover"
+                          fill
+                          className="object-cover"
+                          sizes="40px"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-zinc-400 text-xs" aria-hidden>—</div>

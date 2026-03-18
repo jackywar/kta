@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 import { CatechumeneLinkUserButton } from "@/components/catechumene/catechumene-link-user-button";
 import { MarkdownContent } from "@/components/ui/markdown-content";
@@ -46,12 +47,14 @@ export function CatechumeneDetail({
       <div className="border-b border-zinc-100 p-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
           <div className="mx-auto shrink-0 sm:mx-0">
-            <div className="h-40 w-40 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
+            <div className="relative h-40 w-40 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
               {photoUrl ? (
-                <img
+                <Image
                   src={photoUrl}
                   alt=""
-                  className="h-full w-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="160px"
                 />
               ) : (
                 <div
