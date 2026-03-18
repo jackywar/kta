@@ -78,6 +78,18 @@ export async function Topbar() {
               >
                 Catéchumènes
               </Link>
+              <Link
+                href="/admin/pages"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Pages
+              </Link>
+              <Link
+                href="/admin/responsabilites"
+                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+              >
+                Responsabilités
+              </Link>
             </>
           ) : null}
           {null}

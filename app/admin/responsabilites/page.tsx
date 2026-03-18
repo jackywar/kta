@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
-import { UserCreateForm } from "@/components/admin/user-create-form";
-import { UsersTable } from "@/components/admin/users-table";
+import { ResponsabiliteCreateForm } from "@/components/admin/responsabilite-create-form";
+import { ResponsabilitesTable } from "@/components/admin/responsabilites-table";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { Responsabilite, ResponsableResponsabilite } from "@/lib/responsabilites";
+import type { Responsabilite } from "@/lib/responsabilites";
 
-export default async function AdminUsersPage() {
+export default async function AdminResponsabilitesPage() {
   const supabase = await createSupabaseServerClient();
   const {
     data: { session }
@@ -19,20 +19,8 @@ export default async function AdminUsersPage() {
     .eq("id", session.user.id)
     .maybeSingle();
 
-  if (meProfileError) {
-    throw new Error(meProfileError.message);
-  }
-
-  if (!meProfile || meProfile.role !== "admin") {
-    redirect("/");
-  }
-
-  const { data: profiles, error: profilesError } = await supabase
-    .from("profiles")
-    .select("id, email, first_name, last_name, role, created_at")
-    .order("created_at", { ascending: false });
-
-  if (profilesError) throw new Error(profilesError.message);
+  if (meProfileError) throw new Error(meProfileError.message);
+  if (!meProfile || meProfile.role !== "admin") redirect("/");
 
   const { data: responsabilites, error: respError } = await supabase
     .from("responsabilites")
@@ -41,47 +29,39 @@ export default async function AdminUsersPage() {
 
   if (respError) throw new Error(respError.message);
 
-  const { data: associations, error: assocError } = await supabase
-    .from("responsable_responsabilites")
-    .select("*");
-
-  if (assocError) throw new Error(assocError.message);
-
   return (
     <main className="min-h-screen bg-zinc-50">
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">
-            Administration — Utilisateurs
+            Administration — Responsabilités
           </h1>
           <p className="text-sm text-zinc-600">
-            Créez des comptes et attribuez un rôle.
+            Créez, modifiez et supprimez des responsabilités.
           </p>
         </header>
 
-        <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+        <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
           <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
             <h2 className="text-sm font-medium text-zinc-900">
-              Créer un utilisateur
+              Créer une responsabilité
             </h2>
             <p className="mt-1 text-sm text-zinc-600">
-              Un mot de passe aléatoire sera généré et envoyé par email.
+              Saisissez le libellé et le descriptif (Markdown).
             </p>
             <div className="mt-5">
-              <UserCreateForm />
+              <ResponsabiliteCreateForm />
             </div>
           </section>
 
           <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
             <h2 className="text-sm font-medium text-zinc-900">
-              Utilisateurs
+              Responsabilités
             </h2>
             <div className="mt-5">
-              <UsersTable
-                users={profiles ?? []}
+              <ResponsabilitesTable
                 responsabilites={(responsabilites as Responsabilite[]) ?? []}
-                associations={(associations as ResponsableResponsabilite[]) ?? []}
               />
             </div>
           </section>
@@ -90,4 +70,3 @@ export default async function AdminUsersPage() {
     </main>
   );
 }
-
