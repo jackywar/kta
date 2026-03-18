@@ -80,10 +80,8 @@ export function ResponsableEventsCalendar({
   readOnly?: boolean;
 }) {
   const router = useRouter();
-  const [viewMode, setViewMode] = useState<ViewMode>("calendar");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [month, setMonth] = useState<Date>(() => startOfMonth(new Date()));
-  const [dateFrom, setDateFrom] = useState<string>("");
-  const [dateTo, setDateTo] = useState<string>("");
   const [selected, setSelected] = useState<Event | null>(null);
   const [dayPicker, setDayPicker] = useState<{
     iso: string;
@@ -123,20 +121,27 @@ export function ResponsableEventsCalendar({
     return map;
   }, [events]);
 
+  const monthRange = useMemo(() => {
+    const firstDay = startOfMonth(month);
+    const lastDay = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+    return {
+      from: toISODate(firstDay),
+      to: toISODate(lastDay)
+    };
+  }, [month]);
+
   const listFiltered = useMemo(() => {
-    const from = dateFrom.trim();
-    const to = dateTo.trim();
     return events
       .filter((e) => {
         const d = (e.date ?? "").trim();
         if (!d) return false;
-        if (from && d < from) return false;
-        if (to && d > to) return false;
+        if (d < monthRange.from) return false;
+        if (d > monthRange.to) return false;
         return true;
       })
       .slice()
       .sort((a, b) => (a.date ?? "").localeCompare(b.date ?? ""));
-  }, [events, dateFrom, dateTo]);
+  }, [events, monthRange]);
 
   const monthDays = useMemo(() => {
     const first = startOfMonth(month);
@@ -224,93 +229,64 @@ export function ResponsableEventsCalendar({
           </button>
         </div>
 
-        {viewMode === "calendar" ? (
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setMonth((m) => addMonths(m, -1))}
-              className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setMonth((m) => addMonths(m, -1))}
+            className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+          >
+            ←
+          </button>
+          <div className="flex items-center gap-2">
+            <select
+              value={month.getMonth()}
+              onChange={(e) =>
+                setMonth((m) =>
+                  setMonthYear(m, parseInt(e.target.value, 10), m.getFullYear())
+                )
+              }
+              className="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+              aria-label="Mois"
             >
-              ←
-            </button>
-            <div className="flex items-center gap-2">
-              <select
-                value={month.getMonth()}
-                onChange={(e) =>
-                  setMonth((m) =>
-                    setMonthYear(m, parseInt(e.target.value, 10), m.getFullYear())
-                  )
-                }
-                className="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
-                aria-label="Mois"
-              >
-                {monthOptions.map((m) => (
-                  <option key={m.value} value={m.value} className="capitalize">
-                    {m.label}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={month.getFullYear()}
-                onChange={(e) =>
-                  setMonth((m) =>
-                    setMonthYear(m, m.getMonth(), parseInt(e.target.value, 10))
-                  )
-                }
-                className="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
-                aria-label="Année"
-              >
-                {yearOptions.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
-              <span className="sr-only">{formatMonthTitle(month)}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setMonth((m) => addMonths(m, 1))}
-              className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+              {monthOptions.map((m) => (
+                <option key={m.value} value={m.value} className="capitalize">
+                  {m.label}
+                </option>
+              ))}
+            </select>
+            <select
+              value={month.getFullYear()}
+              onChange={(e) =>
+                setMonth((m) =>
+                  setMonthYear(m, m.getMonth(), parseInt(e.target.value, 10))
+                )
+              }
+              className="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+              aria-label="Année"
             >
-              →
-            </button>
-            <button
-              type="button"
-              onClick={() => setMonth(startOfMonth(new Date()))}
-              className="ml-2 inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
-            >
-              Aujourd&apos;hui
-            </button>
+              {yearOptions.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+            <span className="sr-only">{formatMonthTitle(month)}</span>
           </div>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-zinc-700" htmlFor="re-from">
-                Du
-              </label>
-              <input
-                id="re-from"
-                type="date"
-                value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
-                className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-zinc-700" htmlFor="re-to">
-                Au
-              </label>
-              <input
-                id="re-to"
-                type="date"
-                value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
-                className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
-              />
-            </div>
-          </div>
-        )}
+          <button
+            type="button"
+            onClick={() => setMonth((m) => addMonths(m, 1))}
+            className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+          >
+            →
+          </button>
+          <button
+            type="button"
+            onClick={() => setMonth(startOfMonth(new Date()))}
+            className="ml-2 inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+          >
+            Aujourd&apos;hui
+          </button>
+        </div>
       </div>
 
       {viewMode === "calendar" ? (
@@ -388,9 +364,12 @@ export function ResponsableEventsCalendar({
         </div>
       ) : (
         <div className="space-y-3">
+          <h2 className="text-lg font-semibold capitalize text-zinc-900">
+            {formatMonthTitle(month)}
+          </h2>
           {listFiltered.length === 0 ? (
             <div className="rounded-2xl border border-zinc-200 bg-white p-8 text-center text-sm text-zinc-600 shadow-sm">
-              Aucun évènement.
+              Aucun évènement ce mois-ci.
             </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
