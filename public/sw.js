@@ -1,5 +1,4 @@
-const CACHE_NAME = "kta-v2";
-const STATIC_CACHE = "kta-static-v2";
+const STATIC_CACHE = "kta-static-v4";
 
 const PRECACHE_ASSETS = [
   "/manifest.json",
@@ -23,7 +22,7 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((name) => name !== CACHE_NAME && name !== STATIC_CACHE)
+          .filter((name) => name !== STATIC_CACHE)
           .map((name) => caches.delete(name))
       );
     })
@@ -35,21 +34,15 @@ function isApiRequest(url) {
   return url.pathname.startsWith("/api/");
 }
 
-function isStaticAsset(url) {
-  return (
-    url.pathname.startsWith("/_next/static/") ||
-    url.pathname.startsWith("/icons/") ||
-    url.pathname.endsWith(".js") ||
-    url.pathname.endsWith(".css") ||
-    url.pathname.endsWith(".woff2") ||
-    url.pathname.endsWith(".png") ||
-    url.pathname.endsWith(".svg") ||
-    url.pathname.endsWith(".ico")
-  );
-}
-
-function isNavigationRequest(request) {
-  return request.mode === "navigate";
+/**
+ * Only fingerprinted build output and fixed public assets.
+ * Do NOT use broad *.js/*.css rules — app routes must never hit SW cache.
+ */
+function isCacheableStaticAsset(url) {
+  if (url.pathname.startsWith("/_next/static/")) return true;
+  if (url.pathname.startsWith("/icons/")) return true;
+  if (url.pathname === "/manifest.json") return true;
+  return false;
 }
 
 async function staleWhileRevalidate(request, cacheName) {
@@ -66,19 +59,9 @@ async function staleWhileRevalidate(request, cacheName) {
   return cachedResponse || fetchPromise;
 }
 
-async function networkFirst(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  try {
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    const cachedResponse = await cache.match(request);
-    if (cachedResponse) return cachedResponse;
-    throw error;
-  }
+/** HTML, RSC flight, router.refresh — must not use SW nor HTTP disk cache. */
+function networkOnlyNoStore(request) {
+  return fetch(request, { cache: "no-store" });
 }
 
 self.addEventListener("fetch", (event) => {
@@ -92,15 +75,10 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (isStaticAsset(url)) {
+  if (isCacheableStaticAsset(url)) {
     event.respondWith(staleWhileRevalidate(event.request, STATIC_CACHE));
     return;
   }
 
-  if (isNavigationRequest(event.request)) {
-    event.respondWith(networkFirst(event.request, CACHE_NAME));
-    return;
-  }
-
-  event.respondWith(staleWhileRevalidate(event.request, CACHE_NAME));
+  event.respondWith(networkOnlyNoStore(event.request));
 });

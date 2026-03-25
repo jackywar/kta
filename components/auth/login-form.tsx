@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { z } from "zod";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -14,7 +13,6 @@ const loginSchema = z.object({
 type LoginValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [values, setValues] = useState<LoginValues>({
@@ -50,11 +48,9 @@ export function LoginForm() {
         return;
       }
 
-      // "Se souvenir de moi": Supabase gère un cookie/session persistante côté navigateur.
-      // Pour une séparation stricte "session-only", il faut une stratégie cookie custom.
-      // Ici, on garde l'UX simple et sécurisée (pas de stockage de mdp).
-      router.replace("/");
-      router.refresh();
+      // Navigation pleine page : évite la course replace/refresh (refresh sur la mauvaise route)
+      // et garantit HTML/RSC alignés sur la nouvelle session (topbar, droits).
+      window.location.assign("/");
     });
   }
 
