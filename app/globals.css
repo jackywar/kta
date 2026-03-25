@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Accordéons Markdown (MarkdownContent) : replié = chevron vers la droite, déplié = vers le bas */
+.markdown-details > summary .markdown-details-chevron {
+  transform: rotate(0deg);
+  transition: transform 0.2s ease-out;
+}
+
+.markdown-details[open] > summary .markdown-details-chevron {
+  transform: rotate(90deg);
+}
+
 :root {
   color-scheme: light;
 }
