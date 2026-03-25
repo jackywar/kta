@@ -67,6 +67,7 @@ export default async function ResponsableFratDetailPage({
     `
     )
     .eq("frat_id", id)
+    .eq("est_candidat", false)
     .order("prenom");
 
   if (catError) throw new Error(catError.message);

@@ -1,11 +1,10 @@
 import { notFound, redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
-import { CatechumeneEditForm } from "@/components/responsable/catechumene-edit-form";
+import { CandidatEditForm } from "@/components/responsable/candidat-edit-form";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { CatechumeneWithFrat } from "@/lib/catechumenes";
-import type { Frat } from "@/lib/frats";
+import type { Catechumene, ResponsableOption } from "@/lib/catechumenes";
 
-export default async function ResponsableCatechumeneEditPage({
+export default async function ResponsableCandidatEditPage({
   params
 }: {
   params: Promise<{ id: string }>;
@@ -29,34 +28,27 @@ export default async function ResponsableCatechumeneEditPage({
 
   const { data: row, error } = await supabase
     .from("catechumenes")
-    .select(
-      `
-      *,
-      frat:frats (
-        id,
-        name,
-        color_oklch
-      )
-    `
-    )
+    .select("*")
     .eq("id", id)
     .maybeSingle();
 
   if (error) throw new Error(error.message);
   if (!row) notFound();
 
-  const { data: frats, error: fratsError } = await supabase
-    .from("frats")
-    .select("id, name, color_oklch")
-    .order("name");
-
-  if (fratsError) throw new Error(fratsError.message);
-
-  const catechumene = row as unknown as CatechumeneWithFrat;
-
-  if (catechumene.est_candidat) {
-    redirect(`/responsable/candidats/${id}/edit`);
+  const c = row as Catechumene;
+  if (!c.est_candidat) {
+    redirect(`/responsable/catechumenes/${id}/edit`);
   }
+
+  const { data: respRows, error: respError } = await supabase
+    .from("profiles")
+    .select("id, first_name, last_name, email")
+    .eq("role", "responsable")
+    .order("last_name", { ascending: true });
+
+  if (respError) throw new Error(respError.message);
+
+  const responsables = (respRows ?? []) as ResponsableOption[];
 
   return (
     <main className="min-h-screen bg-zinc-50">
@@ -64,18 +56,12 @@ export default async function ResponsableCatechumeneEditPage({
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-10">
         <header className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-            Modifier {catechumene.prenom} {catechumene.nom}
+            Modifier {c.prenom} {c.nom}
           </h1>
-          <p className="text-sm text-zinc-600">
-            Édition des informations du catéchumène.
-          </p>
+          <p className="text-sm text-zinc-600">Candidat — champs limités.</p>
         </header>
 
-        <CatechumeneEditForm
-          catechumene={catechumene}
-          frats={(frats as Frat[]) ?? []}
-          backHref={`/responsable/catechumenes/${id}`}
-        />
+        <CandidatEditForm candidat={c} responsables={responsables} />
       </div>
     </main>
   );

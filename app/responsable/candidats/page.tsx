@@ -2,15 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
-import { CatechumeneTilesWithFilter } from "@/components/responsable/catechumene-tiles";
+import { CandidatTilesWithFilter } from "@/components/responsable/candidat-tiles";
+import {
+  CANDIDAT_SELECT_WITH_RESPONSABLE,
+  normalizeCandidatRow
+} from "@/lib/candidats-query";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { CatechumeneWithFrat } from "@/lib/catechumenes";
 
 export const metadata: Metadata = {
-  title: "Catéchumènes | KTA"
+  title: "Candidats | KTA"
 };
 
-export default async function ResponsableCatechumenesPage() {
+export default async function ResponsableCandidatsPage() {
   const supabase = await createSupabaseServerClient();
   const {
     data: { session }
@@ -27,33 +30,15 @@ export default async function ResponsableCatechumenesPage() {
   if (profileError) throw new Error(profileError.message);
   if (!profile || profile.role !== "responsable") redirect("/");
 
-  const { data: responsableFrats, error: rfError } = await supabase
-    .from("frat_responsables")
-    .select("frat_id")
-    .eq("profile_id", session.user.id);
-
-  if (rfError) throw new Error(rfError.message);
-  const responsableFratIds =
-    responsableFrats?.map((r) => r.frat_id).filter(Boolean) ?? [];
-
-  const { data: catechumenes, error: catError } = await supabase
+  const { data: rows, error } = await supabase
     .from("catechumenes")
-    .select(
-      `
-      *,
-      frat:frats (
-        id,
-        name,
-        color_oklch
-      )
-    `
-    )
-    .eq("est_candidat", false)
+    .select(CANDIDAT_SELECT_WITH_RESPONSABLE)
+    .eq("est_candidat", true)
     .order("prenom");
 
-  if (catError) throw new Error(catError.message);
+  if (error) throw new Error(error.message);
 
-  const list = (catechumenes ?? []) as unknown as CatechumeneWithFrat[];
+  const candidats = (rows ?? []).map(normalizeCandidatRow);
 
   return (
     <main className="min-h-screen bg-zinc-50">
@@ -61,25 +46,20 @@ export default async function ResponsableCatechumenesPage() {
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Catéchumènes
-            </h1>
+            <h1 className="text-2xl font-semibold tracking-tight">Candidats</h1>
             <p className="text-sm text-zinc-600">
-              Tous les catéchumènes.
+              Fiches candidats avant bascule en catéchumène.
             </p>
           </div>
           <Link
-            href="/responsable/catechumenes/new"
+            href="/responsable/candidats/new"
             className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800"
           >
-            Ajouter un catéchumène
+            Nouveau candidat
           </Link>
         </header>
 
-        <CatechumeneTilesWithFilter
-          catechumenes={list}
-          responsableFratIds={responsableFratIds}
-        />
+        <CandidatTilesWithFilter candidats={candidats} />
       </div>
     </main>
   );

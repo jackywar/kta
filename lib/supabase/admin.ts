@@ -16,3 +16,12 @@ export function createSupabaseAdminClient(): SupabaseClient {
     }
   );
 }
+
+/** Si `SUPABASE_SECRET_KEY` / `APP_URL` manquent (ex. dev), retourne null. */
+export function tryCreateSupabaseAdminClient(): SupabaseClient | null {
+  try {
+    return createSupabaseAdminClient();
+  } catch {
+    return null;
+  }
+}

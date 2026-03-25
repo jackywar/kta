@@ -14,7 +14,8 @@ const bodySchema = z.object({
   rencontre_individuelle_date: z.string().optional().nullable(),
   rencontre_individuelle_texte: z.string().optional().nullable(),
   date_entree_catechumenat: z.string().optional(),
-  frat_id: z.string().uuid().optional().nullable()
+  frat_id: z.string().uuid().optional().nullable(),
+  est_candidat: z.boolean().optional()
 });
 
 export async function POST(req: Request) {
@@ -61,7 +62,8 @@ export async function POST(req: Request) {
     rencontre_individuelle_date: d.rencontre_individuelle_date?.trim() || null,
     rencontre_individuelle_texte: d.rencontre_individuelle_texte?.trim() ?? null,
     date_entree_catechumenat: d.date_entree_catechumenat?.trim() || null,
-    frat_id: d.frat_id ?? null
+    frat_id: d.frat_id ?? null,
+    est_candidat: d.est_candidat ?? false
   });
 
   if (insertError) {

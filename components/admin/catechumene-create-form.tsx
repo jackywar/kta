@@ -7,6 +7,7 @@ import type { Frat } from "@/lib/frats";
 type FormValues = {
   nom: string;
   prenom: string;
+  est_candidat: boolean;
   email: string;
   telephone: string;
   date_naissance: string;
@@ -22,6 +23,7 @@ type FormValues = {
 const emptyForm: FormValues = {
   nom: "",
   prenom: "",
+  est_candidat: false,
   email: "",
   telephone: "",
   date_naissance: "",
@@ -62,6 +64,7 @@ export function CatechumeneCreateForm({
       const body = {
         nom: values.nom.trim(),
         prenom: values.prenom.trim(),
+        est_candidat: values.est_candidat,
         email: values.email.trim() || undefined,
         telephone: values.telephone.trim() || undefined,
         date_naissance: values.date_naissance.trim() || undefined,
@@ -142,6 +145,30 @@ export function CatechumeneCreateForm({
             placeholder="Marie"
             required
           />
+        </div>
+      </div>
+
+      <div className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3">
+        <input
+          id="c-est-candidat"
+          type="checkbox"
+          checked={values.est_candidat}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, est_candidat: e.target.checked }))
+          }
+          className="mt-1 h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-400"
+        />
+        <div className="min-w-0">
+          <label
+            htmlFor="c-est-candidat"
+            className="text-sm font-medium text-zinc-900"
+          >
+            Candidat
+          </label>
+          <p className="mt-0.5 text-xs text-zinc-600">
+            Si coché, la fiche est traitée comme candidat (liste candidats
+            responsable) et non comme catéchumène actif dans la liste principale.
+          </p>
         </div>
       </div>
 

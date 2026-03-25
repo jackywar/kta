@@ -11,6 +11,7 @@ import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-fiel
 type FormValues = {
   nom: string;
   prenom: string;
+  est_candidat: boolean;
   email: string;
   telephone: string;
   date_naissance: string;
@@ -27,6 +28,7 @@ function catechumeneToForm(c: Catechumene): FormValues {
   return {
     nom: c.nom ?? "",
     prenom: c.prenom ?? "",
+    est_candidat: Boolean(c.est_candidat),
     email: c.email ?? "",
     telephone: c.telephone ?? "",
     date_naissance: c.date_naissance ?? "",
@@ -92,6 +94,10 @@ export function CatechumenesTable({
     setEditValues((v) => (v ? { ...v, [key]: value } : null));
   };
 
+  const setEstCandidat = (checked: boolean) => {
+    setEditValues((v) => (v ? { ...v, est_candidat: checked } : null));
+  };
+
   async function handleSave() {
     if (!editingId || !editValues) return;
     setError(null);
@@ -100,6 +106,7 @@ export function CatechumenesTable({
         id: editingId,
         nom: editValues.nom.trim(),
         prenom: editValues.prenom.trim(),
+        est_candidat: editValues.est_candidat,
         email: editValues.email.trim() || undefined,
         telephone: editValues.telephone.trim() || undefined,
         date_naissance: editValues.date_naissance.trim() || undefined,
@@ -194,6 +201,7 @@ export function CatechumenesTable({
                 <th className="px-4 py-3">Nom</th>
                 <th className="px-4 py-3">Prénom</th>
                 <th className="px-4 py-3">Email</th>
+                <th className="px-4 py-3">Candidat</th>
                 <th className="px-4 py-3">Frat</th>
                 <th className="px-4 py-3">Entrée</th>
                 <th className="px-4 py-3">Baptême prév.</th>
@@ -224,6 +232,15 @@ export function CatechumenesTable({
                   <td className="px-4 py-3 text-zinc-900">{c.nom}</td>
                   <td className="px-4 py-3 text-zinc-900">{c.prenom}</td>
                   <td className="px-4 py-3 text-zinc-600">{c.email ?? "—"}</td>
+                  <td className="px-4 py-3">
+                    {c.est_candidat ? (
+                      <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-800">
+                        Oui
+                      </span>
+                    ) : (
+                      <span className="text-xs text-zinc-500">Non</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3">
                     {c.frat_id ? (
                       <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-900">
@@ -346,6 +363,28 @@ export function CatechumenesTable({
                     className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
                     required
                   />
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3">
+                <input
+                  id="e-est-candidat"
+                  type="checkbox"
+                  checked={editValues.est_candidat}
+                  onChange={(e) => setEstCandidat(e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-400"
+                />
+                <div className="min-w-0">
+                  <label
+                    htmlFor="e-est-candidat"
+                    className="text-sm font-medium text-zinc-900"
+                  >
+                    Candidat
+                  </label>
+                  <p className="mt-0.5 text-xs text-zinc-600">
+                    Si coché, la fiche apparaît dans la liste des candidats
+                    (responsable) et pas dans la liste des catéchumènes actifs.
+                  </p>
                 </div>
               </div>
 

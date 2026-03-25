@@ -63,6 +63,9 @@ export default async function ResponsableCatechumeneDetailPage({
   if (!row) notFound();
 
   const catechumene = row as unknown as CatechumeneWithFrat;
+  if (catechumene.est_candidat) {
+    redirect(`/responsable/candidats/${id}`);
+  }
 
   const { data: linkedProfile, error: linkedProfileError } = await supabase
     .from("profiles")

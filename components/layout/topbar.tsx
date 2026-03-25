@@ -61,6 +61,7 @@ export async function Topbar() {
         href: "/responsable/catechumenes",
         label: isAdmin ? "Mes catéchumènes" : "Catéchumènes"
       },
+      { href: "/responsable/candidats", label: "Candidats" },
       {
         href: "/responsable/responsabilites",
         label: "Récap responsabilités"
