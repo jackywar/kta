@@ -60,6 +60,10 @@ export async function Topbar() {
       {
         href: "/responsable/catechumenes",
         label: isAdmin ? "Mes catéchumènes" : "Catéchumènes"
+      },
+      {
+        href: "/responsable/responsabilites",
+        label: "Récap responsabilités"
       }
     );
   }
