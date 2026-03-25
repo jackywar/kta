@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";
-import { LogoutButton } from "@/components/layout/logout-button";
+import {
+  TopbarClient,
+  type TopbarNavLink
+} from "@/components/layout/topbar-client";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function Topbar() {
@@ -13,20 +15,18 @@ export async function Topbar() {
     error: userError
   } = await supabase.auth.getUser();
 
-  let profileRole: string | null = null;
   let isAdmin = false;
   let isResponsable = false;
   let isCatechumene = false;
   let displayName = "Utilisateur";
 
   if (!userError && user) {
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile } = await supabase
       .from("profiles")
       .select("role, first_name, last_name")
       .eq("id", user.id)
       .maybeSingle();
 
-    profileRole = profile?.role ?? null;
     isAdmin = profile?.role === "admin";
     isResponsable = profile?.role === "responsable";
     isCatechumene = profile?.role === "catechumene";
@@ -42,107 +42,47 @@ export async function Topbar() {
     }
   }
 
+  const navLinks: TopbarNavLink[] = [];
+  if (isAdmin) {
+    navLinks.push(
+      { href: "/admin/events", label: "Évènements" },
+      { href: "/admin/users", label: "Users" },
+      { href: "/admin/frats", label: "Frats" },
+      { href: "/admin/catechumenes", label: "Catéchumènes" },
+      { href: "/admin/pages", label: "Pages" },
+      { href: "/admin/responsabilites", label: "Responsabilités" }
+    );
+  }
+  if (isResponsable) {
+    navLinks.push(
+      { href: "/responsable/frats", label: "Frats" },
+      { href: "/responsable/events", label: "Évènements" },
+      {
+        href: "/responsable/catechumenes",
+        label: isAdmin ? "Mes catéchumènes" : "Catéchumènes"
+      }
+    );
+  }
+  if (isCatechumene) {
+    navLinks.push(
+      { href: "/catechumene/frat", label: "Ma frat" },
+      { href: "/catechumene/events", label: "Évènements" }
+    );
+  }
+
+  const roleParts: string[] = [];
+  if (isAdmin) roleParts.push("Admin");
+  if (isResponsable) roleParts.push("Responsable");
+  if (isCatechumene) roleParts.push("Catéchumène");
+  const roleLine = roleParts.join(" · ");
+
   return (
     <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/80 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="text-sm font-semibold tracking-tight text-zinc-900"
-          >
-            KTA
-          </Link>
-          {isAdmin ? (
-            <>
-              <Link
-                href="/admin/events"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Évènements
-              </Link>
-              <Link
-                href="/admin/users"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Users
-              </Link>
-              <Link
-                href="/admin/frats"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Frats
-              </Link>
-              <Link
-                href="/admin/catechumenes"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Catéchumènes
-              </Link>
-              <Link
-                href="/admin/pages"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Pages
-              </Link>
-              <Link
-                href="/admin/responsabilites"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Responsabilités
-              </Link>
-            </>
-          ) : null}
-          {null}
-          {isResponsable ? (
-            <>
-              <Link
-                href="/responsable/frats"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Frats
-              </Link>
-              <Link
-                href="/responsable/events"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Évènements
-              </Link>
-              <Link
-                href="/responsable/catechumenes"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                {isAdmin ? "Mes catéchumènes" : "Catéchumènes"}
-              </Link>
-            </>
-          ) : null}
-          {isCatechumene ? (
-            <>
-              <Link
-                href="/catechumene/frat"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Ma frat
-              </Link>
-              <Link
-                href="/catechumene/events"
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-              >
-                Évènements
-              </Link>
-            </>
-          ) : null}
-        </div>
-        <div className="flex items-center gap-3">
-          <Link
-            href="/profile"
-            className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
-          >
-            {displayName}
-          </Link>
-          <LogoutButton />
-        </div>
-      </div>
+      <TopbarClient
+        displayName={displayName}
+        roleLine={roleLine}
+        navLinks={navLinks}
+      />
     </header>
   );
 }
-
