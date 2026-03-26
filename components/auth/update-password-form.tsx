@@ -67,7 +67,7 @@ export function UpdatePasswordForm() {
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="space-y-2">
         <label
-          className="text-sm font-medium text-zinc-900"
+          className="text-sm font-medium text-foreground"
           htmlFor="new-password"
         >
           Nouveau mot de passe
@@ -78,14 +78,14 @@ export function UpdatePasswordForm() {
           autoComplete="new-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="••••••••••"
         />
       </div>
 
       <div className="space-y-2">
         <label
-          className="text-sm font-medium text-zinc-900"
+          className="text-sm font-medium text-foreground"
           htmlFor="confirm-password"
         >
           Confirmer le mot de passe
@@ -96,19 +96,19 @@ export function UpdatePasswordForm() {
           autoComplete="new-password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="••••••••••"
         />
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
         </div>
       ) : null}
 
       {success ? (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+        <div className="rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
           {success}
         </div>
       ) : null}
@@ -116,7 +116,7 @@ export function UpdatePasswordForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? "Mise à jour…" : "Enregistrer le mot de passe"}
       </button>

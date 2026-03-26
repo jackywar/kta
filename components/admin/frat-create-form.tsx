@@ -59,7 +59,7 @@ export function FratCreateForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="frat-name">
+        <label className="text-sm font-medium text-foreground" htmlFor="frat-name">
           Nom de la frat
         </label>
         <input
@@ -68,7 +68,7 @@ export function FratCreateForm() {
           autoComplete="off"
           value={values.name}
           onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="Frat Vert Fluo"
           required
         />
@@ -76,7 +76,7 @@ export function FratCreateForm() {
 
       <div className="space-y-2">
         <label
-          className="text-sm font-medium text-zinc-900"
+          className="text-sm font-medium text-foreground"
           htmlFor="frat-color"
         >
           Couleur
@@ -88,18 +88,18 @@ export function FratCreateForm() {
           onChange={(e) =>
             setValues((v) => ({ ...v, color_oklch: e.target.value }))
           }
-          className="h-10 w-10 cursor-pointer rounded-full border border-zinc-200 bg-white p-1 shadow-sm"
+          className="h-10 w-10 cursor-pointer rounded-full border border-border bg-card p-1 shadow-sm"
         />
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
         </div>
       ) : null}
 
       {success ? (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+        <div className="rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
           {success}
         </div>
       ) : null}
@@ -107,7 +107,7 @@ export function FratCreateForm() {
       <button
         type="submit"
         disabled={isPending || !canSubmit}
-        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? "Création…" : "Créer"}
       </button>

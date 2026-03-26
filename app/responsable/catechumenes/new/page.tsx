@@ -30,28 +30,28 @@ export default async function ResponsableCatechumeneNewPage() {
   if (fratsError) throw new Error(fratsError.message);
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-2xl space-y-6 px-4 py-10">
         <div className="flex items-center justify-between gap-4">
           <Link
             href="/responsable/catechumenes"
-            className="text-sm font-medium text-zinc-600 underline-offset-4 hover:text-zinc-900 hover:underline"
+            className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             ← Catéchumènes
           </Link>
         </div>
 
         <header className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
             Ajouter un catéchumène
           </h1>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-muted-foreground">
             Saisissez les informations du catéchumène.
           </p>
         </header>
 
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
           <CatechumeneCreateForm
             frats={(frats as Frat[]) ?? []}
             redirectOnSuccess="/responsable/catechumenes"

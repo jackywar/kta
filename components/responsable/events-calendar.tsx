@@ -206,13 +206,13 @@ export function ResponsableEventsCalendar({
   }
 
   const switchBase =
-    "relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2";
+    "relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-sm font-medium text-zinc-700">
+          <span className="text-sm font-medium text-muted-foreground">
             Affichage liste
           </span>
           <button
@@ -224,12 +224,12 @@ export function ResponsableEventsCalendar({
             }
             className={`${switchBase} ${
               viewMode === "list"
-                ? "border-zinc-900 bg-zinc-900"
-                : "border-zinc-200 bg-zinc-100"
+                ? "border-primary bg-primary"
+                : "border-border bg-muted"
             }`}
           >
             <span
-              className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
+              className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-card shadow-sm transition-transform ${
                 viewMode === "list" ? "translate-x-6" : "translate-x-0.5"
               }`}
             />
@@ -240,7 +240,7 @@ export function ResponsableEventsCalendar({
           <button
             type="button"
             onClick={() => setMonth((m) => addMonths(m, -1))}
-            className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+            className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
           >
             ←
           </button>
@@ -252,7 +252,7 @@ export function ResponsableEventsCalendar({
                   setMonthYear(m, parseInt(e.target.value, 10), m.getFullYear())
                 )
               }
-              className="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+              className="h-10 rounded-xl border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
               aria-label="Mois"
             >
               {monthOptions.map((m) => (
@@ -268,7 +268,7 @@ export function ResponsableEventsCalendar({
                   setMonthYear(m, m.getMonth(), parseInt(e.target.value, 10))
                 )
               }
-              className="h-10 rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+              className="h-10 rounded-xl border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
               aria-label="Année"
             >
               {yearOptions.map((y) => (
@@ -282,14 +282,14 @@ export function ResponsableEventsCalendar({
           <button
             type="button"
             onClick={() => setMonth((m) => addMonths(m, 1))}
-            className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+            className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
           >
             →
           </button>
           <button
             type="button"
             onClick={() => setMonth(startOfMonth(new Date()))}
-            className="ml-2 inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+            className="ml-2 inline-flex h-10 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
           >
             Aujourd&apos;hui
           </button>
@@ -297,8 +297,8 @@ export function ResponsableEventsCalendar({
       </div>
 
       {viewMode === "calendar" ? (
-        <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-          <div className="grid grid-cols-7 border-b border-zinc-200 bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <div className="grid grid-cols-7 border-b border-border bg-muted text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => (
               <div key={d} className="px-3 py-2">
                 {d}
@@ -313,14 +313,14 @@ export function ResponsableEventsCalendar({
               return (
                 <div
                   key={iso}
-                  className={`min-h-[110px] border-t border-zinc-200 p-2 ${
-                    inMonth ? "bg-white" : "bg-zinc-50"
+                  className={`min-h-[110px] border-t border-border p-2 ${
+                    inMonth ? "bg-card" : "bg-muted"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div
                       className={`text-xs font-semibold ${
-                        inMonth ? "text-zinc-900" : "text-zinc-400"
+                        inMonth ? "text-foreground" : "text-muted-foreground"
                       }`}
                     >
                       {d.getDate()}
@@ -334,15 +334,15 @@ export function ResponsableEventsCalendar({
                           key={e.id}
                           type="button"
                           onClick={() => setSelected(e)}
-                          className="block w-full truncate rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 text-left text-xs text-zinc-800 hover:bg-zinc-100"
+                          className="block w-full truncate rounded-lg border border-border bg-muted px-2 py-1 text-left text-xs text-foreground hover:bg-muted"
                           title={e.libelle}
                         >
                           <span className="font-medium">{e.type}</span>{" "}
-                          <span className="text-zinc-600">— {e.libelle}</span>
+                          <span className="text-muted-foreground">— {e.libelle}</span>
                         </button>
                       ))}
                       {dayEvents.length > 3 ? (
-                        <div className="text-xs text-zinc-500">
+                        <div className="text-xs text-muted-foreground">
                           +{dayEvents.length - 3}
                         </div>
                       ) : null}
@@ -353,11 +353,11 @@ export function ResponsableEventsCalendar({
                       <button
                         type="button"
                         onClick={() => setDayPicker({ iso, events: dayEvents })}
-                        className="sm:hidden inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+                        className="sm:hidden inline-flex items-center gap-2 rounded-lg border border-border bg-muted px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
                         aria-label={`Voir les évènements du ${formatDateLong(iso)}`}
                       >
                         <span
-                          className="inline-block h-2.5 w-2.5 rounded-full bg-zinc-700"
+                          className="inline-block h-2.5 w-2.5 rounded-full bg-primary"
                           aria-hidden
                         />
                         <span>{dayEvents.length}</span>
@@ -371,11 +371,11 @@ export function ResponsableEventsCalendar({
         </div>
       ) : (
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold capitalize text-zinc-900">
+          <h2 className="text-lg font-semibold capitalize text-foreground">
             {formatMonthTitle(month)}
           </h2>
           {listFiltered.length === 0 ? (
-            <div className="rounded-2xl border border-zinc-200 bg-white p-8 text-center text-sm text-zinc-600 shadow-sm">
+            <div className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground shadow-sm">
               Aucun évènement ce mois-ci.
             </div>
           ) : (
@@ -385,20 +385,20 @@ export function ResponsableEventsCalendar({
                   key={e.id}
                   type="button"
                   onClick={() => setSelected(e)}
-                  className="text-left rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:shadow-md"
+                  className="text-left rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:shadow-md"
                 >
-                  <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     {formatDateLong(e.date)}
                   </p>
                   <div className="mt-1 flex items-start justify-between gap-4">
-                    <h3 className="min-w-0 truncate text-base font-semibold text-zinc-900">
+                    <h3 className="min-w-0 truncate text-base font-semibold text-foreground">
                       {e.libelle}
                     </h3>
-                    <span className="shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-700">
+                    <span className="shrink-0 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                       {e.type}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm text-zinc-600">{e.lieu}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{e.lieu}</p>
                 </button>
               ))}
             </div>
@@ -413,27 +413,27 @@ export function ResponsableEventsCalendar({
           aria-modal="true"
           aria-labelledby="event-detail-title"
         >
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   {formatDateLong(selected.date)}
                 </p>
                 <h2
                   id="event-detail-title"
-                  className="mt-1 text-lg font-semibold text-zinc-900"
+                  className="mt-1 text-lg font-semibold text-foreground"
                 >
                   {selected.libelle}
                 </h2>
-                <p className="mt-1 text-sm text-zinc-600">{selected.lieu}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{selected.lieu}</p>
               </div>
-              <span className="shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-700">
+              <span className="shrink-0 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 {selected.type}
               </span>
             </div>
 
             {selected.descriptif?.trim() ? (
-              <div className="mt-4 rounded-xl border border-zinc-100 bg-zinc-50 p-4">
+              <div className="mt-4 rounded-xl border border-border/60 bg-muted p-4">
                 <MarkdownContent content={selected.descriptif} />
               </div>
             ) : null}
@@ -446,7 +446,7 @@ export function ResponsableEventsCalendar({
                     setEditing(eventToEditValues(selected));
                     setSelected(null);
                   }}
-                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800"
+                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90"
                 >
                   Modifier
                 </button>
@@ -454,7 +454,7 @@ export function ResponsableEventsCalendar({
               <button
                 type="button"
                 onClick={() => setSelected(null)}
-                className={`inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50 ${
+                className={`inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted ${
                   readOnly ? "flex-1" : ""
                 }`}
               >
@@ -472,18 +472,18 @@ export function ResponsableEventsCalendar({
           aria-modal="true"
           aria-labelledby="day-events-title"
         >
-          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
+          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl">
             <div className="flex items-start justify-between gap-4">
               <h2
                 id="day-events-title"
-                className="text-lg font-semibold text-zinc-900 capitalize"
+                className="text-lg font-semibold text-foreground capitalize"
               >
                 {formatDateLong(dayPicker.iso)}
               </h2>
               <button
                 type="button"
                 onClick={() => setDayPicker(null)}
-                className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
               >
                 Fermer
               </button>
@@ -498,18 +498,18 @@ export function ResponsableEventsCalendar({
                     setDayPicker(null);
                     setSelected(e);
                   }}
-                  className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-left text-sm shadow-sm transition hover:bg-zinc-50"
+                  className="w-full rounded-xl border border-border bg-card px-4 py-3 text-left text-sm shadow-sm transition hover:bg-muted"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="truncate font-medium text-zinc-900">
+                      <div className="truncate font-medium text-foreground">
                         {e.libelle}
                       </div>
-                      <div className="mt-0.5 truncate text-xs text-zinc-600">
+                      <div className="mt-0.5 truncate text-xs text-muted-foreground">
                         {e.lieu}
                       </div>
                     </div>
-                    <span className="shrink-0 rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-xs font-medium text-zinc-700">
+                    <span className="shrink-0 rounded-full border border-border bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
                       {e.type}
                     </span>
                   </div>
@@ -527,14 +527,14 @@ export function ResponsableEventsCalendar({
           aria-modal="true"
           aria-labelledby="event-edit-title"
         >
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
-            <h2 id="event-edit-title" className="text-lg font-semibold text-zinc-900">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl">
+            <h2 id="event-edit-title" className="text-lg font-semibold text-foreground">
               Modifier l&apos;évènement
             </h2>
 
             <div className="mt-5 space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="re-date">
+                <label className="text-sm font-medium text-foreground" htmlFor="re-date">
                   Date
                 </label>
                 <input
@@ -542,14 +542,14 @@ export function ResponsableEventsCalendar({
                   type="date"
                   value={editing.date}
                   onChange={(e) => setEditing((v) => (v ? { ...v, date: e.target.value } : null))}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                   required
                 />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-900" htmlFor="re-type">
+                  <label className="text-sm font-medium text-foreground" htmlFor="re-type">
                     Type d&apos;évènement
                   </label>
                   <select
@@ -560,7 +560,7 @@ export function ResponsableEventsCalendar({
                         v ? { ...v, type_option: e.target.value as EventTypeOption } : null
                       )
                     }
-                    className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required
                   >
                     {EVENT_TYPE_OPTIONS.map((t) => (
@@ -577,14 +577,14 @@ export function ResponsableEventsCalendar({
                       onChange={(e) =>
                         setEditing((v) => (v ? { ...v, type_autre: e.target.value } : null))
                       }
-                      className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                      className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                       placeholder="Saisir un autre type…"
                       required
                     />
                   ) : null}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-900" htmlFor="re-lieu">
+                  <label className="text-sm font-medium text-foreground" htmlFor="re-lieu">
                     Lieu
                   </label>
                   <input
@@ -592,14 +592,14 @@ export function ResponsableEventsCalendar({
                     type="text"
                     value={editing.lieu}
                     onChange={(e) => setEditing((v) => (v ? { ...v, lieu: e.target.value } : null))}
-                    className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="re-libelle">
+                <label className="text-sm font-medium text-foreground" htmlFor="re-libelle">
                   Libellé
                 </label>
                 <input
@@ -609,13 +609,13 @@ export function ResponsableEventsCalendar({
                   onChange={(e) =>
                     setEditing((v) => (v ? { ...v, libelle: e.target.value } : null))
                   }
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="re-visibility">
+                <label className="text-sm font-medium text-foreground" htmlFor="re-visibility">
                   Visibilite
                 </label>
                 <select
@@ -628,7 +628,7 @@ export function ResponsableEventsCalendar({
                         : null
                     )
                   }
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 >
                   {EVENT_VISIBILITY_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -639,7 +639,7 @@ export function ResponsableEventsCalendar({
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="re-desc">
+                <label className="text-sm font-medium text-foreground" htmlFor="re-desc">
                   Descriptif (Markdown)
                 </label>
                 <textarea
@@ -649,13 +649,13 @@ export function ResponsableEventsCalendar({
                   onChange={(e) =>
                     setEditing((v) => (v ? { ...v, descriptif: e.target.value } : null))
                   }
-                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               {editing.descriptif.trim() ? (
-                <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                <div className="rounded-xl border border-border bg-muted p-4">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     Aperçu
                   </p>
                   <div className="mt-2">
@@ -665,7 +665,7 @@ export function ResponsableEventsCalendar({
               ) : null}
 
               {error ? (
-                <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+                <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                   {error}
                 </div>
               ) : null}
@@ -675,7 +675,7 @@ export function ResponsableEventsCalendar({
                   type="button"
                   onClick={saveEdit}
                   disabled={isPending}
-                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:opacity-60"
+                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:opacity-60"
                 >
                   {isPending ? "Enregistrement…" : "Enregistrer"}
                 </button>
@@ -683,7 +683,7 @@ export function ResponsableEventsCalendar({
                   type="button"
                   onClick={() => setEditing(null)}
                   disabled={isPending}
-                  className="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50 disabled:opacity-60"
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted disabled:opacity-60"
                 >
                   Annuler
                 </button>

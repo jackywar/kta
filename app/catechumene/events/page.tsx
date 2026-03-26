@@ -40,12 +40,12 @@ export default async function CatechumeneEventsPage() {
   if (error) throw new Error(error.message);
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">Évènements</h1>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-muted-foreground">
             Calendrier mensuel (par défaut) ou liste filtrable.
           </p>
         </header>

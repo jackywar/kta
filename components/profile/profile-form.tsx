@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { ModeSwitcher } from "@/components/theme/mode-switcher";
+import { PaletteSwitcher } from "@/components/theme/palette-switcher";
 
 type Props = {
   initialEmail: string;
@@ -86,8 +88,17 @@ export function ProfileForm({
 
   return (
     <form onSubmit={handleSave} className="space-y-6">
+      <div className="grid gap-4 md:grid-cols-2">
+        <div>
+          <ModeSwitcher label="Mode (clair/sombre/système)" />
+        </div>
+        <div>
+          <PaletteSwitcher label="Palette" />
+        </div>
+      </div>
+
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="email">
+        <label className="text-sm font-medium text-foreground" htmlFor="email">
           Email
         </label>
         <input
@@ -95,14 +106,14 @@ export function ProfileForm({
           type="email"
           value={initialEmail}
           readOnly
-          className="h-11 w-full cursor-not-allowed rounded-xl border border-zinc-200 bg-zinc-50 px-3 text-sm text-zinc-600 shadow-sm"
+          className="h-11 w-full cursor-not-allowed rounded-xl border border-border bg-muted px-3 text-sm text-muted-foreground shadow-sm"
         />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <label
-            className="text-sm font-medium text-zinc-900"
+            className="text-sm font-medium text-foreground"
             htmlFor="first-name"
           >
             Prénom
@@ -112,14 +123,14 @@ export function ProfileForm({
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
             placeholder="Votre prénom"
             autoComplete="given-name"
           />
         </div>
         <div className="space-y-2">
           <label
-            className="text-sm font-medium text-zinc-900"
+            className="text-sm font-medium text-foreground"
             htmlFor="last-name"
           >
             Nom
@@ -129,7 +140,7 @@ export function ProfileForm({
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
             placeholder="Votre nom"
             autoComplete="family-name"
           />
@@ -137,13 +148,13 @@ export function ProfileForm({
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
         </div>
       ) : null}
 
       {message ? (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+        <div className="rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
           {message}
         </div>
       ) : null}
@@ -152,7 +163,7 @@ export function ProfileForm({
         <button
           type="submit"
           disabled={isSaving}
-          className="inline-flex h-11 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSaving ? "Enregistrement…" : "Enregistrer les modifications"}
         </button>
@@ -160,7 +171,7 @@ export function ProfileForm({
           type="button"
           onClick={handleResetPassword}
           disabled={isResetting}
-          className="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-800 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isResetting ? "Envoi en cours…" : "Réinitialiser le mot de passe"}
         </button>

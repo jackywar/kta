@@ -32,19 +32,19 @@ export default async function ResponsableCandidatNewPage() {
   const responsables = (respRows ?? []) as ResponsableOption[];
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-2xl space-y-6 px-4 py-10">
         <header className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
             Nouveau candidat
           </h1>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-muted-foreground">
             Crée une fiche candidat (statut distinct du catéchumène).
           </p>
         </header>
 
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
           <CandidatCreateForm responsables={responsables} />
         </div>
       </div>

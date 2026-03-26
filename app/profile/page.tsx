@@ -58,20 +58,20 @@ export default async function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-2xl space-y-8 px-4 py-10">
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">
             Informations personnelles
           </h1>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-muted-foreground">
             Modifiez votre nom, prénom et gérez la réinitialisation de votre
             mot de passe.
           </p>
         </header>
 
-        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
           <ProfileForm
             initialEmail={profile.email}
             initialFirstName={profile.first_name ?? ""}

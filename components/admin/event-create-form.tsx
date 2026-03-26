@@ -112,12 +112,12 @@ export function EventCreateForm({
   }
 
   const inputClass =
-    "h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100";
+    "h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20";
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="ev-date">
+        <label className="text-sm font-medium text-foreground" htmlFor="ev-date">
           Date
         </label>
         <input
@@ -132,7 +132,7 @@ export function EventCreateForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-900" htmlFor="ev-type">
+          <label className="text-sm font-medium text-foreground" htmlFor="ev-type">
             Type d&apos;évènement
           </label>
           <select
@@ -166,7 +166,7 @@ export function EventCreateForm({
           ) : null}
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-900" htmlFor="ev-lieu">
+          <label className="text-sm font-medium text-foreground" htmlFor="ev-lieu">
             Lieu
           </label>
           <input
@@ -182,7 +182,7 @@ export function EventCreateForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="ev-visibility">
+        <label className="text-sm font-medium text-foreground" htmlFor="ev-visibility">
           Visibilite
         </label>
         <select
@@ -200,7 +200,7 @@ export function EventCreateForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="ev-libelle">
+        <label className="text-sm font-medium text-foreground" htmlFor="ev-libelle">
           Libellé
         </label>
         <input
@@ -215,7 +215,7 @@ export function EventCreateForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="ev-desc">
+        <label className="text-sm font-medium text-foreground" htmlFor="ev-desc">
           Descriptif (Markdown)
         </label>
         <textarea
@@ -223,19 +223,19 @@ export function EventCreateForm({
           rows={5}
           value={values.descriptif}
           onChange={(e) => set("descriptif", e.target.value)}
-          className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="Détails de l'évènement…"
         />
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
         </div>
       ) : null}
 
       {success ? (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+        <div className="rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
           {success}
         </div>
       ) : null}
@@ -243,7 +243,7 @@ export function EventCreateForm({
       <button
         type="submit"
         disabled={isPending || !canSubmit}
-        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? "Création…" : "Créer l'évènement"}
       </button>

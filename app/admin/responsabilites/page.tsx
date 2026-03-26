@@ -35,24 +35,24 @@ export default async function AdminResponsabilitesPage() {
   if (respError) throw new Error(respError.message);
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">
             Administration — Responsabilités
           </h1>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-muted-foreground">
             Créez, modifiez et supprimez des responsabilités.
           </p>
         </header>
 
         <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
-          <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-            <h2 className="text-sm font-medium text-zinc-900">
+          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <h2 className="text-sm font-medium text-foreground">
               Créer une responsabilité
             </h2>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-muted-foreground">
               Saisissez le libellé et le descriptif (Markdown).
             </p>
             <div className="mt-5">
@@ -60,8 +60,8 @@ export default async function AdminResponsabilitesPage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-            <h2 className="text-sm font-medium text-zinc-900">
+          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <h2 className="text-sm font-medium text-foreground">
               Responsabilités
             </h2>
             <div className="mt-5">

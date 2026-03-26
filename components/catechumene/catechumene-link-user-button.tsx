@@ -21,11 +21,11 @@ export function CatechumeneLinkUserButton({
   if (isLinked) {
     return (
       <div className="flex flex-col items-start gap-1 sm:items-end">
-        <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+        <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
           Utilisateur lié
         </span>
         {error ? (
-          <p className="text-xs text-red-600">{error}</p>
+          <p className="text-xs text-destructive">{error}</p>
         ) : null}
       </div>
     );
@@ -66,7 +66,7 @@ export function CatechumeneLinkUserButton({
         type="button"
         onClick={handleClick}
         disabled={isPending || !email}
-        className="inline-flex h-9 items-center justify-center rounded-lg border border-blue-200 bg-blue-50 px-3 text-xs font-medium text-blue-700 shadow-sm transition hover:bg-blue-100 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-zinc-50 disabled:text-zinc-400"
+        className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:text-muted-foreground"
         title={
           email
             ? "Créer un utilisateur pour ce catéchumène"
@@ -75,7 +75,7 @@ export function CatechumeneLinkUserButton({
       >
         Créer l&apos;utilisateur
       </button>
-      {error ? <p className="text-xs text-red-600">{error}</p> : null}
+      {error ? <p className="text-xs text-destructive">{error}</p> : null}
     </div>
   );
 }

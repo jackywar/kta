@@ -115,29 +115,29 @@ export function CatechumeneEditForm({
   }
 
   const inputClass =
-    "h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100";
-  const labelClass = "text-sm font-medium text-zinc-900";
+    "h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20";
+  const labelClass = "text-sm font-medium text-foreground";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex items-center justify-between gap-4">
         <Link
           href={backHref}
-          className="text-sm font-medium text-zinc-600 underline-offset-4 hover:text-zinc-900 hover:underline"
+          className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
         >
           ← Retour
         </Link>
         <button
           type="submit"
           disabled={isPending || !canSubmit}
-          className="inline-flex h-10 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isPending ? "Enregistrement…" : "Enregistrer"}
         </button>
       </div>
 
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-        <h2 className="text-sm font-semibold text-zinc-900">Photo</h2>
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <h2 className="text-sm font-semibold text-foreground">Photo</h2>
         <div className="mt-3">
           <CatechumenePhotoField
             catechumeneId={catechumene.id}
@@ -147,7 +147,7 @@ export function CatechumeneEditForm({
         </div>
       </div>
 
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-sm space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <label className={labelClass} htmlFor="e-nom">Nom</label>
@@ -287,7 +287,7 @@ export function CatechumeneEditForm({
             rows={3}
             value={values.rencontre_individuelle_texte}
             onChange={(e) => set("rencontre_individuelle_texte", e.target.value)}
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           />
         </div>
 
@@ -300,13 +300,13 @@ export function CatechumeneEditForm({
             rows={4}
             value={values.observations}
             onChange={(e) => set("observations", e.target.value)}
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           />
         </div>
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
         </div>
       ) : null}

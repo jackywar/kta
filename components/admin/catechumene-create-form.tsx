@@ -117,7 +117,7 @@ export function CatechumeneCreateForm({
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-900" htmlFor="c-nom">
+          <label className="text-sm font-medium text-foreground" htmlFor="c-nom">
             Nom
           </label>
           <input
@@ -126,13 +126,13 @@ export function CatechumeneCreateForm({
             autoComplete="family-name"
             value={values.nom}
             onChange={(e) => set("nom", e.target.value)}
-            className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
             placeholder="Dupont"
             required
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-900" htmlFor="c-prenom">
+          <label className="text-sm font-medium text-foreground" htmlFor="c-prenom">
             Prénom
           </label>
           <input
@@ -141,14 +141,14 @@ export function CatechumeneCreateForm({
             autoComplete="given-name"
             value={values.prenom}
             onChange={(e) => set("prenom", e.target.value)}
-            className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
             placeholder="Marie"
             required
           />
         </div>
       </div>
 
-      <div className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3">
+      <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/80 px-4 py-3">
         <input
           id="c-est-candidat"
           type="checkbox"
@@ -156,16 +156,16 @@ export function CatechumeneCreateForm({
           onChange={(e) =>
             setValues((v) => ({ ...v, est_candidat: e.target.checked }))
           }
-          className="mt-1 h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-400"
+          className="mt-1 h-4 w-4 rounded border-border text-foreground focus:ring-ring"
         />
         <div className="min-w-0">
           <label
             htmlFor="c-est-candidat"
-            className="text-sm font-medium text-zinc-900"
+            className="text-sm font-medium text-foreground"
           >
             Candidat
           </label>
-          <p className="mt-0.5 text-xs text-zinc-600">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             Si coché, la fiche est traitée comme candidat (liste candidats
             responsable) et non comme catéchumène actif dans la liste principale.
           </p>
@@ -173,14 +173,14 @@ export function CatechumeneCreateForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="c-frat">
+        <label className="text-sm font-medium text-foreground" htmlFor="c-frat">
           Frat
         </label>
         <select
           id="c-frat"
           value={values.frat_id}
           onChange={(e) => set("frat_id", e.target.value)}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
         >
           <option value="">Aucune frat</option>
           {frats.map((f) => (
@@ -196,8 +196,8 @@ export function CatechumeneCreateForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="c-email">
-          Email <span className="text-zinc-400">(facultatif)</span>
+        <label className="text-sm font-medium text-foreground" htmlFor="c-email">
+          Email <span className="text-muted-foreground">(facultatif)</span>
         </label>
         <input
           id="c-email"
@@ -205,13 +205,13 @@ export function CatechumeneCreateForm({
           autoComplete="email"
           value={values.email}
           onChange={(e) => set("email", e.target.value)}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="marie@exemple.fr"
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="c-telephone">
+        <label className="text-sm font-medium text-foreground" htmlFor="c-telephone">
           Téléphone
         </label>
         <input
@@ -220,40 +220,40 @@ export function CatechumeneCreateForm({
           autoComplete="tel"
           value={values.telephone}
           onChange={(e) => set("telephone", e.target.value)}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="06 12 34 56 78"
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-900" htmlFor="c-date-naissance">
-            Date de naissance <span className="text-zinc-400">(facultatif)</span>
+          <label className="text-sm font-medium text-foreground" htmlFor="c-date-naissance">
+            Date de naissance <span className="text-muted-foreground">(facultatif)</span>
           </label>
           <input
             id="c-date-naissance"
             type="date"
             value={values.date_naissance}
             onChange={(e) => set("date_naissance", e.target.value)}
-            className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-900" htmlFor="c-date-entree">
-            Date d&apos;entrée en catéchuménat <span className="text-zinc-400">(facultatif)</span>
+          <label className="text-sm font-medium text-foreground" htmlFor="c-date-entree">
+            Date d&apos;entrée en catéchuménat <span className="text-muted-foreground">(facultatif)</span>
           </label>
           <input
             id="c-date-entree"
             type="date"
             value={values.date_entree_catechumenat}
             onChange={(e) => set("date_entree_catechumenat", e.target.value)}
-            className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="c-aine">
+        <label className="text-sm font-medium text-foreground" htmlFor="c-aine">
           Ainé dans la foi
         </label>
         <input
@@ -261,13 +261,13 @@ export function CatechumeneCreateForm({
           type="text"
           value={values.aine_dans_la_foi}
           onChange={(e) => set("aine_dans_la_foi", e.target.value)}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="Nom de l'ainé"
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="c-annee-bapteme">
+        <label className="text-sm font-medium text-foreground" htmlFor="c-annee-bapteme">
           Année de baptême prévisionnelle
         </label>
         <input
@@ -277,14 +277,14 @@ export function CatechumeneCreateForm({
           max={2100}
           value={values.annee_bapteme_previsionnelle}
           onChange={(e) => set("annee_bapteme_previsionnelle", e.target.value)}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="2026"
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-zinc-900" htmlFor="c-rencontre-date">
+          <label className="text-sm font-medium text-foreground" htmlFor="c-rencontre-date">
             Date rencontre individuelle
           </label>
           <input
@@ -292,13 +292,13 @@ export function CatechumeneCreateForm({
             type="date"
             value={values.rencontre_individuelle_date}
             onChange={(e) => set("rencontre_individuelle_date", e.target.value)}
-            className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="c-rencontre-texte">
+        <label className="text-sm font-medium text-foreground" htmlFor="c-rencontre-texte">
           Rencontre individuelle (notes)
         </label>
         <textarea
@@ -306,13 +306,13 @@ export function CatechumeneCreateForm({
           rows={3}
           value={values.rencontre_individuelle_texte}
           onChange={(e) => set("rencontre_individuelle_texte", e.target.value)}
-          className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="Notes de la rencontre…"
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="c-observations">
+        <label className="text-sm font-medium text-foreground" htmlFor="c-observations">
           Observations (Markdown)
         </label>
         <textarea
@@ -320,19 +320,19 @@ export function CatechumeneCreateForm({
           rows={4}
           value={values.observations}
           onChange={(e) => set("observations", e.target.value)}
-          className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="Notes libres en markdown…"
         />
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
         </div>
       ) : null}
 
       {success ? (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+        <div className="rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
           {success}
         </div>
       ) : null}
@@ -340,7 +340,7 @@ export function CatechumeneCreateForm({
       <button
         type="submit"
         disabled={isPending || !canSubmit}
-        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? "Création…" : "Créer le catéchumène"}
       </button>

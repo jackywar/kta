@@ -46,16 +46,16 @@ export default async function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-5xl px-4 py-10">
-        <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
           {pageContent.trim() ? (
             <MarkdownContent content={pageContent} />
           ) : (
             <>
               <h1 className="text-xl font-semibold tracking-tight">Accueil</h1>
-              <p className="mt-2 text-sm text-zinc-600">
+              <p className="mt-2 text-sm text-muted-foreground">
                 Vous êtes connecté.
               </p>
             </>

@@ -54,7 +54,7 @@ export function CandidatSelfAssign({
           type="button"
           disabled={pending}
           onClick={() => call("unassign")}
-          className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-800 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "…" : "Me désaffecter"}
         </button>
@@ -63,13 +63,13 @@ export function CandidatSelfAssign({
           type="button"
           disabled={pending}
           onClick={() => call("assign")}
-          className="inline-flex h-9 items-center justify-center rounded-lg bg-zinc-900 px-3 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "…" : "Me l'affecter"}
         </button>
       )}
       {error ? (
-        <span className="text-sm text-red-600" role="alert">
+        <span className="text-sm text-destructive" role="alert">
           {error}
         </span>
       ) : null}

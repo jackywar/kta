@@ -66,9 +66,9 @@ export function CandidatTilesWithFilter({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
         <div className="min-w-0 flex-1 space-y-1.5">
-          <label htmlFor="candidats-search" className="text-xs font-medium text-zinc-600">
+          <label htmlFor="candidats-search" className="text-xs font-medium text-muted-foreground">
             Recherche
           </label>
           <input
@@ -77,12 +77,12 @@ export function CandidatTilesWithFilter({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Nom, prénom, responsable, statut…"
-            className="h-10 w-full max-w-md rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-100"
+            className="h-10 w-full max-w-md rounded-lg border border-border bg-card px-3 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
             aria-label="Rechercher"
           />
         </div>
         <div className="w-full space-y-1.5 sm:w-auto sm:min-w-[220px]">
-          <label htmlFor="candidats-statut" className="text-xs font-medium text-zinc-600">
+          <label htmlFor="candidats-statut" className="text-xs font-medium text-muted-foreground">
             Statut
           </label>
           <select
@@ -91,7 +91,7 @@ export function CandidatTilesWithFilter({
             onChange={(e) =>
               setStatutFilter(e.target.value as StatutFilterValue)
             }
-            className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-100"
+            className="h-10 w-full rounded-lg border border-border bg-card px-3 text-sm shadow-sm focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
           >
             <option value="all">Tous les statuts</option>
             <option value="none">Sans statut</option>
@@ -104,7 +104,7 @@ export function CandidatTilesWithFilter({
         </div>
       </div>
       {noMatch ? (
-        <p className="rounded-2xl border border-zinc-200 bg-white p-8 text-center text-sm text-zinc-600">
+        <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
           Aucun candidat ne correspond à la recherche ou au filtre de statut.
         </p>
       ) : (
@@ -117,7 +117,7 @@ export function CandidatTilesWithFilter({
 export function CandidatTiles({ candidats }: { candidats: CandidatWithResponsable[] }) {
   if (candidats.length === 0) {
     return (
-      <p className="rounded-2xl border border-zinc-200 bg-white p-8 text-center text-sm text-zinc-600">
+      <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
         Aucun candidat.
       </p>
     );
@@ -129,7 +129,7 @@ export function CandidatTiles({ candidats }: { candidats: CandidatWithResponsabl
         <li key={c.id}>
           <Link
             href={`/responsable/candidats/${c.id}`}
-            className="block rounded-2xl focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2"
+            className="block rounded-2xl focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <CandidatTile candidat={c} />
           </Link>
@@ -149,8 +149,8 @@ function CandidatTile({ candidat }: { candidat: CandidatWithResponsable }) {
     : null;
 
   return (
-    <article className="flex aspect-square cursor-pointer flex-col overflow-hidden rounded-2xl border-[3px] border-zinc-300 bg-white shadow-sm transition-shadow hover:shadow-md">
-      <div className="relative min-h-0 flex-1 overflow-hidden bg-zinc-100">
+    <article className="flex aspect-square cursor-pointer flex-col overflow-hidden rounded-2xl border-[3px] border-border bg-card shadow-sm transition-shadow hover:shadow-md">
+      <div className="relative min-h-0 flex-1 overflow-hidden bg-muted">
         {photoUrl ? (
           <Image
             src={photoUrl}
@@ -161,40 +161,40 @@ function CandidatTile({ candidat }: { candidat: CandidatWithResponsable }) {
           />
         ) : (
           <div
-            className="flex h-full w-full items-center justify-center text-4xl text-zinc-300"
+            className="flex h-full w-full items-center justify-center text-4xl text-muted-foreground"
             aria-hidden
           >
             —
           </div>
         )}
       </div>
-      <div className="shrink-0 border-t border-zinc-100 px-2 py-2 text-center">
-        <p className="truncate text-sm font-medium text-zinc-900">
+      <div className="shrink-0 border-t border-border/60 px-2 py-2 text-center">
+        <p className="truncate text-sm font-medium text-foreground">
           {candidat.prenom} {candidat.nom}
         </p>
-        <p className="mt-0.5 truncate text-[10px] font-medium uppercase tracking-wide text-amber-700">
+        <p className="mt-0.5 truncate text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
           Candidat
         </p>
         {statutMeta ? (
           <p
-            className="mt-1 line-clamp-2 text-[11px] leading-tight text-zinc-700"
+            className="mt-1 line-clamp-2 text-[11px] leading-tight text-muted-foreground"
             title={`${statutMeta.emoji} ${statutMeta.label}`}
           >
             <span aria-hidden>{statutMeta.emoji}</span>{" "}
             <span>{statutMeta.shortLabel}</span>
           </p>
         ) : (
-          <p className="mt-1 text-[11px] text-zinc-400">Sans statut</p>
+          <p className="mt-1 text-[11px] text-muted-foreground">Sans statut</p>
         )}
         {responsableLabel ? (
           <p
-            className="mt-1 truncate text-[11px] leading-tight text-zinc-600"
+            className="mt-1 truncate text-[11px] leading-tight text-muted-foreground"
             title={responsableLabel}
           >
-            <span className="text-zinc-400">Resp.</span> {responsableLabel}
+            <span className="text-muted-foreground">Resp.</span> {responsableLabel}
           </p>
         ) : (
-          <p className="mt-1 truncate text-[11px] text-zinc-400">Sans responsable</p>
+          <p className="mt-1 truncate text-[11px] text-muted-foreground">Sans responsable</p>
         )}
       </div>
     </article>

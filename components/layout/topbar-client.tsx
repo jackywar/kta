@@ -79,7 +79,7 @@ export function TopbarClient({ displayName, roleLine, navLinks }: Props) {
           <button
             ref={menuButtonRef}
             type="button"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-800 shadow-sm transition hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 md:hidden"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-foreground shadow-sm transition hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:hidden"
             aria-expanded={open}
             aria-controls={panelId}
             aria-haspopup="dialog"
@@ -102,7 +102,7 @@ export function TopbarClient({ displayName, roleLine, navLinks }: Props) {
 
         <Link
           href="/"
-          className="shrink-0 text-sm font-semibold tracking-tight text-zinc-900"
+          className="shrink-0 text-sm font-semibold tracking-tight text-foreground"
         >
           KTA
         </Link>
@@ -116,7 +116,7 @@ export function TopbarClient({ displayName, roleLine, navLinks }: Props) {
               <Link
                 key={item.href + item.label}
                 href={item.href}
-                className="text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline"
+                className="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
               >
                 {item.label}
               </Link>
@@ -128,7 +128,7 @@ export function TopbarClient({ displayName, roleLine, navLinks }: Props) {
       <div className="flex shrink-0 items-center gap-2 sm:gap-3">
         <Link
           href="/profile"
-          className="max-w-[40vw] truncate text-xs font-medium text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline sm:max-w-none"
+          className="max-w-[40vw] truncate text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline sm:max-w-none"
         >
           {displayName}
         </Link>
@@ -142,7 +142,7 @@ export function TopbarClient({ displayName, roleLine, navLinks }: Props) {
           <div className="fixed inset-0 z-[100] md:hidden">
             <button
               type="button"
-              className="absolute inset-0 z-0 bg-zinc-900/40 backdrop-blur-[1px]"
+              className="absolute inset-0 z-0 bg-primary/40 backdrop-blur-[1px]"
               aria-label="Fermer le menu"
               onClick={close}
             />
@@ -152,14 +152,14 @@ export function TopbarClient({ displayName, roleLine, navLinks }: Props) {
               role="dialog"
               aria-modal="true"
               aria-labelledby={titleId}
-              className="absolute left-0 top-0 z-10 flex h-full w-[min(20rem,88vw)] flex-col border-r border-zinc-200 bg-white shadow-xl"
+              className="absolute left-0 top-0 z-10 flex h-full w-[min(20rem,88vw)] flex-col border-r border-border bg-card shadow-xl"
             >
-              <div className="border-b border-zinc-100 px-4 py-4">
-                <p id={titleId} className="text-sm font-semibold text-zinc-900">
+              <div className="border-b border-border/60 px-4 py-4">
+                <p id={titleId} className="text-sm font-semibold text-foreground">
                   {displayName}
                 </p>
                 {roleLine ? (
-                  <p className="mt-0.5 text-xs text-zinc-500">{roleLine}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{roleLine}</p>
                 ) : null}
               </div>
               <nav
@@ -170,7 +170,7 @@ export function TopbarClient({ displayName, roleLine, navLinks }: Props) {
                   <li>
                     <Link
                       href="/"
-                      className="block rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-800 hover:bg-zinc-50"
+                      className="block rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted"
                       onClick={close}
                     >
                       Accueil
@@ -180,7 +180,7 @@ export function TopbarClient({ displayName, roleLine, navLinks }: Props) {
                     <li key={item.href + item.label}>
                       <Link
                         href={item.href}
-                        className="block rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-800 hover:bg-zinc-50"
+                        className="block rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted"
                         onClick={close}
                       >
                         {item.label}

@@ -4,7 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 
 const ReactMarkdown = dynamic(() => import("react-markdown"), {
-  loading: () => <div className="animate-pulse h-4 bg-zinc-200 rounded w-3/4" />
+  loading: () => <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
 });
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 
 /** Styles pour blocs Markdown (paragraphes, listes, titres h2–h6, liens). */
 const markdownClasses =
-  "markdown-content [&_p]:text-sm [&_p]:text-zinc-700 [&_p]:my-2 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-zinc-900 [&_h1]:text-lg [&_h2]:text-base [&_h3]:text-sm [&_h1,_h2,_h3]:font-semibold [&_h1,_h2,_h3]:text-zinc-900 [&_h1,_h2,_h3]:mt-4 [&_a]:text-zinc-700 [&_a]:underline";
+  "markdown-content [&_p]:text-sm [&_p]:text-muted-foreground [&_p]:my-2 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-foreground [&_h1]:text-lg [&_h2]:text-base [&_h3]:text-sm [&_h1,_h2,_h3]:font-semibold [&_h1,_h2,_h3]:text-foreground [&_h1,_h2,_h3]:mt-4 [&_a]:text-muted-foreground [&_a]:underline";
 
 const H1_LINE = /^#\s+(.+)$/;
 
@@ -65,12 +65,12 @@ export function splitMarkdownByH1(raw: string): {
 
 /** Hors `markdown-content` pour éviter tout conflit de sélecteurs sur le summary. */
 const summaryClasses =
-  "flex w-full cursor-pointer select-none list-none items-center justify-between gap-3 text-lg font-semibold text-zinc-900 py-2 [&::-webkit-details-marker]:hidden " +
-  "rounded-lg px-1 -mx-1 transition hover:bg-zinc-50 " +
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2";
+  "flex w-full cursor-pointer select-none list-none items-center justify-between gap-3 text-lg font-semibold text-foreground py-2 [&::-webkit-details-marker]:hidden " +
+  "rounded-lg px-1 -mx-1 transition hover:bg-muted " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 const detailsClasses =
-  "markdown-details border-b border-zinc-100 last:border-b-0";
+  "markdown-details border-b border-border/60 last:border-b-0";
 
 function MarkdownAccordionSection({ section }: { section: MarkdownH1Section }) {
   const [open, setOpen] = useState(true);
@@ -86,7 +86,7 @@ function MarkdownAccordionSection({ section }: { section: MarkdownH1Section }) {
         <AccordionChevron />
       </summary>
       <div
-        className={`border-l-2 border-zinc-100 pl-3 pb-2 pt-0.5 ${markdownClasses}`}
+        className={`border-l-2 border-border/60 pl-3 pb-2 pt-0.5 ${markdownClasses}`}
       >
         {section.body.trim() ? (
           <ReactMarkdown>{section.body}</ReactMarkdown>

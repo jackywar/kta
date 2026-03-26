@@ -111,7 +111,7 @@ export function UsersTable({
 
   if (users.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-zinc-200 p-6 text-sm text-zinc-600">
+      <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
         Aucun utilisateur.
       </div>
     );
@@ -182,10 +182,10 @@ export function UsersTable({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-zinc-200">
+    <div className="overflow-hidden rounded-xl border border-border">
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+          <thead className="bg-muted text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             <tr>
               <th className="px-4 py-3 min-w-[240px]">Nom</th>
               <th className="px-4 py-3">Email</th>
@@ -196,7 +196,7 @@ export function UsersTable({
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-200 bg-white">
+          <tbody className="divide-y divide-border bg-card">
             {users.map((u) => {
               const row = state[u.id] ?? {
                 firstName: u.first_name ?? "",
@@ -212,8 +212,8 @@ export function UsersTable({
                 row.savingRole || row.resettingPassword || row.deleting;
 
               return (
-                <tr key={u.id} className="hover:bg-zinc-50/70">
-                  <td className="px-4 py-3 text-zinc-900">
+                <tr key={u.id} className="hover:bg-muted/70">
+                  <td className="px-4 py-3 text-foreground">
                     <div className="flex flex-col gap-1">
                       <input
                         type="text"
@@ -229,7 +229,7 @@ export function UsersTable({
                         }
                         placeholder="Prénom"
                         disabled={disabledGlobally || isRowBusy}
-                        className="h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                        className="h-9 w-full rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
                       />
                       <input
                         type="text"
@@ -245,11 +245,11 @@ export function UsersTable({
                         }
                         placeholder="Nom"
                         disabled={disabledGlobally || isRowBusy}
-                        className="h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                        className="h-9 w-full rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
                       />
                     </div>
                   </td>
-                  <td className="px-4 py-3 font-medium text-zinc-900">
+                  <td className="px-4 py-3 font-medium text-foreground">
                     {u.email}
                   </td>
                   <td className="px-4 py-3">
@@ -266,7 +266,7 @@ export function UsersTable({
                           }))
                         }
                         disabled={disabledGlobally || isRowBusy}
-                        className="h-8 rounded-lg border border-zinc-200 bg-white px-2 text-xs shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                        className="h-8 rounded-lg border border-border bg-card px-2 text-xs shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
                       >
                         {roleSchema.options.map((r) => (
                           <option key={r} value={r}>
@@ -283,7 +283,7 @@ export function UsersTable({
                           const ids = associationsByProfileId.get(u.id) ?? [];
                           if (ids.length === 0) {
                             return (
-                              <span className="text-xs text-zinc-400">
+                              <span className="text-xs text-muted-foreground">
                                 Aucune
                               </span>
                             );
@@ -293,7 +293,7 @@ export function UsersTable({
                             return r ? (
                               <span
                                 key={rid}
-                                className="inline-block max-w-[120px] truncate rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700"
+                                className="inline-block max-w-[120px] truncate rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
                                 title={r.libelle}
                               >
                                 {r.libelle}
@@ -302,7 +302,7 @@ export function UsersTable({
                           });
                         })()}
                         {(associationsByProfileId.get(u.id)?.length ?? 0) > 2 ? (
-                          <span className="text-xs text-zinc-400">
+                          <span className="text-xs text-muted-foreground">
                             +{(associationsByProfileId.get(u.id)?.length ?? 0) - 2} autres
                           </span>
                         ) : null}
@@ -310,13 +310,13 @@ export function UsersTable({
                           type="button"
                           onClick={() => openResponsabilitesModal(u.id, u.email)}
                           disabled={disabledGlobally || isRowBusy}
-                          className="mt-1 inline-flex h-7 items-center justify-center rounded-lg border border-zinc-200 bg-white px-2 text-xs text-zinc-600 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="mt-1 inline-flex h-7 items-center justify-center rounded-lg border border-border bg-card px-2 text-xs text-muted-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           Modifier
                         </button>
                       </div>
                     ) : (
-                      <span className="text-xs text-zinc-400">—</span>
+                      <span className="text-xs text-muted-foreground">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -325,7 +325,7 @@ export function UsersTable({
                         type="button"
                         onClick={() => handleResetPassword(u.email)}
                         disabled={disabledGlobally || isRowBusy}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                         title="Envoyer un lien de réinitialisation de mot de passe"
                       >
                         {/* pictogramme clé simple */}
@@ -333,7 +333,7 @@ export function UsersTable({
                       </button>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-zinc-600">
+                  <td className="px-4 py-3 text-muted-foreground">
                     {new Date(u.created_at).toLocaleString("fr-FR")}
                   </td>
                   <td className="px-4 py-3">
@@ -342,7 +342,7 @@ export function UsersTable({
                         type="button"
                         onClick={() => handleSaveRole(u.id)}
                         disabled={disabledGlobally || isRowBusy}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                         title="Enregistrer le rôle"
                       >
                         {/* pictogramme disquette */}
@@ -352,7 +352,7 @@ export function UsersTable({
                         type="button"
                         onClick={() => openDeleteConfirm(u.id, u.email)}
                         disabled={disabledGlobally || isRowBusy}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-red-200 bg-white text-red-600 shadow-sm transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-destructive/30 bg-card text-destructive shadow-sm transition hover:bg-destructive/10 disabled:cursor-not-allowed disabled:opacity-50"
                         title="Supprimer l’utilisateur"
                       >
                         {/* pictogramme corbeille */}
@@ -368,13 +368,13 @@ export function UsersTable({
       </div>
       {confirmingUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-sm font-semibold text-zinc-900">
+          <div className="w-full max-w-sm rounded-xl bg-card p-6 shadow-xl">
+            <h2 className="text-sm font-semibold text-foreground">
               Confirmer la suppression
             </h2>
-            <p className="mt-2 text-sm text-zinc-600">
+            <p className="mt-2 text-sm text-muted-foreground">
               Voulez-vous vraiment supprimer l’utilisateur{" "}
-              <span className="font-medium text-zinc-900">
+              <span className="font-medium text-foreground">
                 {confirmingUser.email}
               </span>
               ? Cette action est définitive.
@@ -383,14 +383,14 @@ export function UsersTable({
               <button
                 type="button"
                 onClick={() => setConfirmingUser(null)}
-                className="inline-flex items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                className="inline-flex items-center justify-center rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={() => handleConfirmDelete(confirmingUser.id)}
-                className="inline-flex items-center justify-center rounded-lg border border-red-200 bg-red-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-red-700"
+                className="inline-flex items-center justify-center rounded-lg border border-destructive/30 bg-destructive px-3 py-1.5 text-xs font-medium text-destructive-foreground shadow-sm transition hover:bg-destructive/90"
               >
                 Supprimer
               </button>
@@ -400,23 +400,23 @@ export function UsersTable({
       )}
       {editingResponsabilites && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-sm font-semibold text-zinc-900">
+          <div className="w-full max-w-md rounded-xl bg-card p-6 shadow-xl">
+            <h2 className="text-sm font-semibold text-foreground">
               Responsabilités de {editingResponsabilites.email}
             </h2>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-muted-foreground">
               Cochez les responsabilités à attribuer.
             </p>
             <div className="mt-4 max-h-64 space-y-2 overflow-y-auto">
               {responsabilites.length === 0 ? (
-                <p className="text-sm text-zinc-500">
+                <p className="text-sm text-muted-foreground">
                   Aucune responsabilité définie.
                 </p>
               ) : (
                 responsabilites.map((r) => (
                   <label
                     key={r.id}
-                    className="flex cursor-pointer items-start gap-3 rounded-lg border border-zinc-200 p-3 transition hover:bg-zinc-50"
+                    className="flex cursor-pointer items-start gap-3 rounded-lg border border-border p-3 transition hover:bg-muted"
                   >
                     <input
                       type="checkbox"
@@ -433,14 +433,14 @@ export function UsersTable({
                           selectedIds: newSet
                         });
                       }}
-                      className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500"
+                      className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-ring"
                     />
                     <div className="min-w-0 flex-1">
-                      <div className="text-sm font-medium text-zinc-900">
+                      <div className="text-sm font-medium text-foreground">
                         {r.libelle}
                       </div>
                       {r.descriptif ? (
-                        <div className="mt-0.5 truncate text-xs text-zinc-500">
+                        <div className="mt-0.5 truncate text-xs text-muted-foreground">
                           {r.descriptif.slice(0, 80)}
                           {r.descriptif.length > 80 ? "…" : ""}
                         </div>
@@ -454,7 +454,7 @@ export function UsersTable({
               <button
                 type="button"
                 onClick={() => setEditingResponsabilites(null)}
-                className="inline-flex items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                className="inline-flex items-center justify-center rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
               >
                 Annuler
               </button>
@@ -462,7 +462,7 @@ export function UsersTable({
                 type="button"
                 onClick={handleSaveResponsabilites}
                 disabled={isPending}
-                className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isPending ? "Enregistrement…" : "Enregistrer"}
               </button>

@@ -96,19 +96,19 @@ export default async function ResponsableCatechumeneDetailPage({
   if (attError) throw new Error(attError.message);
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-10">
         <div className="flex items-center justify-between gap-4">
           <Link
             href="/responsable/catechumenes"
-            className="text-sm font-medium text-zinc-600 underline-offset-4 hover:text-zinc-900 hover:underline"
+            className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             ← Catéchumènes
           </Link>
           <Link
             href={`/responsable/catechumenes/${id}/edit`}
-            className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+            className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
           >
             Édition
           </Link>

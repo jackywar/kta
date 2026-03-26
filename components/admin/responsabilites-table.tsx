@@ -76,7 +76,7 @@ export function ResponsabilitesTable({
 
   if (responsabilites.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-zinc-200 p-6 text-sm text-zinc-600">
+      <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
         Aucune responsabilité.
       </div>
     );
@@ -84,30 +84,30 @@ export function ResponsabilitesTable({
 
   return (
     <>
-      <div className="overflow-hidden rounded-xl border border-zinc-200">
+      <div className="overflow-hidden rounded-xl border border-border">
         <div className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
-            <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+            <thead className="bg-muted text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3">Libellé</th>
                 <th className="px-4 py-3">Descriptif</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 bg-white">
+            <tbody className="divide-y divide-border bg-card">
               {responsabilites.map((r) => (
-                <tr key={r.id} className="hover:bg-zinc-50/70">
-                  <td className="px-4 py-3 font-medium text-zinc-900">
+                <tr key={r.id} className="hover:bg-muted/70">
+                  <td className="px-4 py-3 font-medium text-foreground">
                     {r.libelle}
                   </td>
-                  <td className="px-4 py-3 text-zinc-600">
+                  <td className="px-4 py-3 text-muted-foreground">
                     {r.descriptif ? (
                       <span className="truncate block max-w-xs">
                         {r.descriptif.slice(0, 60)}
                         {r.descriptif.length > 60 ? "…" : ""}
                       </span>
                     ) : (
-                      <span className="text-zinc-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -115,14 +115,14 @@ export function ResponsabilitesTable({
                       <button
                         type="button"
                         onClick={() => openEdit(r)}
-                        className="inline-flex h-8 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs text-zinc-600 shadow-sm transition hover:bg-zinc-50"
+                        className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs text-muted-foreground shadow-sm transition hover:bg-muted"
                       >
                         Modifier
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDelete(r.id)}
-                        className="inline-flex h-8 items-center justify-center rounded-lg border border-red-200 bg-white px-3 text-xs text-red-600 shadow-sm transition hover:bg-red-50"
+                        className="inline-flex h-8 items-center justify-center rounded-lg border border-destructive/30 bg-card px-3 text-xs text-destructive shadow-sm transition hover:bg-destructive/10"
                       >
                         Supprimer
                       </button>
@@ -142,10 +142,10 @@ export function ResponsabilitesTable({
           aria-modal="true"
           aria-labelledby="edit-responsabilite-title"
         >
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
+          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl">
             <h2
               id="edit-responsabilite-title"
-              className="text-lg font-semibold text-zinc-900"
+              className="text-lg font-semibold text-foreground"
             >
               Modifier la responsabilité
             </h2>
@@ -153,10 +153,10 @@ export function ResponsabilitesTable({
             <div className="mt-5 space-y-4">
               <div className="space-y-2">
                 <label
-                  className="text-sm font-medium text-zinc-900"
+                  className="text-sm font-medium text-foreground"
                   htmlFor="re-libelle"
                 >
-                  Libellé <span className="text-red-500">*</span>
+                  Libellé <span className="text-destructive">*</span>
                 </label>
                 <input
                   id="re-libelle"
@@ -167,14 +167,14 @@ export function ResponsabilitesTable({
                       v ? { ...v, libelle: e.target.value } : null
                     )
                   }
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                   required
                 />
               </div>
 
               <div className="space-y-2">
                 <label
-                  className="text-sm font-medium text-zinc-900"
+                  className="text-sm font-medium text-foreground"
                   htmlFor="re-descriptif"
                 >
                   Descriptif (Markdown)
@@ -187,20 +187,20 @@ export function ResponsabilitesTable({
                       v ? { ...v, descriptif: e.target.value } : null
                     )
                   }
-                  className="h-32 w-full resize-y rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-32 w-full resize-y rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               {editing.descriptif.trim() ? (
-                <div className="rounded-xl border border-zinc-100 bg-zinc-50 p-4">
-                  <p className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-500">
+                <div className="rounded-xl border border-border/60 bg-muted p-4">
+                  <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     Aperçu
                   </p>
                   <MarkdownContent content={editing.descriptif} />
                 </div>
               ) : null}
 
-              {error ? <p className="text-sm text-red-600">{error}</p> : null}
+              {error ? <p className="text-sm text-destructive">{error}</p> : null}
             </div>
 
             <div className="mt-6 flex gap-3">
@@ -208,14 +208,14 @@ export function ResponsabilitesTable({
                 type="button"
                 onClick={handleSave}
                 disabled={isPending || !editing.libelle.trim()}
-                className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isPending ? "Enregistrement…" : "Enregistrer"}
               </button>
               <button
                 type="button"
                 onClick={closeEdit}
-                className="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
               >
                 Annuler
               </button>

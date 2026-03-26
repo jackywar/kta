@@ -147,7 +147,7 @@ export function EventsTable({ events }: { events: Event[] }) {
 
   if (events.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-zinc-200 p-6 text-sm text-zinc-600">
+      <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
         Aucun évènement.
       </div>
     );
@@ -155,10 +155,10 @@ export function EventsTable({ events }: { events: Event[] }) {
 
   return (
     <>
-      <div className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between">
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="space-y-1">
-            <label className="text-xs font-medium text-zinc-700" htmlFor="ev-from">
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="ev-from">
               Du
             </label>
             <input
@@ -166,11 +166,11 @@ export function EventsTable({ events }: { events: Event[] }) {
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+              className="h-10 w-full rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs font-medium text-zinc-700" htmlFor="ev-to">
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="ev-to">
               Au
             </label>
             <input
@@ -178,19 +178,19 @@ export function EventsTable({ events }: { events: Event[] }) {
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+              className="h-10 w-full rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
             />
           </div>
         </div>
-        <div className="text-xs text-zinc-500">
+        <div className="text-xs text-muted-foreground">
           {filteredEvents.length} évènement{filteredEvents.length > 1 ? "s" : ""}
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-zinc-200">
+      <div className="overflow-hidden rounded-xl border border-border">
         <div className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
-            <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+            <thead className="bg-muted text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3">Type</th>
@@ -200,30 +200,30 @@ export function EventsTable({ events }: { events: Event[] }) {
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 bg-white">
+            <tbody className="divide-y divide-border bg-card">
               {filteredEvents.map((e) => (
-                <tr key={e.id} className="hover:bg-zinc-50/70">
-                  <td className="px-4 py-3 text-zinc-900">{formatDate(e.date)}</td>
-                  <td className="px-4 py-3 text-zinc-900">{e.type}</td>
-                  <td className="px-4 py-3 text-zinc-600">
+                <tr key={e.id} className="hover:bg-muted/70">
+                  <td className="px-4 py-3 text-foreground">{formatDate(e.date)}</td>
+                  <td className="px-4 py-3 text-foreground">{e.type}</td>
+                  <td className="px-4 py-3 text-muted-foreground">
                     {EVENT_VISIBILITY_OPTIONS.find((o) => o.value === e.visibility)
                       ?.label ?? e.visibility}
                   </td>
-                  <td className="px-4 py-3 text-zinc-900">{e.libelle}</td>
-                  <td className="px-4 py-3 text-zinc-600">{e.lieu}</td>
+                  <td className="px-4 py-3 text-foreground">{e.libelle}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{e.lieu}</td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       <button
                         type="button"
                         onClick={() => openEdit(e)}
-                        className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                        className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
                       >
                         Modifier
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDelete(e.id)}
-                        className="inline-flex h-9 items-center justify-center rounded-lg border border-red-200 bg-white px-3 text-xs font-medium text-red-700 shadow-sm transition hover:bg-red-50"
+                        className="inline-flex h-9 items-center justify-center rounded-lg border border-destructive/30 bg-card px-3 text-xs font-medium text-destructive shadow-sm transition hover:bg-destructive/10"
                       >
                         Supprimer
                       </button>
@@ -243,14 +243,14 @@ export function EventsTable({ events }: { events: Event[] }) {
           aria-modal="true"
           aria-labelledby="edit-event-title"
         >
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
-            <h2 id="edit-event-title" className="text-lg font-semibold text-zinc-900">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl">
+            <h2 id="edit-event-title" className="text-lg font-semibold text-foreground">
               Modifier l&apos;évènement
             </h2>
 
             <div className="mt-5 space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="ee-date">
+                <label className="text-sm font-medium text-foreground" htmlFor="ee-date">
                   Date
                 </label>
                 <input
@@ -258,14 +258,14 @@ export function EventsTable({ events }: { events: Event[] }) {
                   type="date"
                   value={editValues.date}
                   onChange={(e) => set("date", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                   required
                 />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-900" htmlFor="ee-type">
+                  <label className="text-sm font-medium text-foreground" htmlFor="ee-type">
                     Type d&apos;évènement
                   </label>
                   <select
@@ -281,7 +281,7 @@ export function EventsTable({ events }: { events: Event[] }) {
                           : null
                       )
                     }
-                    className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required
                   >
                     {EVENT_TYPE_OPTIONS.map((t) => (
@@ -296,14 +296,14 @@ export function EventsTable({ events }: { events: Event[] }) {
                       type="text"
                       value={editValues.type_autre}
                       onChange={(e) => set("type_autre", e.target.value)}
-                      className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                      className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                       placeholder="Saisir un autre type…"
                       required
                     />
                   ) : null}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-900" htmlFor="ee-lieu">
+                  <label className="text-sm font-medium text-foreground" htmlFor="ee-lieu">
                     Lieu
                   </label>
                   <input
@@ -311,14 +311,14 @@ export function EventsTable({ events }: { events: Event[] }) {
                     type="text"
                     value={editValues.lieu}
                     onChange={(e) => set("lieu", e.target.value)}
-                    className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="ee-libelle">
+                <label className="text-sm font-medium text-foreground" htmlFor="ee-libelle">
                   Libellé
                 </label>
                 <input
@@ -326,20 +326,20 @@ export function EventsTable({ events }: { events: Event[] }) {
                   type="text"
                   value={editValues.libelle}
                   onChange={(e) => set("libelle", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="ee-visibility">
+                <label className="text-sm font-medium text-foreground" htmlFor="ee-visibility">
                   Visibilite
                 </label>
                 <select
                   id="ee-visibility"
                   value={editValues.visibility}
                   onChange={(e) => set("visibility", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 >
                   {EVENT_VISIBILITY_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -350,7 +350,7 @@ export function EventsTable({ events }: { events: Event[] }) {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="ee-desc">
+                <label className="text-sm font-medium text-foreground" htmlFor="ee-desc">
                   Descriptif (Markdown)
                 </label>
                 <textarea
@@ -358,13 +358,13 @@ export function EventsTable({ events }: { events: Event[] }) {
                   rows={5}
                   value={editValues.descriptif}
                   onChange={(e) => set("descriptif", e.target.value)}
-                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               {editValues.descriptif.trim() ? (
-                <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                <div className="rounded-xl border border-border bg-muted p-4">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     Aperçu
                   </p>
                   <div className="mt-2">
@@ -374,7 +374,7 @@ export function EventsTable({ events }: { events: Event[] }) {
               ) : null}
 
               {error ? (
-                <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+                <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                   {error}
                 </div>
               ) : null}
@@ -384,7 +384,7 @@ export function EventsTable({ events }: { events: Event[] }) {
                   type="button"
                   onClick={handleSave}
                   disabled={isPending}
-                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:opacity-60"
+                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:opacity-60"
                 >
                   {isPending ? "Enregistrement…" : "Enregistrer"}
                 </button>
@@ -392,7 +392,7 @@ export function EventsTable({ events }: { events: Event[] }) {
                   type="button"
                   onClick={closeEdit}
                   disabled={isPending}
-                  className="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50 disabled:opacity-60"
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted disabled:opacity-60"
                 >
                   Annuler
                 </button>

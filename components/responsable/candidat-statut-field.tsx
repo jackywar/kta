@@ -49,7 +49,7 @@ export function CandidatStatutField({ candidatId, value }: Props) {
 
   return (
     <div className="space-y-2">
-      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         Statut de suivi
       </p>
       <div className="flex flex-col gap-1.5">
@@ -59,11 +59,11 @@ export function CandidatStatutField({ candidatId, value }: Props) {
           onClick={() => setStatut(null)}
           className={`rounded-lg border px-3 py-2 text-left text-sm transition disabled:opacity-60 ${
             value == null
-              ? "border-zinc-900 bg-zinc-50 font-medium text-zinc-900"
-              : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
+              ? "border-primary bg-muted font-medium text-foreground"
+              : "border-border bg-card text-muted-foreground hover:bg-muted"
           }`}
         >
-          <span className="mr-2 text-zinc-400" aria-hidden>
+          <span className="mr-2 text-muted-foreground" aria-hidden>
             ○
           </span>
           Aucun statut
@@ -78,8 +78,8 @@ export function CandidatStatutField({ candidatId, value }: Props) {
               onClick={() => setStatut(opt.value)}
               className={`rounded-lg border px-3 py-2 text-left text-sm transition disabled:opacity-60 ${
                 selected
-                  ? "border-zinc-900 bg-zinc-50 font-medium text-zinc-900"
-                  : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
+                  ? "border-primary bg-muted font-medium text-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-muted"
               }`}
             >
               <span className="mr-2" aria-hidden>
@@ -91,7 +91,7 @@ export function CandidatStatutField({ candidatId, value }: Props) {
         })}
       </div>
       {error ? (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm text-destructive" role="alert">
           {error}
         </p>
       ) : null}

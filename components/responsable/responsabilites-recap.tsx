@@ -26,7 +26,7 @@ export function responsableDisplayName(p: {
 export function ResponsabilitesRecap({ rows }: { rows: ResponsabiliteRecapRow[] }) {
   if (rows.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-zinc-200 bg-white p-8 text-center text-sm text-zinc-600">
+      <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
         Aucune responsabilité n&apos;est définie pour le moment.
       </div>
     );
@@ -37,25 +37,25 @@ export function ResponsabilitesRecap({ rows }: { rows: ResponsabiliteRecapRow[] 
       {rows.map((row) => (
         <li
           key={row.id}
-          className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+          className="rounded-2xl border border-border bg-card p-5 shadow-sm"
         >
-          <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
+          <h2 className="text-lg font-semibold tracking-tight text-foreground">
             {row.libelle}
           </h2>
           {row.descriptif?.trim() ? (
-            <div className="mt-3 border-t border-zinc-100 pt-3">
-              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-500">
+            <div className="mt-3 border-t border-border/60 pt-3">
+              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 Descriptif
               </p>
               <MarkdownContent content={row.descriptif} />
             </div>
           ) : null}
           <div className={row.descriptif?.trim() ? "mt-5" : "mt-4"}>
-            <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Responsables
             </p>
             {row.responsables.length === 0 ? (
-              <p className="mt-2 text-sm text-zinc-600">
+              <p className="mt-2 text-sm text-muted-foreground">
                 Aucun responsable n&apos;est associé à cette responsabilité.
               </p>
             ) : (
@@ -63,10 +63,10 @@ export function ResponsabilitesRecap({ rows }: { rows: ResponsabiliteRecapRow[] 
                 {row.responsables.map((r) => (
                   <li
                     key={`${row.id}-${r.id}`}
-                    className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-sm text-zinc-800"
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1.5 text-sm text-foreground"
                   >
                     <span className="font-medium">{r.displayName}</span>
-                    <span className="text-xs text-zinc-500">
+                    <span className="text-xs text-muted-foreground">
                       ({roleLabelFr(r.role)})
                     </span>
                   </li>

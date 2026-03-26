@@ -41,24 +41,24 @@ export default async function AdminEventsPage() {
   if (eventsError) throw new Error(eventsError.message);
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">
             Administration — Évènements
           </h1>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-muted-foreground">
             Créez, modifiez et supprimez des évènements.
           </p>
         </header>
 
         <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
-          <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-            <h2 className="text-sm font-medium text-zinc-900">
+          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <h2 className="text-sm font-medium text-foreground">
               Créer un évènement
             </h2>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-muted-foreground">
               Saisissez les informations (descriptif en Markdown).
             </p>
             <div className="mt-5">
@@ -66,8 +66,8 @@ export default async function AdminEventsPage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-            <h2 className="text-sm font-medium text-zinc-900">Évènements</h2>
+          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <h2 className="text-sm font-medium text-foreground">Évènements</h2>
             <div className="mt-5">
               <EventsTable events={(events as Event[]) ?? []} />
             </div>

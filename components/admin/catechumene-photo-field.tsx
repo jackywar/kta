@@ -94,9 +94,9 @@ export function CatechumenePhotoField({
 
   return (
     <div className="space-y-2">
-      <span className="text-sm font-medium text-zinc-900">Photo</span>
+      <span className="text-sm font-medium text-foreground">Photo</span>
       <div className="flex flex-wrap items-start gap-4">
-        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
+        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-border bg-muted">
           {photoUrl ? (
             <Image
               src={photoUrl}
@@ -107,7 +107,7 @@ export function CatechumenePhotoField({
             />
           ) : (
             <div
-              className="flex h-full w-full items-center justify-center text-zinc-400"
+              className="flex h-full w-full items-center justify-center text-muted-foreground"
               aria-hidden
             >
               —
@@ -126,7 +126,7 @@ export function CatechumenePhotoField({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50 disabled:opacity-50"
+            className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted disabled:opacity-50"
           >
             {uploading ? "Envoi…" : photoUrl ? "Remplacer" : "Ajouter une photo"}
           </button>
@@ -135,7 +135,7 @@ export function CatechumenePhotoField({
               type="button"
               onClick={handleRemove}
               disabled={uploading}
-              className="inline-flex h-9 items-center justify-center rounded-lg border border-red-200 bg-white px-3 text-xs font-medium text-red-600 shadow-sm transition hover:bg-red-50 disabled:opacity-50"
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-destructive/30 bg-card px-3 text-xs font-medium text-destructive shadow-sm transition hover:bg-destructive/10 disabled:opacity-50"
             >
               Supprimer la photo
             </button>
@@ -143,9 +143,9 @@ export function CatechumenePhotoField({
         </div>
       </div>
       {photoError ? (
-        <p className="text-sm text-red-600">{photoError}</p>
+        <p className="text-sm text-destructive">{photoError}</p>
       ) : null}
-      <p className="text-xs text-zinc-500">
+      <p className="text-xs text-muted-foreground">
         Image compressée automatiquement (max. 500 Ko). JPEG, PNG ou WebP.
       </p>
     </div>

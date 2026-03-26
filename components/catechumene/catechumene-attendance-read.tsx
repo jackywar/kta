@@ -81,11 +81,11 @@ export function CatechumeneAttendanceRead({
   }
 
   return (
-    <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-      <h2 className="text-sm font-semibold text-zinc-900">
+    <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <h2 className="text-sm font-semibold text-foreground">
         Présences / absences aux évènements
       </h2>
-      <p className="mt-1 text-sm text-zinc-600">
+      <p className="mt-1 text-sm text-muted-foreground">
         Liste des évènements pour lesquels une présence a été saisie.
       </p>
 
@@ -93,19 +93,19 @@ export function CatechumeneAttendanceRead({
         {rows.map((r) => (
           <div
             key={r.id}
-            className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-800"
+            className="flex flex-col gap-3 rounded-xl border border-border bg-muted px-4 py-3 text-sm text-foreground"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <div className="font-medium text-zinc-900 break-words">
+                <div className="font-medium text-foreground break-words">
                   {formatDateShort(r.date)} — {r.libelle}
                 </div>
                 <div className="mt-1">
                   <span
                     className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${
                       r.isJustifiedAbsence
-                        ? "border-amber-200 bg-amber-50 text-amber-900"
-                        : "border-emerald-200 bg-emerald-50 text-emerald-800"
+                        ? "border-border bg-muted text-foreground"
+                        : "border-primary/30 bg-primary/10 text-primary"
                     }`}
                   >
                     {r.status}
@@ -115,7 +115,7 @@ export function CatechumeneAttendanceRead({
               <button
                 type="button"
                 onClick={() => handleDelete(r.id)}
-                className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
                 title="Supprimer la présence"
                 aria-label="Supprimer la présence"
               >
@@ -124,8 +124,8 @@ export function CatechumeneAttendanceRead({
             </div>
 
             {r.justificatif ? (
-              <div className="text-xs text-zinc-600">
-                <span className="font-medium text-zinc-700">Justificatif :</span>{" "}
+              <div className="text-xs text-muted-foreground">
+                <span className="font-medium text-muted-foreground">Justificatif :</span>{" "}
                 {r.justificatif}
               </div>
             ) : null}

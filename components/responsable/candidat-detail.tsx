@@ -26,10 +26,10 @@ function Field({
   if (value == null || value === "") return null;
   return (
     <div className={className}>
-      <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </dt>
-      <dd className="mt-1 text-sm text-zinc-900">{value}</dd>
+      <dd className="mt-1 text-sm text-foreground">{value}</dd>
     </div>
   );
 }
@@ -42,11 +42,11 @@ export function CandidatDetail({
   const photoUrl = getCatechumenePhotoUrl(candidat.photo_path);
 
   return (
-    <article className="overflow-hidden rounded-2xl border-2 border-amber-200/80 bg-white shadow-sm">
-      <div className="border-b border-zinc-100 p-6">
+    <article className="overflow-hidden rounded-2xl border-2 border-border bg-card shadow-sm">
+      <div className="border-b border-border/60 p-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
           <div className="mx-auto shrink-0 sm:mx-0">
-            <div className="relative h-40 w-40 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
+            <div className="relative h-40 w-40 overflow-hidden rounded-2xl border border-border bg-muted">
               {photoUrl ? (
                 <Image
                   src={photoUrl}
@@ -57,7 +57,7 @@ export function CandidatDetail({
                 />
               ) : (
                 <div
-                  className="flex h-full w-full items-center justify-center text-4xl text-zinc-300"
+                  className="flex h-full w-full items-center justify-center text-4xl text-muted-foreground"
                   aria-hidden
                 >
                   —
@@ -66,10 +66,10 @@ export function CandidatDetail({
             </div>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Candidat
             </p>
-            <h1 className="mt-1 text-xl font-semibold tracking-tight text-zinc-900">
+            <h1 className="mt-1 text-xl font-semibold tracking-tight text-foreground">
               {candidat.prenom} {candidat.nom}
             </h1>
           </div>
@@ -111,8 +111,8 @@ export function CandidatDetail({
       </dl>
 
       {candidat.rencontre_individuelle_texte?.trim() ? (
-        <div className="border-t border-zinc-100 px-6 py-4">
-          <h2 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+        <div className="border-t border-border/60 px-6 py-4">
+          <h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             Rencontre individuelle (notes)
           </h2>
           <div className="mt-2">

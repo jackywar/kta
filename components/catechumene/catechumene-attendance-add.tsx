@@ -158,7 +158,7 @@ export function CatechumeneAttendanceAdd({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+        className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
       >
         Ajouter présence
       </button>
@@ -170,16 +170,16 @@ export function CatechumeneAttendanceAdd({
           aria-modal="true"
           aria-labelledby="add-attendance-title"
         >
-          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
+          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2
                   id="add-attendance-title"
-                  className="text-lg font-semibold text-zinc-900"
+                  className="text-lg font-semibold text-foreground"
                 >
                   Ajouter une présence
                 </h2>
-                <p className="mt-1 text-sm text-zinc-600">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Sélectionnez un évènement sans présence enregistrée. Filtrez par
                   plage de dates si nécessaire.
                 </p>
@@ -187,16 +187,16 @@ export function CatechumeneAttendanceAdd({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
               >
                 Fermer
               </button>
             </div>
 
-            <div className="mt-4 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+            <div className="mt-4 rounded-xl border border-border bg-muted p-3">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <span className="text-sm font-medium text-zinc-700">
+                  <span className="text-sm font-medium text-muted-foreground">
                     Filtre date à date
                   </span>
                   <button
@@ -204,20 +204,20 @@ export function CatechumeneAttendanceAdd({
                     role="switch"
                     aria-checked={useRangeFilter}
                     onClick={() => setUseRangeFilter((v) => !v)}
-                    className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 ${
+                    className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
                       useRangeFilter
-                        ? "border-zinc-900 bg-zinc-900"
-                        : "border-zinc-200 bg-zinc-100"
+                        ? "border-primary bg-primary"
+                        : "border-border bg-muted"
                     }`}
                   >
                     <span
-                      className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
+                      className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-card shadow-sm transition-transform ${
                         useRangeFilter ? "translate-x-6" : "translate-x-0.5"
                       }`}
                     />
                   </button>
                 </div>
-                <div className="text-xs text-zinc-500">
+                <div className="text-xs text-muted-foreground">
                   {candidates.length} évènement{candidates.length > 1 ? "s" : ""}{" "}
                   sans présence
                 </div>
@@ -227,7 +227,7 @@ export function CatechumeneAttendanceAdd({
                 <div className="mt-3 flex flex-wrap items-end gap-3">
                   <div className="space-y-1">
                     <label
-                      className="text-xs font-medium text-zinc-700"
+                      className="text-xs font-medium text-muted-foreground"
                       htmlFor="att-from"
                     >
                       Du
@@ -237,12 +237,12 @@ export function CatechumeneAttendanceAdd({
                       type="date"
                       value={dateFrom}
                       onChange={(e) => setDateFrom(e.target.value)}
-                      className="h-9 rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                      className="h-9 rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                     />
                   </div>
                   <div className="space-y-1">
                     <label
-                      className="text-xs font-medium text-zinc-700"
+                      className="text-xs font-medium text-muted-foreground"
                       htmlFor="att-to"
                     >
                       Au
@@ -252,7 +252,7 @@ export function CatechumeneAttendanceAdd({
                       type="date"
                       value={dateTo}
                       onChange={(e) => setDateTo(e.target.value)}
-                      className="h-9 rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                      className="h-9 rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                     />
                   </div>
                 </div>
@@ -261,18 +261,18 @@ export function CatechumeneAttendanceAdd({
                   <button
                     type="button"
                     onClick={() => setMonth((m) => addMonths(m, -1))}
-                    className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                    className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
                     aria-label="Mois précédent"
                   >
                     ←
                   </button>
-                  <div className="min-w-[180px] text-center text-sm font-semibold text-zinc-900 capitalize">
+                  <div className="min-w-[180px] text-center text-sm font-semibold text-foreground capitalize">
                     {formatMonthTitle(month)}
                   </div>
                   <button
                     type="button"
                     onClick={() => setMonth((m) => addMonths(m, 1))}
-                    className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                    className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
                     aria-label="Mois suivant"
                   >
                     →
@@ -280,7 +280,7 @@ export function CatechumeneAttendanceAdd({
                   <button
                     type="button"
                     onClick={() => setMonth(startOfMonth(new Date()))}
-                    className="ml-2 inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
+                    className="ml-2 inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
                   >
                     Mois courant
                   </button>
@@ -289,12 +289,12 @@ export function CatechumeneAttendanceAdd({
             </div>
 
             {error ? (
-              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+              <div className="mt-4 rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                 {error}
               </div>
             ) : null}
             {success ? (
-              <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+              <div className="mt-4 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
                 {success}
               </div>
             ) : null}
@@ -304,7 +304,7 @@ export function CatechumeneAttendanceAdd({
                 type="button"
                 onClick={saveAll}
                 disabled={isPending}
-                className="inline-flex h-10 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isPending ? "Enregistrement…" : "Enregistrer"}
               </button>
@@ -313,7 +313,7 @@ export function CatechumeneAttendanceAdd({
             {/* Mobile: cartes */}
             <div className="mt-4 space-y-3 sm:hidden">
               {candidates.length === 0 ? (
-                <div className="rounded-xl border border-zinc-200 bg-white px-4 py-4 text-center text-sm text-zinc-500">
+                <div className="rounded-xl border border-border bg-card px-4 py-4 text-center text-sm text-muted-foreground">
                   Aucun évènement disponible.
                 </div>
               ) : (
@@ -326,7 +326,7 @@ export function CatechumeneAttendanceAdd({
                   return (
                     <div
                       key={e.id}
-                      className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm"
+                      className="rounded-xl border border-border bg-card p-4 shadow-sm"
                     >
                       <div className="flex items-start gap-3">
                         <input
@@ -335,15 +335,15 @@ export function CatechumeneAttendanceAdd({
                           onChange={(ev) =>
                             setRow(e.id, { selected: ev.target.checked })
                           }
-                          className="mt-1 h-4 w-4 shrink-0 accent-zinc-900"
+                          className="mt-1 h-4 w-4 shrink-0 accent-primary"
                           aria-label="Sélectionner l'évènement"
                         />
                         <div className="min-w-0 flex-1">
-                          <div className="text-sm font-medium text-zinc-900">
+                          <div className="text-sm font-medium text-foreground">
                             {formatDateShort(e.date)} — {e.libelle}
                           </div>
 
-                          <div className="mt-2 flex items-center gap-2 text-sm text-zinc-700">
+                          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
                             <input
                               id={`aj-${e.id}`}
                               type="checkbox"
@@ -356,7 +356,7 @@ export function CatechumeneAttendanceAdd({
                                     : ""
                                 })
                               }
-                              className="h-4 w-4 accent-zinc-900"
+                              className="h-4 w-4 accent-primary"
                             />
                             <label htmlFor={`aj-${e.id}`}>Absence justifiée</label>
                           </div>
@@ -370,7 +370,7 @@ export function CatechumeneAttendanceAdd({
                                   setRow(e.id, { justificatif: ev.target.value })
                                 }
                                 placeholder="Justificatif (optionnel)"
-                                className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                                className="h-10 w-full rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
                               />
                             </div>
                           ) : null}
@@ -383,10 +383,10 @@ export function CatechumeneAttendanceAdd({
             </div>
 
             {/* Desktop: tableau */}
-            <div className="mt-4 hidden overflow-hidden rounded-xl border border-zinc-200 sm:block">
+            <div className="mt-4 hidden overflow-hidden rounded-xl border border-border sm:block">
               <div className="overflow-x-auto">
                 <table className="min-w-full text-left text-sm">
-                  <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+                  <thead className="bg-muted text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     <tr>
                       <th className="w-12 px-4 py-3">Ajout</th>
                       <th className="px-4 py-3">Date</th>
@@ -395,11 +395,11 @@ export function CatechumeneAttendanceAdd({
                       <th className="px-4 py-3">Justificatif</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 bg-white">
+                  <tbody className="divide-y divide-border bg-card">
                     {candidates.length === 0 ? (
                       <tr>
                         <td
-                          className="px-4 py-4 text-center text-sm text-zinc-500"
+                          className="px-4 py-4 text-center text-sm text-muted-foreground"
                           colSpan={5}
                         >
                           Aucun évènement disponible.
@@ -413,7 +413,7 @@ export function CatechumeneAttendanceAdd({
                           justificatif: ""
                         };
                         return (
-                          <tr key={e.id} className="hover:bg-zinc-50/70">
+                          <tr key={e.id} className="hover:bg-muted/70">
                             <td className="px-4 py-3">
                               <input
                                 type="checkbox"
@@ -421,14 +421,14 @@ export function CatechumeneAttendanceAdd({
                                 onChange={(ev) =>
                                   setRow(e.id, { selected: ev.target.checked })
                                 }
-                                className="h-4 w-4 accent-zinc-900"
+                                className="h-4 w-4 accent-primary"
                                 aria-label="Sélectionner l'évènement"
                               />
                             </td>
-                            <td className="px-4 py-3 text-zinc-900">
+                            <td className="px-4 py-3 text-foreground">
                               {formatDateShort(e.date)}
                             </td>
-                            <td className="px-4 py-3 text-zinc-900">
+                            <td className="px-4 py-3 text-foreground">
                               {e.libelle}
                             </td>
                             <td className="px-4 py-3">
@@ -443,7 +443,7 @@ export function CatechumeneAttendanceAdd({
                                       : ""
                                   })
                                 }
-                                className="h-4 w-4 accent-zinc-900"
+                                className="h-4 w-4 accent-primary"
                                 aria-label="Absence justifiée"
                               />
                             </td>
@@ -456,7 +456,7 @@ export function CatechumeneAttendanceAdd({
                                   setRow(e.id, { justificatif: ev.target.value })
                                 }
                                 placeholder="Optionnel"
-                                className="h-9 w-56 rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 disabled:opacity-50"
+                                className="h-9 w-56 rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20 disabled:opacity-50"
                               />
                             </td>
                           </tr>

@@ -53,13 +53,13 @@ export function ServiceWorkerRegistration() {
   if (!updateAvailable) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-sm rounded-lg border border-zinc-200 bg-white p-4 shadow-lg sm:left-auto sm:right-4">
-      <p className="text-sm text-zinc-700">
+    <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-sm rounded-lg border border-border bg-card p-4 shadow-lg sm:left-auto sm:right-4">
+      <p className="text-sm text-muted-foreground">
         Une nouvelle version est disponible.
       </p>
       <button
         onClick={handleUpdate}
-        className="mt-2 w-full rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+        className="mt-2 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
       >
         Mettre à jour
       </button>

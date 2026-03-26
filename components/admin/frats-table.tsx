@@ -58,7 +58,7 @@ export function FratsTable({
 
   if (frats.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-zinc-200 p-6 text-sm text-zinc-600">
+      <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
         Aucune frat.
       </div>
     );
@@ -88,17 +88,17 @@ export function FratsTable({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-zinc-200">
+    <div className="overflow-hidden rounded-xl border border-border">
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+          <thead className="bg-muted text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             <tr>
               <th className="px-4 py-3 min-w-[220px]">Nom</th>
               <th className="px-4 py-3 min-w-[200px]">Couleur</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-200 bg-white">
+          <tbody className="divide-y divide-border bg-card">
             {frats.map((f) => {
               const row = state[f.id] ?? {
                 name: f.name,
@@ -114,8 +114,8 @@ export function FratsTable({
               const isRowBusy = row.saving;
 
               return (
-                <tr key={f.id} className="hover:bg-zinc-50/70 align-top">
-                  <td className="px-4 py-3 text-zinc-900">
+                <tr key={f.id} className="hover:bg-muted/70 align-top">
+                  <td className="px-4 py-3 text-foreground">
                     <div className="space-y-2">
                       <input
                         type="text"
@@ -130,7 +130,7 @@ export function FratsTable({
                           }))
                         }
                         disabled={disabledGlobally || isRowBusy}
-                        className="h-9 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                        className="h-9 w-full rounded-lg border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
                         placeholder="Nom de la frat"
                       />
                       <div className="flex flex-wrap gap-2">
@@ -164,7 +164,7 @@ export function FratsTable({
                                   );
                                   router.refresh();
                                 }}
-                                className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-3 py-1 text-xs text-zinc-800 shadow-sm hover:bg-zinc-200"
+                                className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs text-foreground shadow-sm hover:bg-muted/80"
                                 title="Retirer ce responsable"
                               >
                                 <span>{displayName}</span>
@@ -186,7 +186,7 @@ export function FratsTable({
                             }))
                           }
                           disabled={disabledGlobally || isRowBusy}
-                          className="h-8 min-w-0 flex-1 rounded-lg border border-zinc-200 bg-white px-3 text-xs shadow-sm outline-none transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100"
+                          className="h-8 min-w-0 flex-1 rounded-lg border border-border bg-card px-3 text-xs shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
                         >
                           <option value="">
                             {options.length === 0
@@ -233,7 +233,7 @@ export function FratsTable({
                             isRowBusy ||
                             !row.selectedResponsableId
                           }
-                          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-700 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                           title="Ajouter le responsable sélectionné"
                         >
                           +
@@ -241,7 +241,7 @@ export function FratsTable({
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-zinc-900">
+                  <td className="px-4 py-3 text-foreground">
                     <input
                       type="color"
                       value={row.color_oklch}
@@ -255,7 +255,7 @@ export function FratsTable({
                         }))
                       }
                       disabled={disabledGlobally || isRowBusy}
-                      className="h-9 w-9 cursor-pointer rounded-full border border-zinc-200 bg-white p-1 shadow-sm"
+                      className="h-9 w-9 cursor-pointer rounded-full border border-border bg-card p-1 shadow-sm"
                     />
                   </td>
                   <td className="px-4 py-3">
@@ -264,7 +264,7 @@ export function FratsTable({
                         type="button"
                         onClick={() => handleSave(f.id)}
                         disabled={disabledGlobally || isRowBusy}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                         title="Enregistrer la frat"
                       >
                         <span className="text-xs">💾</span>

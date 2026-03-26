@@ -56,7 +56,7 @@ export default async function ResponsableCatechumenesPage() {
   const list = (catechumenes ?? []) as unknown as CatechumeneWithFrat[];
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -64,13 +64,13 @@ export default async function ResponsableCatechumenesPage() {
             <h1 className="text-2xl font-semibold tracking-tight">
               Catéchumènes
             </h1>
-            <p className="text-sm text-zinc-600">
+            <p className="text-sm text-muted-foreground">
               Tous les catéchumènes.
             </p>
           </div>
           <Link
             href="/responsable/catechumenes/new"
-            className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800"
+            className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90"
           >
             Ajouter un catéchumène
           </Link>

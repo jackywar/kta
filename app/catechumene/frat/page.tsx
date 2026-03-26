@@ -105,16 +105,16 @@ export default async function CatechumeneFratPage() {
       }) ?? [];
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">
             {me.frat.name}
           </h1>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-zinc-600">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
             <span
-              className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-900"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-foreground"
               title="Couleur de la frat"
             >
               <span
@@ -124,7 +124,7 @@ export default async function CatechumeneFratPage() {
               />
               Frat
             </span>
-            <span className="text-xs text-zinc-500">
+            <span className="text-xs text-muted-foreground">
               {responsables.length > 0
                 ? `Responsables : ${responsables.join(", ")}`
                 : "Aucun responsable"}
@@ -133,7 +133,7 @@ export default async function CatechumeneFratPage() {
         </header>
 
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold text-zinc-900">
+          <h2 className="text-sm font-semibold text-foreground">
             Membres de la frat ({members.length})
           </h2>
           <CatechumeneTiles catechumenes={members} clickable={false} />

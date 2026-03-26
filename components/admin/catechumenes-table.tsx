@@ -184,7 +184,7 @@ export function CatechumenesTable({
 
   if (catechumenes.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-zinc-200 p-6 text-sm text-zinc-600">
+      <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
         Aucun catéchumène.
       </div>
     );
@@ -192,10 +192,10 @@ export function CatechumenesTable({
 
   return (
     <>
-      <div className="overflow-hidden rounded-xl border border-zinc-200">
+      <div className="overflow-hidden rounded-xl border border-border">
         <div className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
-            <thead className="bg-zinc-50 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+            <thead className="bg-muted text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="w-14 px-4 py-3">Photo</th>
                 <th className="px-4 py-3">Nom</th>
@@ -209,13 +209,13 @@ export function CatechumenesTable({
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 bg-white">
+            <tbody className="divide-y divide-border bg-card">
               {catechumenes.map((c) => {
                 const photoUrl = getCatechumenePhotoUrl(c.photo_path);
                 return (
-                <tr key={c.id} className="hover:bg-zinc-50/70">
+                <tr key={c.id} className="hover:bg-muted/70">
                   <td className="px-4 py-3">
-                    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-zinc-200 bg-zinc-100">
+                    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-border bg-muted">
                       {photoUrl ? (
                         <Image
                           src={photoUrl}
@@ -225,25 +225,25 @@ export function CatechumenesTable({
                           sizes="40px"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-zinc-400 text-xs" aria-hidden>—</div>
+                        <div className="flex h-full w-full items-center justify-center text-muted-foreground text-xs" aria-hidden>—</div>
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-zinc-900">{c.nom}</td>
-                  <td className="px-4 py-3 text-zinc-900">{c.prenom}</td>
-                  <td className="px-4 py-3 text-zinc-600">{c.email ?? "—"}</td>
+                  <td className="px-4 py-3 text-foreground">{c.nom}</td>
+                  <td className="px-4 py-3 text-foreground">{c.prenom}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{c.email ?? "—"}</td>
                   <td className="px-4 py-3">
                     {c.est_candidat ? (
-                      <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-800">
+                      <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-foreground">
                         Oui
                       </span>
                     ) : (
-                      <span className="text-xs text-zinc-500">Non</span>
+                      <span className="text-xs text-muted-foreground">Non</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
                     {c.frat_id ? (
-                      <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-900">
+                      <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-foreground">
                         <span
                           className="h-2 w-2 rounded-full"
                           style={{
@@ -260,20 +260,20 @@ export function CatechumenesTable({
                         </span>
                       </span>
                     ) : (
-                      <span className="text-xs text-zinc-500">
+                      <span className="text-xs text-muted-foreground">
                         Aucune frat
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-zinc-600">
+                  <td className="px-4 py-3 text-muted-foreground">
                     {formatDate(c.date_entree_catechumenat)}
                   </td>
-                  <td className="px-4 py-3 text-zinc-600">
+                  <td className="px-4 py-3 text-muted-foreground">
                     {c.annee_bapteme_previsionnelle ?? "—"}
                   </td>
                   <td className="px-4 py-3">
                     {linkedByCatechumeneId.has(c.id) ? (
-                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
                         Utilisateur lié
                       </span>
                     ) : (
@@ -281,7 +281,7 @@ export function CatechumenesTable({
                         type="button"
                         onClick={() => handleCreateUser(c.id)}
                         disabled={isPending || !c.email}
-                        className="inline-flex h-8 items-center justify-center rounded-lg border border-blue-200 bg-blue-50 px-3 text-xs font-medium text-blue-700 shadow-sm transition hover:bg-blue-100 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-zinc-50 disabled:text-zinc-400"
+                        className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground shadow-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:border-border disabled:bg-muted disabled:text-muted-foreground"
                         title={
                           c.email
                             ? "Créer un utilisateur pour ce catéchumène"
@@ -297,14 +297,14 @@ export function CatechumenesTable({
                       <button
                         type="button"
                         onClick={() => openEdit(c)}
-                        className="inline-flex h-8 items-center justify-center rounded-lg border border-zinc-200 bg-white px-3 text-xs text-zinc-600 shadow-sm transition hover:bg-zinc-50"
+                        className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-card px-3 text-xs text-muted-foreground shadow-sm transition hover:bg-muted"
                       >
                         Modifier
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDelete(c.id)}
-                        className="inline-flex h-8 items-center justify-center rounded-lg border border-red-200 bg-white px-3 text-xs text-red-600 shadow-sm transition hover:bg-red-50"
+                        className="inline-flex h-8 items-center justify-center rounded-lg border border-destructive/30 bg-card px-3 text-xs text-destructive shadow-sm transition hover:bg-destructive/10"
                       >
                         Supprimer
                       </button>
@@ -325,8 +325,8 @@ export function CatechumenesTable({
           aria-modal="true"
           aria-labelledby="edit-catechumene-title"
         >
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl">
-            <h2 id="edit-catechumene-title" className="text-lg font-semibold text-zinc-900">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl">
+            <h2 id="edit-catechumene-title" className="text-lg font-semibold text-foreground">
               Modifier {editing.prenom} {editing.nom}
             </h2>
 
@@ -339,7 +339,7 @@ export function CatechumenesTable({
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-900" htmlFor="e-nom">
+                  <label className="text-sm font-medium text-foreground" htmlFor="e-nom">
                     Nom
                   </label>
                   <input
@@ -347,12 +347,12 @@ export function CatechumenesTable({
                     type="text"
                     value={editValues.nom}
                     onChange={(e) => set("nom", e.target.value)}
-                    className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-900" htmlFor="e-prenom">
+                  <label className="text-sm font-medium text-foreground" htmlFor="e-prenom">
                     Prénom
                   </label>
                   <input
@@ -360,28 +360,28 @@ export function CatechumenesTable({
                     type="text"
                     value={editValues.prenom}
                     onChange={(e) => set("prenom", e.target.value)}
-                    className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required
                   />
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3">
+              <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/80 px-4 py-3">
                 <input
                   id="e-est-candidat"
                   type="checkbox"
                   checked={editValues.est_candidat}
                   onChange={(e) => setEstCandidat(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-400"
+                  className="mt-1 h-4 w-4 rounded border-border text-foreground focus:ring-ring"
                 />
                 <div className="min-w-0">
                   <label
                     htmlFor="e-est-candidat"
-                    className="text-sm font-medium text-zinc-900"
+                    className="text-sm font-medium text-foreground"
                   >
                     Candidat
                   </label>
-                  <p className="mt-0.5 text-xs text-zinc-600">
+                  <p className="mt-0.5 text-xs text-muted-foreground">
                     Si coché, la fiche apparaît dans la liste des candidats
                     (responsable) et pas dans la liste des catéchumènes actifs.
                   </p>
@@ -389,14 +389,14 @@ export function CatechumenesTable({
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="e-frat">
+                <label className="text-sm font-medium text-foreground" htmlFor="e-frat">
                   Frat
                 </label>
                 <select
                   id="e-frat"
                   value={editValues.frat_id}
                   onChange={(e) => set("frat_id", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 >
                   <option value="">Aucune frat</option>
                   {frats.map((f) => (
@@ -412,7 +412,7 @@ export function CatechumenesTable({
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="e-email">
+                <label className="text-sm font-medium text-foreground" htmlFor="e-email">
                   Email
                 </label>
                 <input
@@ -420,13 +420,13 @@ export function CatechumenesTable({
                   type="email"
                   value={editValues.email}
                   onChange={(e) => set("email", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="e-telephone">
+                <label className="text-sm font-medium text-foreground" htmlFor="e-telephone">
                   Téléphone
                 </label>
                 <input
@@ -434,13 +434,13 @@ export function CatechumenesTable({
                   type="tel"
                   value={editValues.telephone}
                   onChange={(e) => set("telephone", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-900" htmlFor="e-date-naissance">
+                  <label className="text-sm font-medium text-foreground" htmlFor="e-date-naissance">
                     Date de naissance
                   </label>
                   <input
@@ -448,11 +448,11 @@ export function CatechumenesTable({
                     type="date"
                     value={editValues.date_naissance}
                     onChange={(e) => set("date_naissance", e.target.value)}
-                    className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-900" htmlFor="e-date-entree">
+                  <label className="text-sm font-medium text-foreground" htmlFor="e-date-entree">
                     Date d&apos;entrée en catéchuménat
                   </label>
                   <input
@@ -460,14 +460,14 @@ export function CatechumenesTable({
                     type="date"
                     value={editValues.date_entree_catechumenat}
                     onChange={(e) => set("date_entree_catechumenat", e.target.value)}
-                    className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="e-aine">
+                <label className="text-sm font-medium text-foreground" htmlFor="e-aine">
                   Ainé dans la foi
                 </label>
                 <input
@@ -475,12 +475,12 @@ export function CatechumenesTable({
                   type="text"
                   value={editValues.aine_dans_la_foi}
                   onChange={(e) => set("aine_dans_la_foi", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="e-annee-bapteme">
+                <label className="text-sm font-medium text-foreground" htmlFor="e-annee-bapteme">
                   Année de baptême prévisionnelle
                 </label>
                 <input
@@ -490,12 +490,12 @@ export function CatechumenesTable({
                   max={2100}
                   value={editValues.annee_bapteme_previsionnelle}
                   onChange={(e) => set("annee_bapteme_previsionnelle", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="e-rencontre-date">
+                <label className="text-sm font-medium text-foreground" htmlFor="e-rencontre-date">
                   Date rencontre individuelle
                 </label>
                 <input
@@ -503,12 +503,12 @@ export function CatechumenesTable({
                   type="date"
                   value={editValues.rencontre_individuelle_date}
                   onChange={(e) => set("rencontre_individuelle_date", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="e-rencontre-texte">
+                <label className="text-sm font-medium text-foreground" htmlFor="e-rencontre-texte">
                   Rencontre individuelle (notes)
                 </label>
                 <textarea
@@ -516,12 +516,12 @@ export function CatechumenesTable({
                   rows={3}
                   value={editValues.rencontre_individuelle_texte}
                   onChange={(e) => set("rencontre_individuelle_texte", e.target.value)}
-                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-900" htmlFor="e-observations">
+                <label className="text-sm font-medium text-foreground" htmlFor="e-observations">
                   Observations (Markdown)
                 </label>
                 <textarea
@@ -529,12 +529,12 @@ export function CatechumenesTable({
                   rows={4}
                   value={editValues.observations}
                   onChange={(e) => set("observations", e.target.value)}
-                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
               {error ? (
-                <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+                <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                   {error}
                 </div>
               ) : null}
@@ -544,7 +544,7 @@ export function CatechumenesTable({
                   type="button"
                   onClick={handleSave}
                   disabled={isPending}
-                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:opacity-60"
+                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:opacity-60"
                 >
                   {isPending ? "Enregistrement…" : "Enregistrer"}
                 </button>
@@ -552,7 +552,7 @@ export function CatechumenesTable({
                   type="button"
                   onClick={closeEdit}
                   disabled={isPending}
-                  className="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50 disabled:opacity-60"
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted disabled:opacity-60"
                 >
                   Annuler
                 </button>

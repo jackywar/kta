@@ -39,24 +39,24 @@ export default async function AdminPagesPage() {
   );
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">
             Administration — Pages
           </h1>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-muted-foreground">
             Modifiez le contenu des pages d&apos;accueil (Markdown).
           </p>
         </header>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-            <h2 className="text-sm font-medium text-zinc-900">
+          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <h2 className="text-sm font-medium text-foreground">
               Accueil catéchumènes
             </h2>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-muted-foreground">
               Contenu affiché aux utilisateurs avec le rôle &quot;catéchumène&quot;.
             </p>
             <div className="mt-5">
@@ -67,11 +67,11 @@ export default async function AdminPagesPage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-            <h2 className="text-sm font-medium text-zinc-900">
+          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <h2 className="text-sm font-medium text-foreground">
               Accueil responsables
             </h2>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-muted-foreground">
               Contenu affiché aux utilisateurs avec le rôle &quot;responsable&quot;.
             </p>
             <div className="mt-5">

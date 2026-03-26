@@ -51,14 +51,14 @@ export default async function ResponsableCandidatEditPage({
   const responsables = (respRows ?? []) as ResponsableOption[];
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-10">
         <header className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
             Modifier {c.prenom} {c.nom}
           </h1>
-          <p className="text-sm text-zinc-600">Candidat — champs limités.</p>
+          <p className="text-sm text-muted-foreground">Candidat — champs limités.</p>
         </header>
 
         <CandidatEditForm candidat={c} responsables={responsables} />

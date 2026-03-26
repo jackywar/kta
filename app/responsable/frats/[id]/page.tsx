@@ -87,19 +87,19 @@ export default async function ResponsableFratDetailPage({
       }) ?? [];
 
   return (
-    <main className="min-h-screen bg-zinc-50">
+    <main className="min-h-screen bg-muted">
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/responsable/frats"
-            className="text-sm font-medium text-zinc-600 underline-offset-4 hover:text-zinc-900 hover:underline"
+            className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             ← Frats
           </Link>
           <Link
             href="/responsable/catechumenes/new"
-            className="inline-flex h-10 items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800"
+            className="inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90"
           >
             Ajouter un catéchumène
           </Link>
@@ -107,9 +107,9 @@ export default async function ResponsableFratDetailPage({
 
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">{frat.name}</h1>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-zinc-600">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
             <span
-              className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-900"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-foreground"
               title="Couleur de la frat"
             >
               <span
@@ -119,7 +119,7 @@ export default async function ResponsableFratDetailPage({
               />
               Frat
             </span>
-            <span className="text-xs text-zinc-500">
+            <span className="text-xs text-muted-foreground">
               {responsables.length > 0
                 ? `Responsables : ${responsables.join(", ")}`
                 : "Aucun responsable"}
@@ -128,7 +128,7 @@ export default async function ResponsableFratDetailPage({
         </header>
 
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold text-zinc-900">
+          <h2 className="text-sm font-semibold text-foreground">
             Catéchumènes ({list.length})
           </h2>
           <CatechumeneTiles catechumenes={list} />

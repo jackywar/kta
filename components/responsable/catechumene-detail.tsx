@@ -22,10 +22,10 @@ function Field({
   if (value == null || value === "") return null;
   return (
     <div className={className}>
-      <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </dt>
-      <dd className="mt-1 text-sm text-zinc-900">{value}</dd>
+      <dd className="mt-1 text-sm text-foreground">{value}</dd>
     </div>
   );
 }
@@ -41,13 +41,13 @@ export function CatechumeneDetail({
 
   return (
     <article
-      className="overflow-hidden rounded-2xl border-2 bg-white shadow-sm"
+      className="overflow-hidden rounded-2xl border-2 bg-card shadow-sm"
       style={{ borderColor }}
     >
-      <div className="border-b border-zinc-100 p-6">
+      <div className="border-b border-border/60 p-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
           <div className="mx-auto shrink-0 sm:mx-0">
-            <div className="relative h-40 w-40 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
+            <div className="relative h-40 w-40 overflow-hidden rounded-2xl border border-border bg-muted">
               {photoUrl ? (
                 <Image
                   src={photoUrl}
@@ -58,7 +58,7 @@ export function CatechumeneDetail({
                 />
               ) : (
                 <div
-                  className="flex h-full w-full items-center justify-center text-4xl text-zinc-300"
+                  className="flex h-full w-full items-center justify-center text-4xl text-muted-foreground"
                   aria-hidden
                 >
                   —
@@ -67,7 +67,7 @@ export function CatechumeneDetail({
             </div>
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">
               {catechumene.prenom} {catechumene.nom}
             </h1>
             {catechumene.frat ? (
@@ -77,7 +77,7 @@ export function CatechumeneDetail({
                   style={{ backgroundColor: catechumene.frat.color_oklch }}
                   aria-hidden
                 />
-                <span className="text-sm text-zinc-600">
+                <span className="text-sm text-muted-foreground">
                   {catechumene.frat.name}
                 </span>
               </p>
@@ -117,8 +117,8 @@ export function CatechumeneDetail({
       </dl>
 
       {catechumene.rencontre_individuelle_texte?.trim() ? (
-        <div className="border-t border-zinc-100 px-6 py-4">
-          <h2 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+        <div className="border-t border-border/60 px-6 py-4">
+          <h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             Rencontre individuelle (notes)
           </h2>
           <div className="mt-2">
@@ -128,8 +128,8 @@ export function CatechumeneDetail({
       ) : null}
 
       {catechumene.observations?.trim() ? (
-        <div className="border-t border-zinc-100 px-6 py-4">
-          <h2 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+        <div className="border-t border-border/60 px-6 py-4">
+          <h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             Observations
           </h2>
           <div className="mt-2">

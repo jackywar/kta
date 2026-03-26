@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { PaletteProvider } from "@/components/theme/palette-provider";
 
 export const metadata: Metadata = {
   title: "KTA",
@@ -17,7 +19,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#18181b",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#18181b" }
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -26,7 +31,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning data-theme="default">
       <head>
         <link rel="apple-touch-icon" href="/icons/icon.svg" />
         <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
@@ -34,7 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body>
-        {children}
+        <ThemeProvider>
+          <PaletteProvider>{children}</PaletteProvider>
+        </ThemeProvider>
         <ServiceWorkerRegistration />
       </body>
     </html>

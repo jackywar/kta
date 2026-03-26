@@ -45,13 +45,13 @@ export function PageContentEditor({ contentKey, initialContent }: Props) {
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="h-48 w-full resize-y rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+        className="h-48 w-full resize-y rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
         placeholder="Contenu en Markdown…"
       />
 
       {content.trim() ? (
-        <div className="rounded-xl border border-zinc-100 bg-zinc-50 p-4">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-500">
+        <div className="rounded-xl border border-border/60 bg-muted p-4">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
             Aperçu
           </p>
           <MarkdownContent content={content} />
@@ -59,18 +59,16 @@ export function PageContentEditor({ contentKey, initialContent }: Props) {
       ) : null}
 
       {error ? (
-        <p className="text-sm text-red-600">{error}</p>
+        <p className="text-sm text-destructive">{error}</p>
       ) : null}
 
-      {success ? (
-        <p className="text-sm text-emerald-600">Enregistré avec succès.</p>
-      ) : null}
+      {success ? <p className="text-sm text-primary">Enregistré avec succès.</p> : null}
 
       <button
         type="button"
         onClick={handleSave}
         disabled={isPending}
-        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? "Enregistrement…" : "Enregistrer"}
       </button>

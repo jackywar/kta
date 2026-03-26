@@ -82,7 +82,7 @@ export async function Topbar() {
   const roleLine = roleParts.join(" · ");
 
   return (
-    <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/80 backdrop-blur">
+    <header className="sticky top-0 z-10 border-b border-border bg-card/80 backdrop-blur">
       <TopbarClient
         displayName={displayName}
         roleLine={roleLine}

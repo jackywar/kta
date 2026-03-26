@@ -57,7 +57,7 @@ export function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-5">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="email">
+        <label className="text-sm font-medium text-foreground" htmlFor="email">
           Email
         </label>
         <input
@@ -68,13 +68,13 @@ export function LoginForm() {
           required
           value={values.email}
           onChange={(e) => setValues((v) => ({ ...v, email: e.target.value }))}
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="prenom.nom@exemple.fr"
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-zinc-900" htmlFor="password">
+        <label className="text-sm font-medium text-foreground" htmlFor="password">
           Mot de passe
         </label>
         <input
@@ -87,27 +87,27 @@ export function LoginForm() {
           onChange={(e) =>
             setValues((v) => ({ ...v, password: e.target.value }))
           }
-          className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="••••••••••••"
         />
       </div>
 
       <div className="flex items-center justify-between gap-3">
-        <label className="inline-flex cursor-pointer select-none items-center gap-2 text-sm text-zinc-700">
+        <label className="inline-flex cursor-pointer select-none items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
             checked={values.remember}
             onChange={(e) =>
               setValues((v) => ({ ...v, remember: e.target.checked }))
             }
-            className="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-300"
+            className="h-4 w-4 rounded border-border text-primary focus:ring-ring"
           />
           Se souvenir de moi
         </label>
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
         </div>
       ) : null}
@@ -115,7 +115,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isPending || !canSubmit}
-        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? "Connexion…" : "Se connecter"}
       </button>
