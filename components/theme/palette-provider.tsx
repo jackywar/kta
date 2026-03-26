@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-export type PaletteName = "default" | "blue" | "red";
+export type PaletteName = "default" | "blue" | "red" | "amber";
 
 const STORAGE_KEY = "kta:palette";
 
@@ -18,7 +18,12 @@ function applyPaletteToDocument(palette: PaletteName) {
 }
 
 function isPaletteName(value: unknown): value is PaletteName {
-  return value === "default" || value === "blue" || value === "red";
+  return (
+    value === "default" ||
+    value === "blue" ||
+    value === "red" ||
+    value === "amber"
+  );
 }
 
 export function PaletteProvider({ children }: { children: React.ReactNode }) {

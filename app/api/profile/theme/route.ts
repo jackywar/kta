@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-const paletteSchema = z.enum(["default", "blue", "red"]);
+const paletteSchema = z.enum(["default", "blue", "red", "amber"]);
 const modeSchema = z.enum(["light", "dark", "system"]);
 
 const updateSchema = z.object({

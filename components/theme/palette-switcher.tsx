@@ -15,7 +15,8 @@ type Option = { value: PaletteName; label: string };
 const OPTIONS: Option[] = [
   { value: "default", label: "Défaut" },
   { value: "blue", label: "Thème D" },
-  { value: "red", label: "Thème R" }
+  { value: "red", label: "Thème R" },
+  { value: "amber", label: "Thème M" }
 ];
 
 export function PaletteSwitcher({
