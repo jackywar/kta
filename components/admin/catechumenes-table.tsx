@@ -26,6 +26,8 @@ type FormValues = {
   frat_id: string;
 };
 
+const NO_FRAT_VALUE = "__none__";
+
 function catechumeneToForm(c: Catechumene): FormValues {
   return {
     nom: c.nom ?? "",
@@ -393,12 +395,15 @@ export function CatechumenesTable({
                 <label className="text-sm font-medium text-foreground" htmlFor="e-frat">
                   Frat
                 </label>
-                <Select value={editValues.frat_id} onValueChange={(v) => set("frat_id", v)}>
+                <Select
+                  value={editValues.frat_id || NO_FRAT_VALUE}
+                  onValueChange={(v) => set("frat_id", v === NO_FRAT_VALUE ? "" : v)}
+                >
                   <SelectTrigger id="e-frat">
                     <SelectValue placeholder="Aucune frat" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Aucune frat</SelectItem>
+                    <SelectItem value={NO_FRAT_VALUE}>Aucune frat</SelectItem>
                     {frats.map((f) => (
                       <SelectItem key={f.id} value={f.id}>
                         {f.name}
