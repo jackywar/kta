@@ -3,6 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { EVENT_VISIBILITY_OPTIONS, type EventVisibility } from "@/lib/events";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const EVENT_TYPE_OPTIONS = ["rencontre", "reunion equipe", "étape"] as const;
 type EventTypeOption = (typeof EVENT_TYPE_OPTIONS)[number] | "autre";
@@ -135,25 +136,24 @@ export function EventCreateForm({
           <label className="text-sm font-medium text-foreground" htmlFor="ev-type">
             Type d&apos;évènement
           </label>
-          <select
-            id="ev-type"
+          <Select
             value={values.type_option}
-            onChange={(e) =>
-              setValues((v) => ({
-                ...v,
-                type_option: e.target.value as EventTypeOption
-              }))
+            onValueChange={(v) =>
+              setValues((prev) => ({ ...prev, type_option: v as EventTypeOption }))
             }
-            className={inputClass}
-            required
           >
-            {EVENT_TYPE_OPTIONS.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-            <option value="autre">Autre…</option>
-          </select>
+            <SelectTrigger id="ev-type">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {EVENT_TYPE_OPTIONS.map((t) => (
+                <SelectItem key={t} value={t}>
+                  {t}
+                </SelectItem>
+              ))}
+              <SelectItem value="autre">Autre…</SelectItem>
+            </SelectContent>
+          </Select>
           {values.type_option === "autre" ? (
             <input
               type="text"
@@ -185,18 +185,21 @@ export function EventCreateForm({
         <label className="text-sm font-medium text-foreground" htmlFor="ev-visibility">
           Visibilite
         </label>
-        <select
-          id="ev-visibility"
+        <Select
           value={values.visibility}
-          onChange={(e) => set("visibility", e.target.value as EventVisibility)}
-          className={inputClass}
+          onValueChange={(v) => set("visibility", v as EventVisibility)}
         >
-          {EVENT_VISIBILITY_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger id="ev-visibility">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {EVENT_VISIBILITY_OPTIONS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">

@@ -3,6 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { z } from "zod";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -94,15 +95,14 @@ export function LoginForm() {
 
       <div className="flex items-center justify-between gap-3">
         <label className="inline-flex cursor-pointer select-none items-center gap-2 text-sm text-muted-foreground">
-          <input
-            type="checkbox"
+          <Checkbox
+            id="remember-me"
             checked={values.remember}
-            onChange={(e) =>
-              setValues((v) => ({ ...v, remember: e.target.checked }))
+            onCheckedChange={(checked) =>
+              setValues((v) => ({ ...v, remember: checked === true }))
             }
-            className="h-4 w-4 rounded border-border text-primary focus:ring-ring"
           />
-          Se souvenir de moi
+          <span id="remember-me-label">Se souvenir de moi</span>
         </label>
       </div>
 

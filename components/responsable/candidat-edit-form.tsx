@@ -10,6 +10,7 @@ import {
   type ResponsableOption
 } from "@/lib/catechumenes";
 import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-field";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type FormValues = {
   nom: string;
@@ -214,38 +215,42 @@ export function CandidatEditForm({
           <label className={labelClass} htmlFor="e-responsable">
             Responsable référent
           </label>
-          <select
-            id="e-responsable"
+          <Select
             value={values.responsable_profile_id}
-            onChange={(e) => set("responsable_profile_id", e.target.value)}
-            className={inputClass}
+            onValueChange={(v) => set("responsable_profile_id", v)}
           >
-            <option value="">Non assigné</option>
-            {responsables.map((p) => (
-              <option key={p.id} value={p.id}>
-                {formatProfilDisplayName(p)}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger id="e-responsable">
+              <SelectValue placeholder="Non assigné" />
+            </SelectTrigger>
+            <SelectContent>
+              {responsables.map((p) => (
+                <SelectItem key={p.id} value={p.id}>
+                  {formatProfilDisplayName(p)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
           <label className={labelClass} htmlFor="e-statut">
             Statut de suivi
           </label>
-          <select
-            id="e-statut"
+          <Select
             value={values.candidat_suivi_statut}
-            onChange={(e) => set("candidat_suivi_statut", e.target.value)}
-            className={inputClass}
+            onValueChange={(v) => set("candidat_suivi_statut", v)}
           >
-            <option value="">Aucun statut</option>
-            {CANDIDAT_SUIVI_STATUT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.emoji} {o.label}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger id="e-statut">
+              <SelectValue placeholder="Aucun statut" />
+            </SelectTrigger>
+            <SelectContent>
+              {CANDIDAT_SUIVI_STATUT_OPTIONS.map((o) => (
+                <SelectItem key={o.value} value={o.value}>
+                  {o.emoji} {o.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">

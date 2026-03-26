@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Frat } from "@/lib/frats";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type FormValues = {
   nom: string;
@@ -149,14 +151,13 @@ export function CatechumeneCreateForm({
       </div>
 
       <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/80 px-4 py-3">
-        <input
+        <Checkbox
           id="c-est-candidat"
-          type="checkbox"
           checked={values.est_candidat}
-          onChange={(e) =>
-            setValues((v) => ({ ...v, est_candidat: e.target.checked }))
+          onCheckedChange={(checked) =>
+            setValues((v) => ({ ...v, est_candidat: checked === true }))
           }
-          className="mt-1 h-4 w-4 rounded border-border text-foreground focus:ring-ring"
+          className="mt-1"
         />
         <div className="min-w-0">
           <label
@@ -176,23 +177,19 @@ export function CatechumeneCreateForm({
         <label className="text-sm font-medium text-foreground" htmlFor="c-frat">
           Frat
         </label>
-        <select
-          id="c-frat"
-          value={values.frat_id}
-          onChange={(e) => set("frat_id", e.target.value)}
-          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
-        >
-          <option value="">Aucune frat</option>
-          {frats.map((f) => (
-            <option
-              key={f.id}
-              value={f.id}
-              style={{ backgroundColor: f.color_oklch }}
-            >
-              {f.name}
-            </option>
-          ))}
-        </select>
+        <Select value={values.frat_id} onValueChange={(v) => set("frat_id", v)}>
+          <SelectTrigger id="c-frat">
+            <SelectValue placeholder="Aucune frat" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Aucune frat</SelectItem>
+            {frats.map((f) => (
+              <SelectItem key={f.id} value={f.id}>
+                {f.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">

@@ -7,6 +7,7 @@ import {
   formatProfilDisplayName,
   type ResponsableOption
 } from "@/lib/catechumenes";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function CandidatCreateForm({
   responsables
@@ -145,19 +146,21 @@ export function CandidatCreateForm({
           <label className={labelClass} htmlFor="c-responsable">
             Responsable référent
           </label>
-          <select
-            id="c-responsable"
+          <Select
             value={values.responsable_profile_id}
-            onChange={(e) => set("responsable_profile_id", e.target.value)}
-            className={inputClass}
+            onValueChange={(v) => set("responsable_profile_id", v)}
           >
-            <option value="">Non assigné</option>
-            {responsables.map((p) => (
-              <option key={p.id} value={p.id}>
-                {formatProfilDisplayName(p)}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger id="c-responsable">
+              <SelectValue placeholder="Non assigné" />
+            </SelectTrigger>
+            <SelectContent>
+              {responsables.map((p) => (
+                <SelectItem key={p.id} value={p.id}>
+                  {formatProfilDisplayName(p)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">

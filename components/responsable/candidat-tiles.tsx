@@ -11,6 +11,7 @@ import {
   type CandidatSuiviStatut,
   type CandidatWithResponsable
 } from "@/lib/catechumenes";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type StatutFilterValue = "all" | "none" | CandidatSuiviStatut;
 
@@ -85,22 +86,23 @@ export function CandidatTilesWithFilter({
           <label htmlFor="candidats-statut" className="text-xs font-medium text-muted-foreground">
             Statut
           </label>
-          <select
-            id="candidats-statut"
+          <Select
             value={statutFilter}
-            onChange={(e) =>
-              setStatutFilter(e.target.value as StatutFilterValue)
-            }
-            className="h-10 w-full rounded-lg border border-border bg-card px-3 text-sm shadow-sm focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
+            onValueChange={(v) => setStatutFilter(v as StatutFilterValue)}
           >
-            <option value="all">Tous les statuts</option>
-            <option value="none">Sans statut</option>
-            {CANDIDAT_SUIVI_STATUT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.emoji} {o.shortLabel}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger id="candidats-statut" className="h-10 rounded-lg">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tous les statuts</SelectItem>
+              <SelectItem value="none">Sans statut</SelectItem>
+              {CANDIDAT_SUIVI_STATUT_OPTIONS.map((o) => (
+                <SelectItem key={o.value} value={o.value}>
+                  {o.emoji} {o.shortLabel}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       {noMatch ? (

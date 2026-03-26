@@ -7,6 +7,8 @@ import type { Catechumene } from "@/lib/catechumenes";
 import type { Frat } from "@/lib/frats";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-field";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type FormValues = {
   nom: string;
@@ -367,12 +369,11 @@ export function CatechumenesTable({
               </div>
 
               <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/80 px-4 py-3">
-                <input
+                <Checkbox
                   id="e-est-candidat"
-                  type="checkbox"
                   checked={editValues.est_candidat}
-                  onChange={(e) => setEstCandidat(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-border text-foreground focus:ring-ring"
+                  onCheckedChange={(checked) => setEstCandidat(checked === true)}
+                  className="mt-1"
                 />
                 <div className="min-w-0">
                   <label
@@ -392,23 +393,19 @@ export function CatechumenesTable({
                 <label className="text-sm font-medium text-foreground" htmlFor="e-frat">
                   Frat
                 </label>
-                <select
-                  id="e-frat"
-                  value={editValues.frat_id}
-                  onChange={(e) => set("frat_id", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
-                >
-                  <option value="">Aucune frat</option>
-                  {frats.map((f) => (
-                    <option
-                      key={f.id}
-                      value={f.id}
-                      style={{ backgroundColor: f.color_oklch }}
-                    >
-                      {f.name}
-                    </option>
-                  ))}
-                </select>
+                <Select value={editValues.frat_id} onValueChange={(v) => set("frat_id", v)}>
+                  <SelectTrigger id="e-frat">
+                    <SelectValue placeholder="Aucune frat" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Aucune frat</SelectItem>
+                    {frats.map((f) => (
+                      <SelectItem key={f.id} value={f.id}>
+                        {f.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">

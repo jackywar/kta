@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { z } from "zod";
 import { roleSchema } from "@/lib/roles";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -91,23 +92,21 @@ export function UserCreateForm() {
         <label className="text-sm font-medium text-foreground" htmlFor="new-role">
           Rôle
         </label>
-        <select
-          id="new-role"
+        <Select
           value={values.role}
-          onChange={(e) =>
-            setValues((v) => ({
-              ...v,
-              role: roleSchema.parse(e.target.value)
-            }))
-          }
-          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+          onValueChange={(v) => setValues((prev) => ({ ...prev, role: roleSchema.parse(v) }))}
         >
-          {roleSchema.options.map((r) => (
-            <option key={r} value={r}>
-              {roleLabels[r]}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger id="new-role">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {roleSchema.options.map((r) => (
+              <SelectItem key={r} value={r}>
+                {roleLabels[r]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {error ? (

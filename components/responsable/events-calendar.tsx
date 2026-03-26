@@ -8,6 +8,14 @@ import {
   type EventVisibility
 } from "@/lib/events";
 import { MarkdownContent } from "@/components/ui/markdown-content";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
 const EVENT_TYPE_OPTIONS = ["rencontre", "reunion equipe", "étape"] as const;
 type EventTypeOption = (typeof EVENT_TYPE_OPTIONS)[number] | "autre";
@@ -205,9 +213,6 @@ export function ResponsableEventsCalendar({
     });
   }
 
-  const switchBase =
-    "relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
@@ -215,25 +220,13 @@ export function ResponsableEventsCalendar({
           <span className="text-sm font-medium text-muted-foreground">
             Affichage liste
           </span>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={viewMode === "list"}
-            onClick={() =>
-              setViewMode((v) => (v === "list" ? "calendar" : "list"))
+          <Switch
+            checked={viewMode === "list"}
+            aria-label="Basculer entre affichage liste et calendrier"
+            onCheckedChange={(checked) =>
+              setViewMode(checked ? "list" : "calendar")
             }
-            className={`${switchBase} ${
-              viewMode === "list"
-                ? "border-primary bg-primary"
-                : "border-border bg-muted"
-            }`}
-          >
-            <span
-              className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-card shadow-sm transition-transform ${
-                viewMode === "list" ? "translate-x-6" : "translate-x-0.5"
-              }`}
-            />
-          </button>
+          />
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -245,38 +238,40 @@ export function ResponsableEventsCalendar({
             ←
           </button>
           <div className="flex items-center gap-2">
-            <select
-              value={month.getMonth()}
-              onChange={(e) =>
-                setMonth((m) =>
-                  setMonthYear(m, parseInt(e.target.value, 10), m.getFullYear())
-                )
+            <Select
+              value={String(month.getMonth())}
+              onValueChange={(v) =>
+                setMonth((m) => setMonthYear(m, parseInt(v, 10), m.getFullYear()))
               }
-              className="h-10 rounded-xl border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
-              aria-label="Mois"
             >
-              {monthOptions.map((m) => (
-                <option key={m.value} value={m.value} className="capitalize">
-                  {m.label}
-                </option>
-              ))}
-            </select>
-            <select
-              value={month.getFullYear()}
-              onChange={(e) =>
-                setMonth((m) =>
-                  setMonthYear(m, m.getMonth(), parseInt(e.target.value, 10))
-                )
+              <SelectTrigger className="h-10 w-auto min-w-[140px] text-muted-foreground">
+                <SelectValue placeholder="Mois" />
+              </SelectTrigger>
+              <SelectContent>
+                {monthOptions.map((m) => (
+                  <SelectItem key={m.value} value={String(m.value)}>
+                    {m.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              value={String(month.getFullYear())}
+              onValueChange={(v) =>
+                setMonth((m) => setMonthYear(m, m.getMonth(), parseInt(v, 10)))
               }
-              className="h-10 rounded-xl border border-border bg-card px-3 text-sm font-medium text-muted-foreground shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
-              aria-label="Année"
             >
-              {yearOptions.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="h-10 w-auto min-w-[100px] text-muted-foreground">
+                <SelectValue placeholder="Année" />
+              </SelectTrigger>
+              <SelectContent>
+                {yearOptions.map((y) => (
+                  <SelectItem key={y} value={String(y)}>
+                    {y}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <span className="sr-only">{formatMonthTitle(month)}</span>
           </div>
           <button
@@ -552,24 +547,26 @@ export function ResponsableEventsCalendar({
                   <label className="text-sm font-medium text-foreground" htmlFor="re-type">
                     Type d&apos;évènement
                   </label>
-                  <select
-                    id="re-type"
+                  <Select
                     value={editing.type_option}
-                    onChange={(e) =>
-                      setEditing((v) =>
-                        v ? { ...v, type_option: e.target.value as EventTypeOption } : null
+                    onValueChange={(v) =>
+                      setEditing((prev) =>
+                        prev ? { ...prev, type_option: v as EventTypeOption } : null
                       )
                     }
-                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
-                    required
                   >
-                    {EVENT_TYPE_OPTIONS.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                    <option value="autre">Autre…</option>
-                  </select>
+                    <SelectTrigger id="re-type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {EVENT_TYPE_OPTIONS.map((t) => (
+                        <SelectItem key={t} value={t}>
+                          {t}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="autre">Autre…</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {editing.type_option === "autre" ? (
                     <input
                       type="text"
@@ -618,24 +615,25 @@ export function ResponsableEventsCalendar({
                 <label className="text-sm font-medium text-foreground" htmlFor="re-visibility">
                   Visibilite
                 </label>
-                <select
-                  id="re-visibility"
+                <Select
                   value={editing.visibility}
-                  onChange={(e) =>
-                    setEditing((v) =>
-                      v
-                        ? { ...v, visibility: e.target.value as EventVisibility }
-                        : null
+                  onValueChange={(v) =>
+                    setEditing((prev) =>
+                      prev ? { ...prev, visibility: v as EventVisibility } : null
                     )
                   }
-                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 >
-                  {EVENT_VISIBILITY_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger id="re-visibility">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {EVENT_VISIBILITY_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">

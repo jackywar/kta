@@ -6,6 +6,7 @@ import { useMemo, useState, useTransition } from "react";
 import type { Catechumene, CatechumeneWithFrat } from "@/lib/catechumenes";
 import type { Frat } from "@/lib/frats";
 import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-field";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type FormValues = {
   nom: string;
@@ -175,19 +176,19 @@ export function CatechumeneEditForm({
 
         <div className="space-y-2">
           <label className={labelClass} htmlFor="e-frat">Frat</label>
-          <select
-            id="e-frat"
-            value={values.frat_id}
-            onChange={(e) => set("frat_id", e.target.value)}
-            className={inputClass}
-          >
-            <option value="">Aucune frat</option>
-            {frats.map((f) => (
-              <option key={f.id} value={f.id} style={{ backgroundColor: f.color_oklch }}>
-                {f.name}
-              </option>
-            ))}
-          </select>
+          <Select value={values.frat_id} onValueChange={(v) => set("frat_id", v)}>
+            <SelectTrigger id="e-frat">
+              <SelectValue placeholder="Aucune frat" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Aucune frat</SelectItem>
+              {frats.map((f) => (
+                <SelectItem key={f.id} value={f.id}>
+                  {f.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">

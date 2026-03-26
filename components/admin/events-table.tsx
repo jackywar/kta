@@ -8,6 +8,7 @@ import {
   type EventVisibility
 } from "@/lib/events";
 import { MarkdownContent } from "@/components/ui/markdown-content";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const EVENT_TYPE_OPTIONS = ["rencontre", "reunion equipe", "étape"] as const;
 type EventTypeOption = (typeof EVENT_TYPE_OPTIONS)[number] | "autre";
@@ -268,29 +269,26 @@ export function EventsTable({ events }: { events: Event[] }) {
                   <label className="text-sm font-medium text-foreground" htmlFor="ee-type">
                     Type d&apos;évènement
                   </label>
-                  <select
-                    id="ee-type"
+                  <Select
                     value={editValues.type_option}
-                    onChange={(e) =>
-                      setEditValues((v) =>
-                        v
-                          ? ({
-                              ...v,
-                              type_option: e.target.value as EventTypeOption
-                            } as FormValues)
-                          : null
+                    onValueChange={(v) =>
+                      setEditValues((prev) =>
+                        prev ? ({ ...prev, type_option: v as EventTypeOption } as FormValues) : null
                       )
                     }
-                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
-                    required
                   >
-                    {EVENT_TYPE_OPTIONS.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                    <option value="autre">Autre…</option>
-                  </select>
+                    <SelectTrigger id="ee-type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {EVENT_TYPE_OPTIONS.map((t) => (
+                        <SelectItem key={t} value={t}>
+                          {t}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="autre">Autre…</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {editValues.type_option === "autre" ? (
                     <input
                       type="text"
@@ -335,18 +333,18 @@ export function EventsTable({ events }: { events: Event[] }) {
                 <label className="text-sm font-medium text-foreground" htmlFor="ee-visibility">
                   Visibilite
                 </label>
-                <select
-                  id="ee-visibility"
-                  value={editValues.visibility}
-                  onChange={(e) => set("visibility", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
-                >
-                  {EVENT_VISIBILITY_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                <Select value={editValues.visibility} onValueChange={(v) => set("visibility", v)}>
+                  <SelectTrigger id="ee-visibility">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {EVENT_VISIBILITY_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">

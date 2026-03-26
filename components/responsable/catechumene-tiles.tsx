@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
+import { Switch } from "@/components/ui/switch";
 
 const DEFAULT_BORDER_COLOR = "rgb(161 161 170)"; // zinc-400
 
@@ -64,27 +65,14 @@ export function CatechumeneTilesWithFilter({
         >
           Uniquement ma frat
         </span>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={showOnlyMyFrats}
-          aria-disabled={!hasFratResponsability}
+        <Switch
+          checked={showOnlyMyFrats}
+          aria-label="Uniquement ma frat"
           disabled={!hasFratResponsability}
-          onClick={() => hasFratResponsability && setShowOnlyMyFrats((v) => !v)}
-          className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
-            hasFratResponsability
-              ? showOnlyMyFrats
-                ? "border-primary bg-primary"
-                : "border-border bg-muted"
-              : "cursor-not-allowed border-border bg-muted opacity-60"
-          }`}
-        >
-          <span
-            className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-card shadow-sm transition-transform ${
-              showOnlyMyFrats ? "translate-x-6" : "translate-x-0.5"
-            } ${hasFratResponsability ? "" : "opacity-70"}`}
-          />
-        </button>
+          onCheckedChange={(checked) =>
+            hasFratResponsability && setShowOnlyMyFrats(checked)
+          }
+        />
         {!hasFratResponsability && (
           <span className="text-xs text-muted-foreground">
             Vous n&apos;êtes responsable d&apos;aucune frat

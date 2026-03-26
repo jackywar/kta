@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { FratWithResponsables } from "@/lib/frats";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type ResponsableOption = {
   id: string;
@@ -174,39 +175,44 @@ export function FratsTable({
                           })}
                       </div>
                       <div className="flex items-center gap-2">
-                        <select
+                        <Select
                           value={row.selectedResponsableId}
-                          onChange={(e) =>
+                          onValueChange={(v) =>
                             setState((prev) => ({
                               ...prev,
                               [f.id]: {
                                 ...prev[f.id],
-                                selectedResponsableId: e.target.value
+                                selectedResponsableId: v
                               }
                             }))
                           }
                           disabled={disabledGlobally || isRowBusy}
-                          className="h-8 min-w-0 flex-1 rounded-lg border border-border bg-card px-3 text-xs shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
                         >
-                          <option value="">
-                            {options.length === 0
-                              ? "Aucun responsable disponible"
-                              : "Choisir un responsable…"}
-                          </option>
-                          {options.map((p) => {
-                            const fullName = [p.first_name, p.last_name]
-                              .map((s) => (s && s.trim()) || "")
-                              .filter(Boolean)
-                              .join(" ")
-                              .trim();
-                            const label = fullName || p.email;
-                            return (
-                              <option key={p.id} value={p.id}>
-                                {label}
-                              </option>
-                            );
-                          })}
-                        </select>
+                          <SelectTrigger className="h-8 min-w-0 flex-1 rounded-lg text-xs">
+                            <SelectValue
+                              placeholder={
+                                options.length === 0
+                                  ? "Aucun responsable disponible"
+                                  : "Choisir un responsable…"
+                              }
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {options.map((p) => {
+                              const fullName = [p.first_name, p.last_name]
+                                .map((s) => (s && s.trim()) || "")
+                                .filter(Boolean)
+                                .join(" ")
+                                .trim();
+                              const label = fullName || p.email;
+                              return (
+                                <SelectItem key={p.id} value={p.id}>
+                                  {label}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
                         <button
                           type="button"
                           onClick={async () => {

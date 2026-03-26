@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Event } from "@/lib/events";
 import type { EventAttendance } from "@/lib/event-attendances";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 
 type RowState = {
   selected: boolean;
@@ -199,23 +201,11 @@ export function CatechumeneAttendanceAdd({
                   <span className="text-sm font-medium text-muted-foreground">
                     Filtre date à date
                   </span>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={useRangeFilter}
-                    onClick={() => setUseRangeFilter((v) => !v)}
-                    className={`relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
-                      useRangeFilter
-                        ? "border-primary bg-primary"
-                        : "border-border bg-muted"
-                    }`}
-                  >
-                    <span
-                      className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-card shadow-sm transition-transform ${
-                        useRangeFilter ? "translate-x-6" : "translate-x-0.5"
-                      }`}
-                    />
-                  </button>
+                  <Switch
+                    checked={useRangeFilter}
+                    aria-label="Activer le filtre date à date"
+                    onCheckedChange={setUseRangeFilter}
+                  />
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {candidates.length} évènement{candidates.length > 1 ? "s" : ""}{" "}
@@ -329,13 +319,12 @@ export function CatechumeneAttendanceAdd({
                       className="rounded-xl border border-border bg-card p-4 shadow-sm"
                     >
                       <div className="flex items-start gap-3">
-                        <input
-                          type="checkbox"
+                        <Checkbox
                           checked={row.selected}
-                          onChange={(ev) =>
-                            setRow(e.id, { selected: ev.target.checked })
+                          onCheckedChange={(checked) =>
+                            setRow(e.id, { selected: checked === true })
                           }
-                          className="mt-1 h-4 w-4 shrink-0 accent-primary"
+                          className="mt-1 shrink-0"
                           aria-label="Sélectionner l'évènement"
                         />
                         <div className="min-w-0 flex-1">
@@ -344,19 +333,17 @@ export function CatechumeneAttendanceAdd({
                           </div>
 
                           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                            <input
+                            <Checkbox
                               id={`aj-${e.id}`}
-                              type="checkbox"
                               checked={row.absence_justifiee}
-                              onChange={(ev) =>
+                              onCheckedChange={(checked) =>
                                 setRow(e.id, {
-                                  absence_justifiee: ev.target.checked,
-                                  justificatif: ev.target.checked
+                                  absence_justifiee: checked === true,
+                                  justificatif: checked === true
                                     ? row.justificatif
                                     : ""
                                 })
                               }
-                              className="h-4 w-4 accent-primary"
                             />
                             <label htmlFor={`aj-${e.id}`}>Absence justifiée</label>
                           </div>
@@ -415,13 +402,11 @@ export function CatechumeneAttendanceAdd({
                         return (
                           <tr key={e.id} className="hover:bg-muted/70">
                             <td className="px-4 py-3">
-                              <input
-                                type="checkbox"
+                              <Checkbox
                                 checked={row.selected}
-                                onChange={(ev) =>
-                                  setRow(e.id, { selected: ev.target.checked })
+                                onCheckedChange={(checked) =>
+                                  setRow(e.id, { selected: checked === true })
                                 }
-                                className="h-4 w-4 accent-primary"
                                 aria-label="Sélectionner l'évènement"
                               />
                             </td>
@@ -432,18 +417,16 @@ export function CatechumeneAttendanceAdd({
                               {e.libelle}
                             </td>
                             <td className="px-4 py-3">
-                              <input
-                                type="checkbox"
+                              <Checkbox
                                 checked={row.absence_justifiee}
-                                onChange={(ev) =>
+                                onCheckedChange={(checked) =>
                                   setRow(e.id, {
-                                    absence_justifiee: ev.target.checked,
-                                    justificatif: ev.target.checked
+                                    absence_justifiee: checked === true,
+                                    justificatif: checked === true
                                       ? row.justificatif
                                       : ""
                                   })
                                 }
-                                className="h-4 w-4 accent-primary"
                                 aria-label="Absence justifiée"
                               />
                             </td>

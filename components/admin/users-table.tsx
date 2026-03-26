@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { roleSchema, type Role } from "@/lib/roles";
 import type { Responsabilite, ResponsableResponsabilite } from "@/lib/responsabilites";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export type ProfileRow = {
   id: string;
@@ -254,26 +256,30 @@ export function UsersTable({
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <select
+                      <Select
                         value={row.role}
-                        onChange={(e) =>
+                        onValueChange={(v) =>
                           setState((prev) => ({
                             ...prev,
                             [u.id]: {
                               ...prev[u.id],
-                              role: roleSchema.parse(e.target.value)
+                              role: roleSchema.parse(v)
                             }
                           }))
                         }
                         disabled={disabledGlobally || isRowBusy}
-                        className="h-8 rounded-lg border border-border bg-card px-2 text-xs shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
                       >
-                        {roleSchema.options.map((r) => (
-                          <option key={r} value={r}>
-                            {roleLabels[r]}
-                          </option>
-                        ))}
-                      </select>
+                        <SelectTrigger className="h-8 w-auto min-w-[130px] rounded-lg px-2 text-xs">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {roleSchema.options.map((r) => (
+                            <SelectItem key={r} value={r}>
+                              {roleLabels[r]}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </td>
                   <td className="px-4 py-3">
@@ -418,12 +424,11 @@ export function UsersTable({
                     key={r.id}
                     className="flex cursor-pointer items-start gap-3 rounded-lg border border-border p-3 transition hover:bg-muted"
                   >
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       checked={editingResponsabilites.selectedIds.has(r.id)}
-                      onChange={(e) => {
+                      onCheckedChange={(checked) => {
                         const newSet = new Set(editingResponsabilites.selectedIds);
-                        if (e.target.checked) {
+                        if (checked === true) {
                           newSet.add(r.id);
                         } else {
                           newSet.delete(r.id);
@@ -433,7 +438,7 @@ export function UsersTable({
                           selectedIds: newSet
                         });
                       }}
-                      className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-ring"
+                      className="mt-0.5"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-medium text-foreground">
