@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { EVENT_VISIBILITY_OPTIONS, type EventVisibility } from "@/lib/events";
 
 const EVENT_TYPE_OPTIONS = ["rencontre", "reunion equipe", "étape"] as const;
 type EventTypeOption = (typeof EVENT_TYPE_OPTIONS)[number] | "autre";
@@ -14,6 +15,7 @@ type FormValues = {
   libelle: string;
   lieu: string;
   descriptif: string;
+  visibility: EventVisibility;
 };
 
 const emptyForm: FormValues = {
@@ -23,7 +25,8 @@ const emptyForm: FormValues = {
   type_autre: "",
   libelle: "",
   lieu: "ND Talence",
-  descriptif: ""
+  descriptif: "",
+  visibility: "tout"
 };
 
 export function EventCreateForm({
@@ -74,7 +77,8 @@ export function EventCreateForm({
         type: typeValue,
         libelle: values.libelle.trim(),
         lieu: values.lieu.trim(),
-        descriptif: values.descriptif.trim() || undefined
+        descriptif: values.descriptif.trim() || undefined,
+        visibility: values.visibility
       };
 
       const res = await fetch("/api/admin/events/create", {
@@ -175,6 +179,24 @@ export function EventCreateForm({
             required
           />
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-zinc-900" htmlFor="ev-visibility">
+          Visibilite
+        </label>
+        <select
+          id="ev-visibility"
+          value={values.visibility}
+          onChange={(e) => set("visibility", e.target.value as EventVisibility)}
+          className={inputClass}
+        >
+          {EVENT_VISIBILITY_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="space-y-2">

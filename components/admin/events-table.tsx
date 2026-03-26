@@ -2,7 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
-import type { Event } from "@/lib/events";
+import {
+  EVENT_VISIBILITY_OPTIONS,
+  type Event,
+  type EventVisibility
+} from "@/lib/events";
 import { MarkdownContent } from "@/components/ui/markdown-content";
 
 const EVENT_TYPE_OPTIONS = ["rencontre", "reunion equipe", "étape"] as const;
@@ -16,6 +20,7 @@ type FormValues = {
   libelle: string;
   lieu: string;
   descriptif: string;
+  visibility: EventVisibility;
 };
 
 function eventToForm(e: Event): FormValues {
@@ -30,7 +35,8 @@ function eventToForm(e: Event): FormValues {
     type_autre: option === "autre" ? t : "",
     libelle: e.libelle ?? "",
     lieu: e.lieu ?? "",
-    descriptif: e.descriptif ?? ""
+    descriptif: e.descriptif ?? "",
+    visibility: e.visibility ?? "tout"
   };
 }
 
@@ -102,7 +108,8 @@ export function EventsTable({ events }: { events: Event[] }) {
         type: typeValue,
         libelle: editValues.libelle.trim(),
         lieu: editValues.lieu.trim(),
-        descriptif: editValues.descriptif.trim() || undefined
+        descriptif: editValues.descriptif.trim() || undefined,
+        visibility: editValues.visibility
       };
 
       const res = await fetch("/api/admin/events/update", {
@@ -187,6 +194,7 @@ export function EventsTable({ events }: { events: Event[] }) {
               <tr>
                 <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3">Type</th>
+                <th className="px-4 py-3">Visibilite</th>
                 <th className="px-4 py-3">Libellé</th>
                 <th className="px-4 py-3">Lieu</th>
                 <th className="px-4 py-3 text-right">Actions</th>
@@ -197,6 +205,10 @@ export function EventsTable({ events }: { events: Event[] }) {
                 <tr key={e.id} className="hover:bg-zinc-50/70">
                   <td className="px-4 py-3 text-zinc-900">{formatDate(e.date)}</td>
                   <td className="px-4 py-3 text-zinc-900">{e.type}</td>
+                  <td className="px-4 py-3 text-zinc-600">
+                    {EVENT_VISIBILITY_OPTIONS.find((o) => o.value === e.visibility)
+                      ?.label ?? e.visibility}
+                  </td>
                   <td className="px-4 py-3 text-zinc-900">{e.libelle}</td>
                   <td className="px-4 py-3 text-zinc-600">{e.lieu}</td>
                   <td className="px-4 py-3">
@@ -317,6 +329,24 @@ export function EventsTable({ events }: { events: Event[] }) {
                   className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
                   required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-zinc-900" htmlFor="ee-visibility">
+                  Visibilite
+                </label>
+                <select
+                  id="ee-visibility"
+                  value={editValues.visibility}
+                  onChange={(e) => set("visibility", e.target.value)}
+                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                >
+                  {EVENT_VISIBILITY_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="space-y-2">

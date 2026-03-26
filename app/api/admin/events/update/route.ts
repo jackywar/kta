@@ -8,7 +8,8 @@ const bodySchema = z.object({
   type: z.string().min(1),
   libelle: z.string().min(1),
   lieu: z.string().min(1),
-  descriptif: z.string().optional()
+  descriptif: z.string().optional(),
+  visibility: z.enum(["tout", "annee_1", "annee_2", "equipe"]).optional()
 });
 
 export async function POST(req: Request) {
@@ -49,7 +50,8 @@ export async function POST(req: Request) {
       type: d.type.trim(),
       libelle: d.libelle.trim(),
       lieu: d.lieu.trim(),
-      descriptif: d.descriptif?.trim() || null
+      descriptif: d.descriptif?.trim() || null,
+      ...(d.visibility ? { visibility: d.visibility } : {})
     })
     .eq("id", d.id);
 

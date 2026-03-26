@@ -2,7 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
-import type { Event } from "@/lib/events";
+import {
+  EVENT_VISIBILITY_OPTIONS,
+  type Event,
+  type EventVisibility
+} from "@/lib/events";
 import { MarkdownContent } from "@/components/ui/markdown-content";
 
 const EVENT_TYPE_OPTIONS = ["rencontre", "reunion equipe", "étape"] as const;
@@ -18,6 +22,7 @@ type EditValues = {
   libelle: string;
   lieu: string;
   descriptif: string;
+  visibility: EventVisibility;
 };
 
 function toISODate(d: Date): string {
@@ -68,7 +73,8 @@ function eventToEditValues(e: Event): EditValues {
     type_autre: option === "autre" ? t : "",
     libelle: e.libelle ?? "",
     lieu: e.lieu ?? "",
-    descriptif: e.descriptif ?? ""
+    descriptif: e.descriptif ?? "",
+    visibility: e.visibility ?? "tout"
   };
 }
 
@@ -174,7 +180,8 @@ export function ResponsableEventsCalendar({
         type: typeValue,
         libelle: editing.libelle.trim(),
         lieu: editing.lieu.trim(),
-        descriptif: editing.descriptif.trim() || undefined
+        descriptif: editing.descriptif.trim() || undefined,
+        visibility: editing.visibility
       };
 
       const res = await fetch("/api/admin/events/update", {
@@ -605,6 +612,30 @@ export function ResponsableEventsCalendar({
                   className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
                   required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-zinc-900" htmlFor="re-visibility">
+                  Visibilite
+                </label>
+                <select
+                  id="re-visibility"
+                  value={editing.visibility}
+                  onChange={(e) =>
+                    setEditing((v) =>
+                      v
+                        ? { ...v, visibility: e.target.value as EventVisibility }
+                        : null
+                    )
+                  }
+                  className="h-11 w-full rounded-xl border border-zinc-200 bg-white px-3 text-sm shadow-sm outline-none transition focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
+                >
+                  {EVENT_VISIBILITY_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="space-y-2">
