@@ -12,11 +12,28 @@ type ThemeMode = "light" | "dark" | "system";
 function ThemeProfileSync() {
   const { theme, setTheme } = useTheme();
   const hasHydrated = React.useRef(false);
+  const STORAGE_KEY = "kta:mode";
 
   React.useEffect(() => {
     let cancelled = false;
 
     async function run() {
+      // 1) Prefer local persisted mode to avoid late server response
+      // overriding a recent user choice on this device.
+      try {
+        const local = localStorage.getItem(STORAGE_KEY);
+        if (local === "light" || local === "dark" || local === "system") {
+          if (!cancelled) {
+            setTheme(local);
+            hasHydrated.current = true;
+          }
+          return;
+        }
+      } catch {
+        // ignore localStorage access issues and continue with server fallback
+      }
+
+      // 2) Fallback: hydrate from profile value
       try {
         const res = await fetch("/api/profile/theme", { method: "GET" });
         if (!res.ok) return;
@@ -33,6 +50,9 @@ function ThemeProfileSync() {
           (mode === "light" || mode === "dark" || mode === "system")
         ) {
           setTheme(mode);
+          try {
+            localStorage.setItem(STORAGE_KEY, mode);
+          } catch {}
         }
       } catch {
         // ignore (offline / not logged in)
