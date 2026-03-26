@@ -31,7 +31,7 @@ export function PaletteSwitcher({
     <label className={className}>
       <span className="block text-sm font-medium text-foreground">{label}</span>
       <Select value={palette} onValueChange={(v) => setPalette(v as PaletteName)}>
-        <SelectTrigger className="mt-2 bg-foreground text-background">
+        <SelectTrigger className="mt-2">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

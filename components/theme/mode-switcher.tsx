@@ -28,7 +28,7 @@ export function ModeSwitcher({
     <label className={className}>
       <span className="block text-sm font-medium text-foreground">{label}</span>
       <Select value={value} onValueChange={(v) => setTheme(v as Mode)}>
-        <SelectTrigger className="mt-2 bg-foreground text-background">
+        <SelectTrigger className="mt-2">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
