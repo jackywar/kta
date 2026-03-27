@@ -23,7 +23,14 @@ export function SelectTrigger({ className = "", children, ...props }: SelectTrig
     >
       {children}
       <SelectPrimitive.Icon>
-        <svg className="h-4 w-4 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+        <svg
+          className="h-4 w-4 text-current opacity-70"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          aria-hidden
+        >
           <path d="m6 9 6 6 6-6" />
         </svg>
       </SelectPrimitive.Icon>

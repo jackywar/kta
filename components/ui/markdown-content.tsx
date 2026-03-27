@@ -70,7 +70,7 @@ const summaryClasses =
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 const detailsClasses =
-  "markdown-details border-b border-border/60 last:border-b-0";
+  "markdown-details";
 
 function MarkdownAccordionSection({ section }: { section: MarkdownH1Section }) {
   const [open, setOpen] = useState(true);
@@ -86,7 +86,7 @@ function MarkdownAccordionSection({ section }: { section: MarkdownH1Section }) {
         <AccordionChevron />
       </summary>
       <div
-        className={`border-l-2 border-border/60 pl-3 pb-2 pt-0.5 ${markdownClasses}`}
+        className={`pl-3 pb-2 pt-0.5 ${markdownClasses}`}
       >
         {section.body.trim() ? (
           <ReactMarkdown>{section.body}</ReactMarkdown>
@@ -108,11 +108,11 @@ function AccordionChevron() {
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="block"
+        className="block text-current"
       >
         <path
           d="M9 6l6 6-6 6"
-          stroke="#3f3f46"
+          stroke="currentColor"
           strokeWidth={2.25}
           strokeLinecap="round"
           strokeLinejoin="round"
