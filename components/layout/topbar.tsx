@@ -1,4 +1,5 @@
 import { unstable_noStore as noStore } from "next/cache";
+import { redirect } from "next/navigation";
 import {
   TopbarClient,
   type TopbarNavLink
@@ -23,9 +24,13 @@ export async function Topbar() {
   if (!userError && user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role, first_name, last_name")
+      .select("role, first_name, last_name, disabled_at")
       .eq("id", user.id)
       .maybeSingle();
+
+    if (profile?.disabled_at) {
+      redirect("/disabled");
+    }
 
     isAdmin = profile?.role === "admin";
     isResponsable = profile?.role === "responsable";

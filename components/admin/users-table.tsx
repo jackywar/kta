@@ -14,6 +14,7 @@ export type ProfileRow = {
   last_name: string | null;
   role: Role;
   created_at: string;
+  disabled_at?: string | null;
 };
 
 type RowState = {
@@ -24,6 +25,7 @@ type RowState = {
   savingRole: boolean;
   resettingPassword: boolean;
   deleting: boolean;
+  togglingDisabled: boolean;
 };
 
 const roleLabels: Record<Role, string> = {
@@ -53,7 +55,8 @@ export function UsersTable({
           newPassword: "",
           savingRole: false,
           resettingPassword: false,
-          deleting: false
+          deleting: false,
+          togglingDisabled: false
         }
       ])
     )
@@ -183,6 +186,22 @@ export function UsersTable({
     });
   }
 
+  async function handleToggleDisabled(id: string, nextDisabled: boolean) {
+    setState((prev) => ({
+      ...prev,
+      [id]: { ...prev[id], togglingDisabled: true }
+    }));
+
+    startTransition(async () => {
+      await fetch("/api/admin/users/toggle-disabled", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id, disabled: nextDisabled })
+      });
+      router.refresh();
+    });
+  }
+
   return (
     <div className="overflow-hidden rounded-xl border border-border">
       <div className="overflow-x-auto">
@@ -207,14 +226,23 @@ export function UsersTable({
                 newPassword: "",
                 savingRole: false,
                 resettingPassword: false,
-                deleting: false
+                deleting: false,
+                togglingDisabled: false
               };
 
               const isRowBusy =
-                row.savingRole || row.resettingPassword || row.deleting;
+                row.savingRole ||
+                row.resettingPassword ||
+                row.deleting ||
+                row.togglingDisabled;
+
+              const isDisabled = Boolean(u.disabled_at);
 
               return (
-                <tr key={u.id} className="hover:bg-muted/70">
+                <tr
+                  key={u.id}
+                  className={`hover:bg-muted/70 ${isDisabled ? "opacity-60" : ""}`}
+                >
                   <td className="px-4 py-3 text-foreground">
                     <div className="flex flex-col gap-1">
                       <input
@@ -253,6 +281,13 @@ export function UsersTable({
                   </td>
                   <td className="px-4 py-3 font-medium text-foreground">
                     {u.email}
+                    {isDisabled ? (
+                      <div className="mt-1">
+                        <span className="inline-flex items-center rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                          Désactivé
+                        </span>
+                      </div>
+                    ) : null}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
@@ -344,6 +379,23 @@ export function UsersTable({
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleDisabled(u.id, !isDisabled)}
+                        disabled={disabledGlobally || isRowBusy}
+                        className={`inline-flex h-8 items-center justify-center rounded-lg border bg-card px-2 text-xs shadow-sm transition disabled:cursor-not-allowed disabled:opacity-50 ${
+                          isDisabled
+                            ? "border-border text-muted-foreground hover:bg-muted"
+                            : "border-border text-muted-foreground hover:bg-muted"
+                        }`}
+                        title={isDisabled ? "Réactiver l’utilisateur" : "Désactiver l’utilisateur"}
+                      >
+                        {row.togglingDisabled
+                          ? "…"
+                          : isDisabled
+                            ? "Réactiver"
+                            : "Désactiver"}
+                      </button>
                       <button
                         type="button"
                         onClick={() => handleSaveRole(u.id)}

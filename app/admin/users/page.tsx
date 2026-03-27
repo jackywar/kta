@@ -34,7 +34,7 @@ export default async function AdminUsersPage() {
 
   const { data: profiles, error: profilesError } = await supabase
     .from("profiles")
-    .select("id, email, first_name, last_name, role, created_at")
+    .select("id, email, first_name, last_name, role, created_at, disabled_at")
     .order("created_at", { ascending: false });
 
   if (profilesError) throw new Error(profilesError.message);
