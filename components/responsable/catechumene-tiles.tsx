@@ -9,6 +9,9 @@ import { Switch } from "@/components/ui/switch";
 
 const DEFAULT_BORDER_COLOR = "rgb(161 161 170)"; // zinc-400
 
+/** Ratio portrait pour la photo (moins carré que 1:1, bandes latérales plus faibles avec object-contain). */
+const TILE_PHOTO_BOX = "relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-muted";
+
 function matchSearch(c: CatechumeneWithFrat, query: string): boolean {
   if (!query.trim()) return true;
   const q = query.trim().toLowerCase();
@@ -134,20 +137,14 @@ export function CatechumeneTile({
   const borderColor =
     catechumene.frat?.color_oklch?.trim() || DEFAULT_BORDER_COLOR;
 
-  const hasFooter = footer != null;
-
   return (
     <article
       className={`flex flex-col overflow-hidden rounded-2xl border-[3px] bg-card shadow-sm transition-shadow hover:shadow-md ${
-        hasFooter ? "" : "aspect-square"
-      } ${clickable ? "cursor-pointer" : ""}`}
+        clickable ? "cursor-pointer" : ""
+      }`}
       style={{ borderColor }}
     >
-      <div
-        className={`relative shrink-0 overflow-hidden bg-muted ${
-          hasFooter ? "aspect-square w-full" : "min-h-0 flex-1"
-        }`}
-      >
+      <div className={TILE_PHOTO_BOX}>
         {photoUrl ? (
           <Image
             src={photoUrl}

@@ -151,8 +151,8 @@ function CandidatTile({ candidat }: { candidat: CandidatWithResponsable }) {
     : null;
 
   return (
-    <article className="flex aspect-square cursor-pointer flex-col overflow-hidden rounded-2xl border-[3px] border-border bg-card shadow-sm transition-shadow hover:shadow-md">
-      <div className="relative min-h-0 flex-1 overflow-hidden bg-muted">
+    <article className="flex cursor-pointer flex-col overflow-hidden rounded-2xl border-[3px] border-border bg-card shadow-sm transition-shadow hover:shadow-md">
+      <div className="relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-muted">
         {photoUrl ? (
           <Image
             src={photoUrl}
