@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
 import { Switch } from "@/components/ui/switch";
@@ -121,25 +121,33 @@ export function CatechumeneTiles({
   );
 }
 
-function CatechumeneTile({
+export function CatechumeneTile({
   catechumene,
-  clickable = true
+  clickable = true,
+  footer
 }: {
   catechumene: CatechumeneWithFrat;
   clickable?: boolean;
+  footer?: ReactNode;
 }) {
   const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path);
   const borderColor =
     catechumene.frat?.color_oklch?.trim() || DEFAULT_BORDER_COLOR;
 
+  const hasFooter = footer != null;
+
   return (
     <article
-      className={`flex aspect-square flex-col overflow-hidden rounded-2xl border-[3px] bg-card shadow-sm transition-shadow hover:shadow-md ${
-        clickable ? "cursor-pointer" : ""
-      }`}
+      className={`flex flex-col overflow-hidden rounded-2xl border-[3px] bg-card shadow-sm transition-shadow hover:shadow-md ${
+        hasFooter ? "" : "aspect-square"
+      } ${clickable ? "cursor-pointer" : ""}`}
       style={{ borderColor }}
     >
-      <div className="relative flex-1 shrink-0 overflow-hidden bg-muted">
+      <div
+        className={`relative shrink-0 overflow-hidden bg-muted ${
+          hasFooter ? "aspect-square w-full" : "min-h-0 flex-1"
+        }`}
+      >
         {photoUrl ? (
           <Image
             src={photoUrl}
@@ -162,6 +170,9 @@ function CatechumeneTile({
           {catechumene.prenom} {catechumene.nom}
         </p>
       </div>
+      {footer != null ? (
+        <div className="shrink-0 border-t border-border/60 px-3 py-2">{footer}</div>
+      ) : null}
     </article>
   );
 }

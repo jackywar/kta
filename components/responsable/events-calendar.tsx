@@ -408,53 +408,70 @@ export function ResponsableEventsCalendar({
           aria-modal="true"
           aria-labelledby="event-detail-title"
         >
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  {formatDateLong(selected.date)}
-                </p>
-                <h2
-                  id="event-detail-title"
-                  className="mt-1 text-lg font-semibold text-foreground"
-                >
-                  {selected.libelle}
-                </h2>
-                <p className="mt-1 text-sm text-muted-foreground">{selected.lieu}</p>
+          <div className="flex min-h-0 max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-4 pt-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {formatDateLong(selected.date)}
+                  </p>
+                  <h2
+                    id="event-detail-title"
+                    className="mt-1 text-lg font-semibold text-foreground"
+                  >
+                    {selected.libelle}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">{selected.lieu}</p>
+                </div>
+                <span className="shrink-0 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+                  {selected.type}
+                </span>
               </div>
-              <span className="shrink-0 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-                {selected.type}
-              </span>
+
+              {selected.descriptif?.trim() ? (
+                <div className="mt-4 rounded-xl border border-border/60 bg-muted p-4">
+                  <MarkdownContent content={selected.descriptif} />
+                </div>
+              ) : null}
             </div>
 
-            {selected.descriptif?.trim() ? (
-              <div className="mt-4 rounded-xl border border-border/60 bg-muted p-4">
-                <MarkdownContent content={selected.descriptif} />
+            <div className="shrink-0 space-y-3 border-t border-border bg-card px-6 py-4">
+              <div className="flex gap-3">
+                {!readOnly ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditing(eventToEditValues(selected));
+                      setSelected(null);
+                    }}
+                    className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90"
+                  >
+                    Modifier
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={() => setSelected(null)}
+                  className={`inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted ${
+                    readOnly ? "flex-1" : ""
+                  }`}
+                >
+                  Fermer
+                </button>
               </div>
-            ) : null}
-
-            <div className="mt-6 flex gap-3">
               {!readOnly ? (
                 <button
                   type="button"
                   onClick={() => {
-                    setEditing(eventToEditValues(selected));
+                    const id = selected.id;
                     setSelected(null);
+                    router.push(`/responsable/events/${id}/presence`);
                   }}
-                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90"
+                  className="inline-flex h-11 w-full items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
                 >
-                  Modifier
+                  Saisir présence
                 </button>
               ) : null}
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
-                className={`inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted ${
-                  readOnly ? "flex-1" : ""
-                }`}
-              >
-                Fermer
-              </button>
             </div>
           </div>
         </div>
