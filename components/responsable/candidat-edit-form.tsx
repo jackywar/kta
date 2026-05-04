@@ -11,6 +11,7 @@ import {
 } from "@/lib/catechumenes";
 import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormValues = {
   nom: string;
@@ -311,14 +312,12 @@ export function CandidatEditForm({
           <label className={labelClass} htmlFor="e-rencontre-texte">
             Rencontre individuelle (notes)
           </label>
-          <textarea
+          <Textarea
             id="e-rencontre-texte"
-            rows={4}
             value={values.rencontre_individuelle_texte}
             onChange={(e) =>
               set("rencontre_individuelle_texte", e.target.value)
             }
-            className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           />
         </div>
       </div>

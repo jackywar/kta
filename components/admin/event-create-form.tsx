@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { EVENT_VISIBILITY_OPTIONS, type EventVisibility } from "@/lib/events";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const EVENT_TYPE_OPTIONS = ["rencontre", "reunion equipe", "étape"] as const;
 type EventTypeOption = (typeof EVENT_TYPE_OPTIONS)[number] | "autre";
@@ -221,12 +222,11 @@ export function EventCreateForm({
         <label className="text-sm font-medium text-foreground" htmlFor="ev-desc">
           Descriptif (Markdown)
         </label>
-        <textarea
+        <Textarea
           id="ev-desc"
-          rows={5}
           value={values.descriptif}
           onChange={(e) => set("descriptif", e.target.value)}
-          className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+          className="font-mono"
           placeholder="Détails de l'évènement…"
         />
       </div>

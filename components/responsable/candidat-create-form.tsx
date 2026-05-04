@@ -8,6 +8,7 @@ import {
   type ResponsableOption
 } from "@/lib/catechumenes";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 export function CandidatCreateForm({
   responsables
@@ -219,14 +220,12 @@ export function CandidatCreateForm({
           <label className={labelClass} htmlFor="c-rencontre-texte">
             Rencontre individuelle (notes)
           </label>
-          <textarea
+          <Textarea
             id="c-rencontre-texte"
-            rows={4}
             value={values.rencontre_individuelle_texte}
             onChange={(e) =>
               set("rencontre_individuelle_texte", e.target.value)
             }
-            className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           />
         </div>
       </div>

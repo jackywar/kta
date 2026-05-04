@@ -8,6 +8,7 @@ import {
   type EventVisibility
 } from "@/lib/events";
 import { MarkdownContent } from "@/components/ui/markdown-content";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
@@ -657,14 +658,13 @@ export function ResponsableEventsCalendar({
                 <label className="text-sm font-medium text-foreground" htmlFor="re-desc">
                   Descriptif (Markdown)
                 </label>
-                <textarea
+                <Textarea
                   id="re-desc"
-                  rows={5}
                   value={editing.descriptif}
                   onChange={(e) =>
                     setEditing((v) => (v ? { ...v, descriptif: e.target.value } : null))
                   }
-                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+                  className="font-mono"
                 />
               </div>
 

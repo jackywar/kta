@@ -5,6 +5,7 @@ import { useMemo, useState, useTransition } from "react";
 import type { Frat } from "@/lib/frats";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormValues = {
   nom: string;
@@ -303,12 +304,10 @@ export function CatechumeneCreateForm({
         <label className="text-sm font-medium text-foreground" htmlFor="c-rencontre-texte">
           Rencontre individuelle (notes)
         </label>
-        <textarea
+        <Textarea
           id="c-rencontre-texte"
-          rows={3}
           value={values.rencontre_individuelle_texte}
           onChange={(e) => set("rencontre_individuelle_texte", e.target.value)}
-          className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="Notes de la rencontre…"
         />
       </div>
@@ -317,12 +316,11 @@ export function CatechumeneCreateForm({
         <label className="text-sm font-medium text-foreground" htmlFor="c-observations">
           Observations (Markdown)
         </label>
-        <textarea
+        <Textarea
           id="c-observations"
-          rows={4}
           value={values.observations}
           onChange={(e) => set("observations", e.target.value)}
-          className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+          className="font-mono"
           placeholder="Notes libres en markdown…"
         />
       </div>

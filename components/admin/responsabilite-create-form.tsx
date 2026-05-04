@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { MarkdownContent } from "@/components/ui/markdown-content";
+import { Textarea } from "@/components/ui/textarea";
 
 export function ResponsabiliteCreateForm() {
   const router = useRouter();
@@ -64,11 +65,10 @@ export function ResponsabiliteCreateForm() {
         <label className="text-sm font-medium text-foreground" htmlFor="rc-descriptif">
           Descriptif (Markdown)
         </label>
-        <textarea
+        <Textarea
           id="rc-descriptif"
           value={descriptif}
           onChange={(e) => setDescriptif(e.target.value)}
-          className="h-32 w-full resize-y rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
           placeholder="Description détaillée…"
         />
       </div>

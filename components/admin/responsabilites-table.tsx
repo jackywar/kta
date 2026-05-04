@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import type { Responsabilite } from "@/lib/responsabilites";
 import { MarkdownContent } from "@/components/ui/markdown-content";
+import { Textarea } from "@/components/ui/textarea";
 
 type EditValues = {
   id: string;
@@ -179,7 +180,7 @@ export function ResponsabilitesTable({
                 >
                   Descriptif (Markdown)
                 </label>
-                <textarea
+                <Textarea
                   id="re-descriptif"
                   value={editing.descriptif}
                   onChange={(e) =>
@@ -187,7 +188,6 @@ export function ResponsabilitesTable({
                       v ? { ...v, descriptif: e.target.value } : null
                     )
                   }
-                  className="h-32 w-full resize-y rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 

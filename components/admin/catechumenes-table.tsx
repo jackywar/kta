@@ -9,6 +9,7 @@ import { getCatechumenePhotoUrl } from "@/lib/storage";
 import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-field";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormValues = {
   nom: string;
@@ -513,12 +514,10 @@ export function CatechumenesTable({
                 <label className="text-sm font-medium text-foreground" htmlFor="e-rencontre-texte">
                   Rencontre individuelle (notes)
                 </label>
-                <textarea
+                <Textarea
                   id="e-rencontre-texte"
-                  rows={3}
                   value={editValues.rencontre_individuelle_texte}
                   onChange={(e) => set("rencontre_individuelle_texte", e.target.value)}
-                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>
 
@@ -526,12 +525,11 @@ export function CatechumenesTable({
                 <label className="text-sm font-medium text-foreground" htmlFor="e-observations">
                   Observations (Markdown)
                 </label>
-                <textarea
+                <Textarea
                   id="e-observations"
-                  rows={4}
                   value={editValues.observations}
                   onChange={(e) => set("observations", e.target.value)}
-                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+                  className="font-mono"
                 />
               </div>
 

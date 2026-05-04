@@ -9,6 +9,7 @@ import {
 } from "@/lib/events";
 import { MarkdownContent } from "@/components/ui/markdown-content";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const EVENT_TYPE_OPTIONS = ["rencontre", "reunion equipe", "étape"] as const;
 type EventTypeOption = (typeof EVENT_TYPE_OPTIONS)[number] | "autre";
@@ -351,12 +352,11 @@ export function EventsTable({ events }: { events: Event[] }) {
                 <label className="text-sm font-medium text-foreground" htmlFor="ee-desc">
                   Descriptif (Markdown)
                 </label>
-                <textarea
+                <Textarea
                   id="ee-desc"
-                  rows={5}
                   value={editValues.descriptif}
                   onChange={(e) => set("descriptif", e.target.value)}
-                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm font-mono shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+                  className="font-mono"
                 />
               </div>
 

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { MarkdownContent } from "@/components/ui/markdown-content";
+import { Textarea } from "@/components/ui/textarea";
 
 type Props = {
   contentKey: string;
@@ -42,10 +43,9 @@ export function PageContentEditor({ contentKey, initialContent }: Props) {
 
   return (
     <div className="space-y-4">
-      <textarea
+      <Textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="h-48 w-full resize-y rounded-xl border border-border bg-card px-3 py-2 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
         placeholder="Contenu en Markdown…"
       />
 
