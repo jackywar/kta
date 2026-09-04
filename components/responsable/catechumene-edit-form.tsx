@@ -18,6 +18,7 @@ type FormValues = {
   observations: string;
   aine_dans_la_foi: string;
   annee_bapteme_previsionnelle: string;
+  date_bapteme: string;
   rencontre_individuelle_date: string;
   rencontre_individuelle_texte: string;
   date_entree_catechumenat: string;
@@ -39,6 +40,7 @@ function catechumeneToForm(c: Catechumene): FormValues {
       c.annee_bapteme_previsionnelle != null
         ? String(c.annee_bapteme_previsionnelle)
         : "",
+    date_bapteme: c.date_bapteme ?? "",
     rencontre_individuelle_date: c.rencontre_individuelle_date ?? "",
     rencontre_individuelle_texte: c.rencontre_individuelle_texte ?? "",
     date_entree_catechumenat: c.date_entree_catechumenat ?? "",
@@ -86,6 +88,7 @@ export function CatechumeneEditForm({
         annee_bapteme_previsionnelle: values.annee_bapteme_previsionnelle.trim()
           ? parseInt(values.annee_bapteme_previsionnelle, 10)
           : undefined,
+        date_bapteme: values.date_bapteme.trim() || undefined,
         rencontre_individuelle_date:
           values.rencontre_individuelle_date.trim() || undefined,
         rencontre_individuelle_texte:
@@ -181,6 +184,7 @@ export function CatechumeneEditForm({
           <label className={labelClass} htmlFor="e-frat">Frat</label>
           <Select
             value={values.frat_id || NO_FRAT_VALUE}
+            disabled={Boolean(catechumene.est_neophyte)}
             onValueChange={(v) => set("frat_id", v === NO_FRAT_VALUE ? "" : v)}
           >
             <SelectTrigger id="e-frat">
@@ -195,6 +199,11 @@ export function CatechumeneEditForm({
               ))}
             </SelectContent>
           </Select>
+          {catechumene.est_neophyte ? (
+            <p className="text-xs text-muted-foreground">
+              Un néophyte ne peut pas être rattaché à une frat.
+            </p>
+          ) : null}
         </div>
 
         <div className="space-y-2">
@@ -257,19 +266,34 @@ export function CatechumeneEditForm({
           />
         </div>
 
-        <div className="space-y-2">
-          <label className={labelClass} htmlFor="e-annee-bapteme">
-            Année de baptême prévisionnelle
-          </label>
-          <input
-            id="e-annee-bapteme"
-            type="number"
-            min={1900}
-            max={2100}
-            value={values.annee_bapteme_previsionnelle}
-            onChange={(e) => set("annee_bapteme_previsionnelle", e.target.value)}
-            className={inputClass}
-          />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <label className={labelClass} htmlFor="e-annee-bapteme">
+              Année de baptême prévisionnelle
+            </label>
+            <input
+              id="e-annee-bapteme"
+              type="number"
+              min={1900}
+              max={2100}
+              value={values.annee_bapteme_previsionnelle}
+              onChange={(e) => set("annee_bapteme_previsionnelle", e.target.value)}
+              className={inputClass}
+            />
+          </div>
+          <div className="space-y-2">
+            <label className={labelClass} htmlFor="e-date-bapteme">
+              Date de baptême
+            </label>
+            <input
+              id="e-date-bapteme"
+              type="date"
+              value={values.date_bapteme}
+              onChange={(e) => set("date_bapteme", e.target.value)}
+              className={inputClass}
+              required={Boolean(catechumene.est_neophyte)}
+            />
+          </div>
         </div>
 
         <div className="space-y-2">

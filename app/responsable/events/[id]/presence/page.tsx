@@ -62,6 +62,7 @@ export default async function ResponsableEventPresencePage({
     .from("catechumenes")
     .select(CATECHUMENE_TILE_SELECT)
     .eq("est_candidat", false)
+    .eq("est_neophyte", false)
     .order("prenom");
 
   if (catError) throw new Error(catError.message);

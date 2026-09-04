@@ -35,6 +35,7 @@ export default async function ResponsableCatechumenesPage() {
     .from("catechumenes")
     .select(CATECHUMENE_TILE_SELECT)
     .eq("est_candidat", false)
+    .eq("est_neophyte", false)
     .order("prenom");
 
   if (catError) throw new Error(catError.message);

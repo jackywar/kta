@@ -43,7 +43,8 @@ export default async function ResponsableFratsPage() {
   const { data: catechumeneFrats, error: cfError } = await supabase
     .from("catechumenes")
     .select("frat_id")
-    .eq("est_candidat", false);
+    .eq("est_candidat", false)
+    .eq("est_neophyte", false);
 
   if (cfError) throw new Error(cfError.message);
 

@@ -17,6 +17,7 @@ type FormValues = {
   observations: string;
   aine_dans_la_foi: string;
   annee_bapteme_previsionnelle: string;
+  date_bapteme: string;
   rencontre_individuelle_date: string;
   rencontre_individuelle_texte: string;
   date_entree_catechumenat: string;
@@ -35,6 +36,7 @@ const emptyForm: FormValues = {
   observations: "",
   aine_dans_la_foi: "",
   annee_bapteme_previsionnelle: "",
+  date_bapteme: "",
   rencontre_individuelle_date: "",
   rencontre_individuelle_texte: "",
   date_entree_catechumenat: "",
@@ -78,6 +80,7 @@ export function CatechumeneCreateForm({
         annee_bapteme_previsionnelle: values.annee_bapteme_previsionnelle.trim()
           ? parseInt(values.annee_bapteme_previsionnelle, 10)
           : undefined,
+        date_bapteme: values.date_bapteme.trim() || undefined,
         rencontre_individuelle_date: values.rencontre_individuelle_date.trim() || undefined,
         rencontre_individuelle_texte: values.rencontre_individuelle_texte.trim() || undefined,
         date_entree_catechumenat: values.date_entree_catechumenat.trim() || undefined,
@@ -269,20 +272,34 @@ export function CatechumeneCreateForm({
         />
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground" htmlFor="c-annee-bapteme">
-          Année de baptême prévisionnelle
-        </label>
-        <input
-          id="c-annee-bapteme"
-          type="number"
-          min={1900}
-          max={2100}
-          value={values.annee_bapteme_previsionnelle}
-          onChange={(e) => set("annee_bapteme_previsionnelle", e.target.value)}
-          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
-          placeholder="2026"
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground" htmlFor="c-annee-bapteme">
+            Année de baptême prévisionnelle
+          </label>
+          <input
+            id="c-annee-bapteme"
+            type="number"
+            min={1900}
+            max={2100}
+            value={values.annee_bapteme_previsionnelle}
+            onChange={(e) => set("annee_bapteme_previsionnelle", e.target.value)}
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+            placeholder="2026"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground" htmlFor="c-date-bapteme">
+            Date de baptême
+          </label>
+          <input
+            id="c-date-bapteme"
+            type="date"
+            value={values.date_bapteme}
+            onChange={(e) => set("date_bapteme", e.target.value)}
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+          />
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

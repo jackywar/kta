@@ -11,6 +11,7 @@ const bodySchema = z.object({
   observations: z.string().optional(),
   aine_dans_la_foi: z.string().optional(),
   annee_bapteme_previsionnelle: z.number().int().min(1900).max(2100).optional().nullable(),
+  date_bapteme: z.string().date().optional().nullable(),
   rencontre_individuelle_date: z.string().optional().nullable(),
   rencontre_individuelle_texte: z.string().optional().nullable(),
   date_entree_catechumenat: z.string().optional(),
@@ -59,11 +60,13 @@ export async function POST(req: Request) {
     observations: d.observations?.trim() ?? null,
     aine_dans_la_foi: d.aine_dans_la_foi?.trim() ?? null,
     annee_bapteme_previsionnelle: d.annee_bapteme_previsionnelle ?? null,
+    date_bapteme: d.date_bapteme?.trim() || null,
     rencontre_individuelle_date: d.rencontre_individuelle_date?.trim() || null,
     rencontre_individuelle_texte: d.rencontre_individuelle_texte?.trim() ?? null,
     date_entree_catechumenat: d.date_entree_catechumenat?.trim() || null,
     frat_id: d.frat_id ?? null,
-    est_candidat: d.est_candidat ?? false
+    est_candidat: d.est_candidat ?? false,
+    est_neophyte: false
   });
 
   if (insertError) {

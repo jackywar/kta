@@ -62,12 +62,18 @@ export default async function CatechumeneFratPage() {
     frat: FratWithResponsables;
   };
 
+  if (me.est_candidat || me.est_neophyte) {
+    redirect("/");
+  }
+
   const fratId = me.frat.id;
 
   const { data: membersRows, error: membersError } = await supabase
     .from("catechumenes")
     .select(CATECHUMENE_TILE_SELECT)
     .eq("frat_id", fratId)
+    .eq("est_candidat", false)
+    .eq("est_neophyte", false)
     .order("prenom");
 
   if (membersError) {

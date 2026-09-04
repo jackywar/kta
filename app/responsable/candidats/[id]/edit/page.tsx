@@ -3,7 +3,11 @@ import { Topbar } from "@/components/layout/topbar";
 import { CandidatEditForm } from "@/components/responsable/candidat-edit-form";
 import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { Catechumene, ResponsableOption } from "@/lib/catechumenes";
+import {
+  getCatechumeneCategory,
+  type Catechumene,
+  type ResponsableOption
+} from "@/lib/catechumenes";
 
 export default async function ResponsableCandidatEditPage({
   params
@@ -28,7 +32,11 @@ export default async function ResponsableCandidatEditPage({
   if (!row) notFound();
 
   const c = row as Catechumene;
-  if (!c.est_candidat) {
+  const category = getCatechumeneCategory(c);
+  if (category === "neophyte") {
+    redirect(`/responsable/neophytes/${id}/edit`);
+  }
+  if (category === "catechumene") {
     redirect(`/responsable/catechumenes/${id}/edit`);
   }
 

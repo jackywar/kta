@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 import { CatechumeneLinkUserButton } from "@/components/catechumene/catechumene-link-user-button";
+import { NeophyteTransitionButton } from "@/components/responsable/neophyte-transition-button";
 import { MarkdownContent } from "@/components/ui/markdown-content";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
 
@@ -8,15 +9,18 @@ type Props = {
   catechumene: CatechumeneWithFrat;
   formatDate: (s: string | null) => string;
   isUserLinked: boolean;
+  transition?: "to-neophyte" | "to-catechumene" | null;
 };
 
 function Field({
   label,
   value,
+  action,
   className = ""
 }: {
   label: string;
   value: React.ReactNode;
+  action?: React.ReactNode;
   className?: string;
 }) {
   if (value == null || value === "") return null;
@@ -25,7 +29,10 @@ function Field({
       <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </dt>
-      <dd className="mt-1 text-sm text-foreground">{value}</dd>
+      <dd className="mt-1 flex flex-wrap items-center gap-3 text-sm text-foreground">
+        <span>{value}</span>
+        {action}
+      </dd>
     </div>
   );
 }
@@ -33,7 +40,8 @@ function Field({
 export function CatechumeneDetail({
   catechumene,
   formatDate,
-  isUserLinked
+  isUserLinked,
+  transition = null
 }: Props) {
   const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path);
   const borderColor =
@@ -107,6 +115,18 @@ export function CatechumeneDetail({
         <Field
           label="Année de baptême prévisionnelle"
           value={catechumene.annee_bapteme_previsionnelle ?? ""}
+        />
+        <Field
+          label="Date de baptême"
+          value={formatDate(catechumene.date_bapteme)}
+          action={
+            transition ? (
+              <NeophyteTransitionButton
+                catechumeneId={catechumene.id}
+                direction={transition}
+              />
+            ) : null
+          }
         />
         <Field label="Aîné dans la foi" value={catechumene.aine_dans_la_foi ?? ""} />
         <Field

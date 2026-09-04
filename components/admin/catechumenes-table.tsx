@@ -21,6 +21,7 @@ type FormValues = {
   observations: string;
   aine_dans_la_foi: string;
   annee_bapteme_previsionnelle: string;
+  date_bapteme: string;
   rencontre_individuelle_date: string;
   rencontre_individuelle_texte: string;
   date_entree_catechumenat: string;
@@ -43,6 +44,7 @@ function catechumeneToForm(c: Catechumene): FormValues {
       c.annee_bapteme_previsionnelle != null
         ? String(c.annee_bapteme_previsionnelle)
         : "",
+    date_bapteme: c.date_bapteme ?? "",
     rencontre_individuelle_date: c.rencontre_individuelle_date ?? "",
     rencontre_individuelle_texte: c.rencontre_individuelle_texte ?? "",
     date_entree_catechumenat: c.date_entree_catechumenat ?? "",
@@ -120,6 +122,7 @@ export function CatechumenesTable({
         annee_bapteme_previsionnelle: editValues.annee_bapteme_previsionnelle.trim()
           ? parseInt(editValues.annee_bapteme_previsionnelle, 10)
           : undefined,
+        date_bapteme: editValues.date_bapteme.trim() || undefined,
         rencontre_individuelle_date: editValues.rencontre_individuelle_date.trim() || undefined,
         rencontre_individuelle_texte:
           editValues.rencontre_individuelle_texte.trim() || undefined,
@@ -207,9 +210,11 @@ export function CatechumenesTable({
                 <th className="px-4 py-3">Prénom</th>
                 <th className="px-4 py-3">Email</th>
                 <th className="px-4 py-3">Candidat</th>
+                <th className="px-4 py-3">Néophyte</th>
                 <th className="px-4 py-3">Frat</th>
                 <th className="px-4 py-3">Entrée</th>
                 <th className="px-4 py-3">Baptême prév.</th>
+                <th className="px-4 py-3">Baptême</th>
                 <th className="px-4 py-3">User</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
@@ -247,6 +252,15 @@ export function CatechumenesTable({
                     )}
                   </td>
                   <td className="px-4 py-3">
+                    {c.est_neophyte ? (
+                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+                        Néophyte
+                      </span>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">Non</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
                     {c.frat_id ? (
                       <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-foreground">
                         <span
@@ -275,6 +289,9 @@ export function CatechumenesTable({
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {c.annee_bapteme_previsionnelle ?? "—"}
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {formatDate(c.date_bapteme)}
                   </td>
                   <td className="px-4 py-3">
                     {linkedByCatechumeneId.has(c.id) ? (
@@ -375,6 +392,7 @@ export function CatechumenesTable({
                 <Checkbox
                   id="e-est-candidat"
                   checked={editValues.est_candidat}
+                  disabled={Boolean(editing?.est_neophyte)}
                   onCheckedChange={(checked) => setEstCandidat(checked === true)}
                   className="mt-1"
                 />
@@ -398,6 +416,7 @@ export function CatechumenesTable({
                 </label>
                 <Select
                   value={editValues.frat_id || NO_FRAT_VALUE}
+                  disabled={Boolean(editing?.est_neophyte)}
                   onValueChange={(v) => set("frat_id", v === NO_FRAT_VALUE ? "" : v)}
                 >
                   <SelectTrigger id="e-frat">
@@ -482,19 +501,34 @@ export function CatechumenesTable({
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground" htmlFor="e-annee-bapteme">
-                  Année de baptême prévisionnelle
-                </label>
-                <input
-                  id="e-annee-bapteme"
-                  type="number"
-                  min={1900}
-                  max={2100}
-                  value={editValues.annee_bapteme_previsionnelle}
-                  onChange={(e) => set("annee_bapteme_previsionnelle", e.target.value)}
-                  className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
-                />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground" htmlFor="e-annee-bapteme">
+                    Année de baptême prévisionnelle
+                  </label>
+                  <input
+                    id="e-annee-bapteme"
+                    type="number"
+                    min={1900}
+                    max={2100}
+                    value={editValues.annee_bapteme_previsionnelle}
+                    onChange={(e) => set("annee_bapteme_previsionnelle", e.target.value)}
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground" htmlFor="e-date-bapteme">
+                    Date de baptême
+                  </label>
+                  <input
+                    id="e-date-bapteme"
+                    type="date"
+                    value={editValues.date_bapteme}
+                    onChange={(e) => set("date_bapteme", e.target.value)}
+                    className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+                    required={Boolean(editing?.est_neophyte)}
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">

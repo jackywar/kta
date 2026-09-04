@@ -22,10 +22,16 @@ function matchSearch(c: CatechumeneTileData, query: string): boolean {
 
 export function CatechumeneTilesWithFilter({
   catechumenes,
-  responsableFratIds
+  responsableFratIds,
+  detailBasePath = "/responsable/catechumenes",
+  emptyLabel = "Aucun catéchumène.",
+  showFratFilter = true
 }: {
   catechumenes: CatechumeneTileData[];
   responsableFratIds: string[];
+  detailBasePath?: string;
+  emptyLabel?: string;
+  showFratFilter?: boolean;
 }) {
   const [showOnlyMyFrats, setShowOnlyMyFrats] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,46 +66,52 @@ export function CatechumeneTilesWithFilter({
           className="h-10 min-w-0 flex-1 rounded-lg border border-border bg-card px-3 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 sm:max-w-xs"
           aria-label="Rechercher par nom ou prénom"
         />
-        <div className="flex flex-wrap items-center gap-3">
-          <span
-          className={`text-sm font-medium ${
-            hasFratResponsability ? "text-muted-foreground" : "text-muted-foreground"
-          }`}
-        >
-          Uniquement ma frat
-        </span>
-        <Switch
-          checked={showOnlyMyFrats}
-          aria-label="Uniquement ma frat"
-          disabled={!hasFratResponsability}
-          onCheckedChange={(checked) =>
-            hasFratResponsability && setShowOnlyMyFrats(checked)
-          }
-        />
-        {!hasFratResponsability && (
-          <span className="text-xs text-muted-foreground">
-            Vous n&apos;êtes responsable d&apos;aucune frat
-          </span>
-        )}
-        </div>
+        {showFratFilter ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-sm font-medium text-muted-foreground">
+              Uniquement ma frat
+            </span>
+            <Switch
+              checked={showOnlyMyFrats}
+              aria-label="Uniquement ma frat"
+              disabled={!hasFratResponsability}
+              onCheckedChange={(checked) =>
+                hasFratResponsability && setShowOnlyMyFrats(checked)
+              }
+            />
+            {!hasFratResponsability && (
+              <span className="text-xs text-muted-foreground">
+                Vous n&apos;êtes responsable d&apos;aucune frat
+              </span>
+            )}
+          </div>
+        ) : null}
       </div>
 
-      <CatechumeneTiles catechumenes={filtered} />
+      <CatechumeneTiles
+        catechumenes={filtered}
+        detailBasePath={detailBasePath}
+        emptyLabel={emptyLabel}
+      />
     </div>
   );
 }
 
 export function CatechumeneTiles({
   catechumenes,
-  clickable = true
+  clickable = true,
+  detailBasePath = "/responsable/catechumenes",
+  emptyLabel = "Aucun catéchumène."
 }: {
   catechumenes: CatechumeneTileData[];
   clickable?: boolean;
+  detailBasePath?: string;
+  emptyLabel?: string;
 }) {
   if (catechumenes.length === 0) {
     return (
       <p className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
-        Aucun catéchumène.
+        {emptyLabel}
       </p>
     );
   }
@@ -110,7 +122,7 @@ export function CatechumeneTiles({
         <li key={c.id}>
           {clickable ? (
             <Link
-              href={`/responsable/catechumenes/${c.id}`}
+              href={`${detailBasePath}/${c.id}`}
               className="block rounded-2xl focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <CatechumeneTile catechumene={c} clickable />

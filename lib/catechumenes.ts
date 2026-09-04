@@ -57,6 +57,7 @@ export type Catechumene = {
   observations: string | null;
   aine_dans_la_foi: string | null;
   annee_bapteme_previsionnelle: number | null;
+  date_bapteme: string | null;
   rencontre_individuelle_date: string | null;
   rencontre_individuelle_texte: string | null;
   date_entree_catechumenat: string | null;
@@ -64,12 +65,24 @@ export type Catechumene = {
   photo_path: string | null;
   /** Si true, candidat (pas dans la liste catéchumènes responsable). */
   est_candidat?: boolean;
+  /** Si true, néophyte baptisé (bascule manuelle, sans frat). */
+  est_neophyte?: boolean;
   /** Responsable référent (profil). */
   responsable_profile_id?: string | null;
   /** Suivi candidat (fiches est_candidat). */
   candidat_suivi_statut?: CandidatSuiviStatut | null;
   created_at: string;
 };
+
+export type CatechumeneCategory = "candidat" | "catechumene" | "neophyte";
+
+export function getCatechumeneCategory(
+  person: Pick<Catechumene, "est_candidat" | "est_neophyte">
+): CatechumeneCategory {
+  if (person.est_candidat) return "candidat";
+  if (person.est_neophyte) return "neophyte";
+  return "catechumene";
+}
 
 export type ProfilResponsableLite = {
   id: string;

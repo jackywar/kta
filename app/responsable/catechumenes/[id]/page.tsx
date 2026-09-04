@@ -6,7 +6,10 @@ import { CatechumeneAttendanceRead } from "@/components/catechumene/catechumene-
 import { CatechumeneAttendanceAdd } from "@/components/catechumene/catechumene-attendance-add";
 import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { CatechumeneWithFrat } from "@/lib/catechumenes";
+import {
+  getCatechumeneCategory,
+  type CatechumeneWithFrat
+} from "@/lib/catechumenes";
 import type { Event } from "@/lib/events";
 import type { EventAttendance } from "@/lib/event-attendances";
 
@@ -55,8 +58,12 @@ export default async function ResponsableCatechumeneDetailPage({
   if (!row) notFound();
 
   const catechumene = row as unknown as CatechumeneWithFrat;
-  if (catechumene.est_candidat) {
+  const category = getCatechumeneCategory(catechumene);
+  if (category === "candidat") {
     redirect(`/responsable/candidats/${id}`);
+  }
+  if (category === "neophyte") {
+    redirect(`/responsable/neophytes/${id}`);
   }
 
   const { data: linkedProfile, error: linkedProfileError } = await supabase
@@ -110,6 +117,7 @@ export default async function ResponsableCatechumeneDetailPage({
           catechumene={catechumene}
           formatDate={formatDate}
           isUserLinked={isUserLinked}
+          transition={catechumene.date_bapteme ? "to-neophyte" : null}
         />
 
         <CatechumeneAttendanceRead

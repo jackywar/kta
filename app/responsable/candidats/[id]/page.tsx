@@ -7,6 +7,7 @@ import {
   normalizeCandidatRow
 } from "@/lib/candidats-query";
 import { getCurrentUserProfile } from "@/lib/auth/current-profile";
+import { getCatechumeneCategory } from "@/lib/catechumenes";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function formatDate(s: string | null): string {
@@ -45,7 +46,11 @@ export default async function ResponsableCandidatDetailPage({
   if (!row) notFound();
 
   const candidat = normalizeCandidatRow(row);
-  if (!candidat.est_candidat) {
+  const category = getCatechumeneCategory(candidat);
+  if (category === "neophyte") {
+    redirect(`/responsable/neophytes/${id}`);
+  }
+  if (category === "catechumene") {
     redirect(`/responsable/catechumenes/${id}`);
   }
 

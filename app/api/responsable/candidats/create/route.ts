@@ -75,6 +75,7 @@ export async function POST(req: Request) {
       rencontre_individuelle_date: d.rencontre_individuelle_date?.trim() || null,
       rencontre_individuelle_texte: d.rencontre_individuelle_texte?.trim() ?? null,
       est_candidat: true,
+      est_neophyte: false,
       frat_id: null,
       date_entree_catechumenat: null,
       responsable_profile_id: responsableId

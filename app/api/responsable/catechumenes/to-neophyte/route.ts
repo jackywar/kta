@@ -7,31 +7,32 @@ const bodySchema = z.object({
   id: z.string().uuid()
 });
 
-/**
- * Basculer un candidat en catéchumène (est_candidat → false).
- */
 export async function POST(req: Request) {
   const supabase = await createSupabaseServerClient();
   const {
-    data: { session }
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (userError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { data: me, error: meError } = await supabase
     .from("profiles")
-    .select("id, role")
-    .eq("id", session.user.id)
+    .select("role")
+    .eq("id", user.id)
     .maybeSingle();
 
-  if (meError || !me || me.role !== "responsable") {
+  if (
+    meError ||
+    !me ||
+    (me.role !== "admin" && me.role !== "responsable")
+  ) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const json = await req.json().catch(() => null);
-  const parsed = bodySchema.safeParse(json);
+  const parsed = bodySchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid body", details: parsed.error.flatten() },
@@ -39,36 +40,51 @@ export async function POST(req: Request) {
     );
   }
 
-  const { id } = parsed.data;
-
   const db = tryCreateSupabaseAdminClient() ?? supabase;
-
-  const { data: row, error: fetchError } = await db
+  const { data: person, error: fetchError } = await db
     .from("catechumenes")
-    .select("id, est_candidat")
-    .eq("id", id)
+    .select("id, est_candidat, est_neophyte, date_bapteme")
+    .eq("id", parsed.data.id)
     .maybeSingle();
 
-  if (fetchError || !row) {
+  if (fetchError || !person) {
     return NextResponse.json({ error: "Introuvable" }, { status: 404 });
   }
 
-  if (!(row as { est_candidat: boolean }).est_candidat) {
+  if (person.est_candidat || person.est_neophyte) {
     return NextResponse.json(
-      { error: "Cette fiche n'est pas un candidat." },
+      { error: "Cette fiche n'est pas un catéchumène actif." },
       { status: 400 }
     );
   }
 
-  const { error: updateError } = await db
+  if (!person.date_bapteme) {
+    return NextResponse.json(
+      { error: "Une date de baptême est requise avant la bascule." },
+      { status: 400 }
+    );
+  }
+
+  const { data: updated, error: updateError } = await db
     .from("catechumenes")
-    .update({ est_candidat: false, est_neophyte: false })
-    .eq("id", id);
+    .update({ est_neophyte: true, frat_id: null })
+    .eq("id", parsed.data.id)
+    .eq("est_candidat", false)
+    .eq("est_neophyte", false)
+    .not("date_bapteme", "is", null)
+    .select("id")
+    .maybeSingle();
 
   if (updateError) {
     return NextResponse.json(
       { error: updateError.message ?? "Échec du basculement" },
       { status: 500 }
+    );
+  }
+  if (!updated) {
+    return NextResponse.json(
+      { error: "La fiche a changé. Rechargez la page puis réessayez." },
+      { status: 409 }
     );
   }
 

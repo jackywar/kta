@@ -54,6 +54,7 @@ export default async function ResponsableFratDetailPage({
     .select(CATECHUMENE_TILE_SELECT)
     .eq("frat_id", id)
     .eq("est_candidat", false)
+    .eq("est_neophyte", false)
     .order("prenom");
 
   if (catError) throw new Error(catError.message);
