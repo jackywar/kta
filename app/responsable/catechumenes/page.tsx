@@ -3,34 +3,29 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { CatechumeneTilesWithFilter } from "@/components/responsable/catechumene-tiles";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { CatechumeneWithFrat } from "@/lib/catechumenes";
+import {
+  CATECHUMENE_TILE_SELECT,
+  type CatechumeneTileData
+} from "@/lib/catechumenes";
 
 export const metadata: Metadata = {
   title: "Catéchumènes | KTA"
 };
 
 export default async function ResponsableCatechumenesPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) throw new Error(profileError.message);
+  if (!user) redirect("/login");
   if (!profile || profile.role !== "responsable") redirect("/");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: responsableFrats, error: rfError } = await supabase
     .from("frat_responsables")
     .select("frat_id")
-    .eq("profile_id", session.user.id);
+    .eq("profile_id", user.id);
 
   if (rfError) throw new Error(rfError.message);
   const responsableFratIds =
@@ -38,22 +33,13 @@ export default async function ResponsableCatechumenesPage() {
 
   const { data: catechumenes, error: catError } = await supabase
     .from("catechumenes")
-    .select(
-      `
-      *,
-      frat:frats (
-        id,
-        name,
-        color_oklch
-      )
-    `
-    )
+    .select(CATECHUMENE_TILE_SELECT)
     .eq("est_candidat", false)
     .order("prenom");
 
   if (catError) throw new Error(catError.message);
 
-  const list = (catechumenes ?? []) as unknown as CatechumeneWithFrat[];
+  const list = (catechumenes ?? []) as unknown as CatechumeneTileData[];
 
   return (
     <main className="min-h-screen bg-muted">

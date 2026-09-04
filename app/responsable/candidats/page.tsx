@@ -7,6 +7,7 @@ import {
   CANDIDAT_SELECT_WITH_RESPONSABLE,
   normalizeCandidatRow
 } from "@/lib/candidats-query";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -14,21 +15,12 @@ export const metadata: Metadata = {
 };
 
 export default async function ResponsableCandidatsPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) throw new Error(profileError.message);
+  if (!user) redirect("/login");
   if (!profile || profile.role !== "responsable") redirect("/");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: rows, error } = await supabase
     .from("catechumenes")

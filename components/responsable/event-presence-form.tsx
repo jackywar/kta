@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
-import type { CatechumeneWithFrat } from "@/lib/catechumenes";
+import type { CatechumeneTileData } from "@/lib/catechumenes";
 import { CatechumeneTile } from "@/components/responsable/catechumene-tiles";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -30,7 +30,7 @@ export function EventPresenceForm({
   eventId: string;
   eventDate: string;
   eventLibelle: string;
-  catechumenes: CatechumeneWithFrat[];
+  catechumenes: CatechumeneTileData[];
   initialPresentCatechumeneIds: string[];
   initialJustifiedAbsenceCatechumeneIds: string[];
 }) {

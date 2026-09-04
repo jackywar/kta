@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-
-const paletteSchema = z.enum(["default", "blue", "red", "amber"]);
-const modeSchema = z.enum(["light", "dark", "system"]);
+import {
+  normalizePalette,
+  normalizeThemeMode,
+  paletteNameSchema,
+  themeModeSchema
+} from "@/lib/theme";
 
 const updateSchema = z.object({
-  mode: modeSchema.optional(),
-  palette: paletteSchema.optional()
+  mode: themeModeSchema.optional(),
+  palette: paletteNameSchema.optional()
 });
 
 export async function GET() {
@@ -37,10 +40,8 @@ export async function GET() {
 
   return NextResponse.json(
     {
-      mode: modeSchema.catch("system").parse(data.theme_mode ?? "system"),
-      palette: paletteSchema.catch("default").parse(
-        data.theme_palette ?? "default"
-      )
+      mode: normalizeThemeMode(data.theme_mode),
+      palette: normalizePalette(data.theme_palette)
     },
     { status: 200 }
   );
@@ -68,8 +69,8 @@ export async function POST(req: Request) {
   }
 
   const updatePayload: {
-    theme_mode?: z.infer<typeof modeSchema>;
-    theme_palette?: z.infer<typeof paletteSchema>;
+    theme_mode?: z.infer<typeof themeModeSchema>;
+    theme_palette?: z.infer<typeof paletteNameSchema>;
   } = {};
 
   if (parsed.data.mode) updatePayload.theme_mode = parsed.data.mode;

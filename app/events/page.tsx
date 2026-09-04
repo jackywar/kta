@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { MarkdownContent } from "@/components/ui/markdown-content";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Event } from "@/lib/events";
 
@@ -18,12 +19,11 @@ function formatDate(s: string): string {
 }
 
 export default async function EventsPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
+  if (!user) redirect("/login");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: events, error } = await supabase
     .from("events")

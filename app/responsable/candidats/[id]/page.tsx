@@ -6,6 +6,7 @@ import {
   CANDIDAT_SELECT_WITH_RESPONSABLE,
   normalizeCandidatRow
 } from "@/lib/candidats-query";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function formatDate(s: string | null): string {
@@ -27,21 +28,12 @@ export default async function ResponsableCandidatDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) throw new Error(profileError.message);
+  if (!user) redirect("/login");
   if (!profile || profile.role !== "responsable") redirect("/");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: row, error } = await supabase
     .from("catechumenes")
@@ -79,7 +71,7 @@ export default async function ResponsableCandidatDetailPage({
         <CandidatDetail
           candidat={candidat}
           formatDate={formatDate}
-          currentUserProfileId={session.user.id}
+          currentUserProfileId={user.id}
         />
       </div>
     </main>

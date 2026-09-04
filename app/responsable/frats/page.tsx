@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { FratTiles, type FratTileData } from "@/components/responsable/frat-tiles";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { FratWithResponsables } from "@/lib/frats";
 
@@ -10,21 +11,12 @@ export const metadata: Metadata = {
 };
 
 export default async function ResponsableFratsPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) throw new Error(profileError.message);
+  if (!user) redirect("/login");
   if (!profile || profile.role !== "responsable") redirect("/");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: frats, error: fratsError } = await supabase
     .from("frats")

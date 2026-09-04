@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ProfileForm } from "@/components/profile/profile-form";
 import { ProfileResponsabilites } from "@/components/profile/profile-responsabilites";
@@ -11,25 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default async function ProfilePage() {
-  const supabase = await createSupabaseServerClient();
+  const { user, profile } = await getCurrentUserProfile();
 
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
-
-  if (!session) {
+  if (!user) {
     redirect("/login");
   }
 
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("id, email, first_name, last_name, role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (error || !profile) {
-    throw new Error(error?.message ?? "Profil introuvable");
+  if (!profile) {
+    throw new Error("Profil introuvable");
   }
+
+  const supabase = await createSupabaseServerClient();
 
   let responsabilites: Responsabilite[] = [];
 

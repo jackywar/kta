@@ -1,26 +1,15 @@
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { MarkdownContent } from "@/components/ui/markdown-content";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function HomePage() {
+  const { user, profile } = await getCurrentUserProfile();
+
+  if (!user) redirect("/login");
+
   const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
-
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) {
-    throw new Error(profileError.message);
-  }
-
   const role = profile?.role ?? null;
 
   let contentKey: string | null = null;

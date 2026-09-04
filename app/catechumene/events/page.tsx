@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { ResponsableEventsCalendar } from "@/components/responsable/events-calendar";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Event } from "@/lib/events";
 
@@ -10,26 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CatechumeneEventsPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) {
-    throw new Error(profileError.message);
-  }
-
+  if (!user) redirect("/login");
   if (!profile || profile.role !== "catechumene") {
     redirect("/");
   }
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: events, error } = await supabase
     .from("events")

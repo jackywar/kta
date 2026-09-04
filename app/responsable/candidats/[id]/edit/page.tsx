@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { CandidatEditForm } from "@/components/responsable/candidat-edit-form";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Catechumene, ResponsableOption } from "@/lib/catechumenes";
 
@@ -10,21 +11,12 @@ export default async function ResponsableCandidatEditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) throw new Error(profileError.message);
+  if (!user) redirect("/login");
   if (!profile || profile.role !== "responsable") redirect("/");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: row, error } = await supabase
     .from("catechumenes")

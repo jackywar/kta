@@ -1,8 +1,13 @@
 "use client";
 
 import * as React from "react";
+import {
+  DEFAULT_PALETTE,
+  paletteNameSchema,
+  type PaletteName
+} from "@/lib/theme";
 
-export type PaletteName = "default" | "blue" | "red" | "amber";
+export type { PaletteName };
 
 const STORAGE_KEY = "kta:palette";
 
@@ -18,16 +23,20 @@ function applyPaletteToDocument(palette: PaletteName) {
 }
 
 function isPaletteName(value: unknown): value is PaletteName {
-  return (
-    value === "default" ||
-    value === "blue" ||
-    value === "red" ||
-    value === "amber"
-  );
+  return paletteNameSchema.safeParse(value).success;
 }
 
-export function PaletteProvider({ children }: { children: React.ReactNode }) {
-  const [palette, setPaletteState] = React.useState<PaletteName>("default");
+export function PaletteProvider({
+  children,
+  initialPalette = null
+}: {
+  children: React.ReactNode;
+  /** Palette du profil, rendue côté serveur. `null` si non connecté. */
+  initialPalette?: PaletteName | null;
+}) {
+  const [palette, setPaletteState] = React.useState<PaletteName>(
+    initialPalette ?? DEFAULT_PALETTE
+  );
   const hasHydrated = React.useRef(false);
 
   const setPalette = React.useCallback((next: PaletteName) => {
@@ -47,55 +56,30 @@ export function PaletteProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   React.useEffect(() => {
-    let cancelled = false;
-
-    async function hydrate() {
-      // 1) try profile
+    if (initialPalette) {
+      // Profil connecté : la valeur serveur fait foi, on aligne le cache local.
+      setPaletteState(initialPalette);
+      applyPaletteToDocument(initialPalette);
       try {
-        const res = await fetch("/api/profile/theme", { method: "GET" });
-        if (res.ok) {
-          const data: unknown = await res.json().catch(() => null);
-          const p =
-            typeof data === "object" &&
-            data &&
-            "palette" in data &&
-            (data as { palette?: unknown }).palette;
-
-          if (!cancelled && isPaletteName(p)) {
-            setPaletteState(p);
-            applyPaletteToDocument(p);
-            try {
-              localStorage.setItem(STORAGE_KEY, p);
-            } catch {}
-            hasHydrated.current = true;
-            return;
-          }
-        }
+        localStorage.setItem(STORAGE_KEY, initialPalette);
       } catch {
         // ignore
       }
-
-      // 2) fallback localStorage
+    } else {
+      // Pas de profil : on retombe sur la préférence locale de l'appareil.
+      let stored: string | null = null;
       try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!cancelled && isPaletteName(stored)) {
-          setPaletteState(stored);
-          applyPaletteToDocument(stored);
-        } else if (!cancelled) {
-          applyPaletteToDocument("default");
-        }
+        stored = localStorage.getItem(STORAGE_KEY);
       } catch {
-        if (!cancelled) applyPaletteToDocument("default");
-      } finally {
-        hasHydrated.current = true;
+        // ignore
       }
+      const next = isPaletteName(stored) ? stored : DEFAULT_PALETTE;
+      setPaletteState(next);
+      applyPaletteToDocument(next);
     }
 
-    void hydrate();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    hasHydrated.current = true;
+  }, [initialPalette]);
 
   React.useEffect(() => {
     if (!hasHydrated.current) return;
@@ -116,4 +100,3 @@ export function usePalette() {
   }
   return ctx;
 }
-

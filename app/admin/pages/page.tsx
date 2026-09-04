@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { PageContentEditor } from "@/components/admin/page-content-editor";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { PageContent } from "@/lib/page-contents";
 
@@ -10,21 +11,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminPagesPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile: meProfile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: meProfile, error: meProfileError } = await supabase
-    .from("profiles")
-    .select("id, role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (meProfileError) throw new Error(meProfileError.message);
+  if (!user) redirect("/login");
   if (!meProfile || meProfile.role !== "admin") redirect("/");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: contents, error: contentsError } = await supabase
     .from("page_contents")

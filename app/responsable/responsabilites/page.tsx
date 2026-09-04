@@ -6,6 +6,7 @@ import {
   responsableDisplayName,
   type ResponsabiliteRecapRow
 } from "@/components/responsable/responsabilites-recap";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Responsabilite } from "@/lib/responsabilites";
 
@@ -14,21 +15,12 @@ export const metadata: Metadata = {
 };
 
 export default async function ResponsableResponsabilitesPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) throw new Error(profileError.message);
+  if (!user) redirect("/login");
   if (!profile || profile.role !== "responsable") redirect("/");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: responsabilites, error: respError } = await supabase
     .from("responsabilites")

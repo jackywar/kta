@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { UserCreateForm } from "@/components/admin/user-create-form";
 import { UsersTable } from "@/components/admin/users-table";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Responsabilite, ResponsableResponsabilite } from "@/lib/responsabilites";
 
@@ -11,26 +12,14 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminUsersPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile: meProfile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: meProfile, error: meProfileError } = await supabase
-    .from("profiles")
-    .select("id, role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (meProfileError) {
-    throw new Error(meProfileError.message);
-  }
-
+  if (!user) redirect("/login");
   if (!meProfile || meProfile.role !== "admin") {
     redirect("/");
   }
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: profiles, error: profilesError } = await supabase
     .from("profiles")

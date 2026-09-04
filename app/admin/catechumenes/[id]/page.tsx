@@ -4,6 +4,7 @@ import { Topbar } from "@/components/layout/topbar";
 import { CatechumeneDetail } from "@/components/responsable/catechumene-detail";
 import { CatechumeneAttendanceRead } from "@/components/catechumene/catechumene-attendance-read";
 import { CatechumeneAttendanceAdd } from "@/components/catechumene/catechumene-attendance-add";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
 import type { Event } from "@/lib/events";
@@ -28,21 +29,12 @@ export default async function AdminCatechumeneDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile: meProfile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: meProfile, error: meProfileError } = await supabase
-    .from("profiles")
-    .select("id, role")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (meProfileError) throw new Error(meProfileError.message);
+  if (!user) redirect("/login");
   if (!meProfile || meProfile.role !== "admin") redirect("/");
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: row, error } = await supabase
     .from("catechumenes")

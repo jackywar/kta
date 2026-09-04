@@ -9,3 +9,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Données locales et script d'import
+donnees_a_importer/
+scripts/import-donnees-glide.sql
+

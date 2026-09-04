@@ -1,33 +1,19 @@
-import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   TopbarClient,
   type TopbarNavLink
 } from "@/components/layout/topbar-client";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 
 export async function Topbar() {
-  // Ensure auth-dependent UI is always rendered per-request.
-  noStore();
-
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-    error: userError
-  } = await supabase.auth.getUser();
+  const { user, profile } = await getCurrentUserProfile();
 
   let isAdmin = false;
   let isResponsable = false;
   let isCatechumene = false;
   let displayName = "Utilisateur";
 
-  if (!userError && user) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role, first_name, last_name, disabled_at")
-      .eq("id", user.id)
-      .maybeSingle();
-
+  if (user) {
     if (profile?.disabled_at) {
       redirect("/disabled");
     }

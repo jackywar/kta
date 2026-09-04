@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { CatechumeneTiles } from "@/components/responsable/catechumene-tiles";
+import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { CatechumeneWithFrat } from "@/lib/catechumenes";
+import {
+  CATECHUMENE_TILE_SELECT,
+  type CatechumeneTileData,
+  type CatechumeneWithFrat
+} from "@/lib/catechumenes";
 import type { FratWithResponsables } from "@/lib/frats";
 
 export const metadata: Metadata = {
@@ -11,26 +16,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CatechumeneFratPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { user, profile } = await getCurrentUserProfile();
 
-  if (!session) redirect("/login");
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role, catechumene_id")
-    .eq("id", session.user.id)
-    .maybeSingle();
-
-  if (profileError) {
-    throw new Error(profileError.message);
-  }
-
+  if (!user) redirect("/login");
   if (!profile || profile.role !== "catechumene" || !profile.catechumene_id) {
     redirect("/");
   }
+
+  const supabase = await createSupabaseServerClient();
 
   const { data: catechumeneRow, error: catechumeneError } = await supabase
     .from("catechumenes")
@@ -73,16 +66,7 @@ export default async function CatechumeneFratPage() {
 
   const { data: membersRows, error: membersError } = await supabase
     .from("catechumenes")
-    .select(
-      `
-      *,
-      frat:frats (
-        id,
-        name,
-        color_oklch
-      )
-    `
-    )
+    .select(CATECHUMENE_TILE_SELECT)
     .eq("frat_id", fratId)
     .order("prenom");
 
@@ -90,7 +74,7 @@ export default async function CatechumeneFratPage() {
     throw new Error(membersError.message);
   }
 
-  const members = (membersRows ?? []) as unknown as CatechumeneWithFrat[];
+  const members = (membersRows ?? []) as unknown as CatechumeneTileData[];
 
   const responsables =
     (me.frat.responsables ?? [])

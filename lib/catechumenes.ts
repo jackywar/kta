@@ -99,3 +99,28 @@ export type CatechumeneFratInfo = {
 export type CatechumeneWithFrat = Catechumene & {
   frat: CatechumeneFratInfo | null;
 };
+
+/**
+ * Sous-ensemble réellement affiché par les tuiles et la saisie de présences.
+ * Évite de transporter les champs texte libre (observations, compte-rendu de
+ * rencontre) jusqu'au client.
+ */
+export type CatechumeneTileData = Pick<
+  Catechumene,
+  "id" | "nom" | "prenom" | "photo_path" | "frat_id"
+> & {
+  frat: CatechumeneFratInfo | null;
+};
+
+export const CATECHUMENE_TILE_SELECT = `
+  id,
+  nom,
+  prenom,
+  photo_path,
+  frat_id,
+  frat:frats (
+    id,
+    name,
+    color_oklch
+  )
+`;

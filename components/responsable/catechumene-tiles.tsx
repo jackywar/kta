@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useMemo, useState, type ReactNode } from "react";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
-import type { CatechumeneWithFrat } from "@/lib/catechumenes";
+import type { CatechumeneTileData } from "@/lib/catechumenes";
 import { Switch } from "@/components/ui/switch";
 
 const DEFAULT_BORDER_COLOR = "rgb(161 161 170)"; // zinc-400
@@ -12,7 +12,7 @@ const DEFAULT_BORDER_COLOR = "rgb(161 161 170)"; // zinc-400
 /** Ratio portrait pour la photo (moins carré que 1:1, bandes latérales plus faibles avec object-contain). */
 const TILE_PHOTO_BOX = "relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-muted";
 
-function matchSearch(c: CatechumeneWithFrat, query: string): boolean {
+function matchSearch(c: CatechumeneTileData, query: string): boolean {
   if (!query.trim()) return true;
   const q = query.trim().toLowerCase();
   const nom = (c.nom ?? "").toLowerCase();
@@ -24,7 +24,7 @@ export function CatechumeneTilesWithFilter({
   catechumenes,
   responsableFratIds
 }: {
-  catechumenes: CatechumeneWithFrat[];
+  catechumenes: CatechumeneTileData[];
   responsableFratIds: string[];
 }) {
   const [showOnlyMyFrats, setShowOnlyMyFrats] = useState(false);
@@ -93,7 +93,7 @@ export function CatechumeneTiles({
   catechumenes,
   clickable = true
 }: {
-  catechumenes: CatechumeneWithFrat[];
+  catechumenes: CatechumeneTileData[];
   clickable?: boolean;
 }) {
   if (catechumenes.length === 0) {
@@ -129,7 +129,7 @@ export function CatechumeneTile({
   clickable = true,
   footer
 }: {
-  catechumene: CatechumeneWithFrat;
+  catechumene: CatechumeneTileData;
   clickable?: boolean;
   footer?: ReactNode;
 }) {
