@@ -6,6 +6,10 @@
   "engines": {
     "node": "24.x"
   },
+  "allowScripts": {
+    "sharp@0.35.4": true,
+    "unrs-resolver@1.11.1": true
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -20,12 +24,12 @@
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.99.1",
     "browser-image-compression": "^2.0.2",
-    "next": "^15.5.12",
+    "next": "^15.5.25",
     "next-themes": "^0.4.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-markdown": "^10.1.0",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.4",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -36,9 +40,12 @@
     "autoprefixer": "^10.4.27",
     "eslint": "^9.22.0",
     "eslint-config-next": "^15.2.3",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.28",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "postcss": "$postcss"
   },
   "description": "Stack: **Next.js App Router**, **TypeScript (strict)**, **Tailwind CSS v4**, **Supabase Auth + RLS**, déployable sur **Vercel**.",
   "main": "index.js",
