@@ -8,6 +8,7 @@ import type { Frat } from "@/lib/frats";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-field";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DateInput } from "@/components/ui/date-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -465,11 +466,10 @@ export function CatechumenesTable({
                   <label className="text-sm font-medium text-foreground" htmlFor="e-date-naissance">
                     Date de naissance
                   </label>
-                  <input
+                  <DateInput
                     id="e-date-naissance"
-                    type="date"
                     value={editValues.date_naissance}
-                    onChange={(e) => set("date_naissance", e.target.value)}
+                    onChange={(value) => set("date_naissance", value)}
                     className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                   />
                 </div>
@@ -477,11 +477,10 @@ export function CatechumenesTable({
                   <label className="text-sm font-medium text-foreground" htmlFor="e-date-entree">
                     Date d&apos;entrée en catéchuménat
                   </label>
-                  <input
+                  <DateInput
                     id="e-date-entree"
-                    type="date"
                     value={editValues.date_entree_catechumenat}
-                    onChange={(e) => set("date_entree_catechumenat", e.target.value)}
+                    onChange={(value) => set("date_entree_catechumenat", value)}
                     className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required
                   />
@@ -520,11 +519,10 @@ export function CatechumenesTable({
                   <label className="text-sm font-medium text-foreground" htmlFor="e-date-bapteme">
                     Date de baptême
                   </label>
-                  <input
+                  <DateInput
                     id="e-date-bapteme"
-                    type="date"
                     value={editValues.date_bapteme}
-                    onChange={(e) => set("date_bapteme", e.target.value)}
+                    onChange={(value) => set("date_bapteme", value)}
                     className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                     required={Boolean(editing?.est_neophyte)}
                   />
@@ -535,11 +533,10 @@ export function CatechumenesTable({
                 <label className="text-sm font-medium text-foreground" htmlFor="e-rencontre-date">
                   Date rencontre individuelle
                 </label>
-                <input
+                <DateInput
                   id="e-rencontre-date"
-                  type="date"
                   value={editValues.rencontre_individuelle_date}
-                  onChange={(e) => set("rencontre_individuelle_date", e.target.value)}
+                  onChange={(value) => set("rencontre_individuelle_date", value)}
                   className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
                 />
               </div>

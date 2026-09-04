@@ -10,6 +10,7 @@ import {
   type ResponsableOption
 } from "@/lib/catechumenes";
 import { CatechumenePhotoField } from "@/components/admin/catechumene-photo-field";
+import { DateInput } from "@/components/ui/date-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -284,11 +285,10 @@ export function CandidatEditForm({
           <label className={labelClass} htmlFor="e-date-naissance">
             Date de naissance
           </label>
-          <input
+          <DateInput
             id="e-date-naissance"
-            type="date"
             value={values.date_naissance}
-            onChange={(e) => set("date_naissance", e.target.value)}
+            onChange={(value) => set("date_naissance", value)}
             className={inputClass}
           />
         </div>
@@ -297,13 +297,10 @@ export function CandidatEditForm({
           <label className={labelClass} htmlFor="e-rencontre-date">
             Date rencontre individuelle
           </label>
-          <input
+          <DateInput
             id="e-rencontre-date"
-            type="date"
             value={values.rencontre_individuelle_date}
-            onChange={(e) =>
-              set("rencontre_individuelle_date", e.target.value)
-            }
+            onChange={(value) => set("rencontre_individuelle_date", value)}
             className={inputClass}
           />
         </div>
