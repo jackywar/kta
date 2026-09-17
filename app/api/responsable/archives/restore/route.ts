@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { getRestoredCategoryPath } from "@/lib/catechumenes";
 import { tryCreateSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
   const db = tryCreateSupabaseAdminClient() ?? supabase;
   const { data: person, error: fetchError } = await db
     .from("catechumenes")
-    .select("id, est_candidat, est_neophyte, est_archive, date_bapteme")
+    .select("id, est_archive, est_candidat, est_neophyte")
     .eq("id", parsed.data.id)
     .maybeSingle();
 
@@ -51,34 +52,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Introuvable" }, { status: 404 });
   }
 
-  if (person.est_candidat || person.est_neophyte || person.est_archive) {
+  if (!person.est_archive) {
     return NextResponse.json(
-      { error: "Cette fiche n'est pas un catéchumène actif." },
-      { status: 400 }
-    );
-  }
-
-  if (!person.date_bapteme) {
-    return NextResponse.json(
-      { error: "Une date de baptême est requise avant la bascule." },
+      { error: "Cette fiche n'est pas archivée." },
       { status: 400 }
     );
   }
 
   const { data: updated, error: updateError } = await db
     .from("catechumenes")
-    .update({ est_neophyte: true, frat_id: null })
+    .update({ est_archive: false })
     .eq("id", parsed.data.id)
-    .eq("est_candidat", false)
-    .eq("est_neophyte", false)
-    .eq("est_archive", false)
-    .not("date_bapteme", "is", null)
-    .select("id")
+    .eq("est_archive", true)
+    .select("id, est_candidat, est_neophyte")
     .maybeSingle();
 
   if (updateError) {
     return NextResponse.json(
-      { error: updateError.message ?? "Échec du basculement" },
+      { error: updateError.message ?? "Échec de la restauration" },
       { status: 500 }
     );
   }
@@ -89,5 +80,11 @@ export async function POST(req: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true }, { status: 200 });
+  return NextResponse.json(
+    {
+      ok: true,
+      destination: `${getRestoredCategoryPath(updated)}/${parsed.data.id}`
+    },
+    { status: 200 }
+  );
 }

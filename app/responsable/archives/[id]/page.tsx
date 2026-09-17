@@ -3,7 +3,13 @@ import { notFound, redirect } from "next/navigation";
 import { CatechumeneAttendanceAdd } from "@/components/catechumene/catechumene-attendance-add";
 import { CatechumeneAttendanceRead } from "@/components/catechumene/catechumene-attendance-read";
 import { Topbar } from "@/components/layout/topbar";
+import { CandidatDetail } from "@/components/responsable/candidat-detail";
 import { CatechumeneDetail } from "@/components/responsable/catechumene-detail";
+import { ArchiveTransitionButton } from "@/components/responsable/archive-transition-button";
+import {
+  CANDIDAT_SELECT_WITH_RESPONSABLE,
+  normalizeCandidatRow
+} from "@/lib/candidats-query";
 import { getCurrentUserProfile } from "@/lib/auth/current-profile";
 import {
   getCatechumeneCategory,
@@ -26,7 +32,7 @@ function formatDate(value: string | null): string {
   }
 }
 
-export default async function ResponsableNeophyteDetailPage({
+export default async function ResponsableArchiveDetailPage({
   params
 }: {
   params: Promise<{ id: string }>;
@@ -56,12 +62,57 @@ export default async function ResponsableNeophyteDetailPage({
   if (error) throw new Error(error.message);
   if (!row) notFound();
 
-  const neophyte = row as unknown as CatechumeneWithFrat;
-  const category = getCatechumeneCategory(neophyte);
-  if (category === "archive") redirect(`/responsable/archives/${id}`);
+  const person = row as unknown as CatechumeneWithFrat;
+  const category = getCatechumeneCategory(person);
   if (category === "candidat") redirect(`/responsable/candidats/${id}`);
-  if (category === "catechumene") {
-    redirect(`/responsable/catechumenes/${id}`);
+  if (category === "neophyte") redirect(`/responsable/neophytes/${id}`);
+  if (category === "catechumene") redirect(`/responsable/catechumenes/${id}`);
+
+  if (person.est_candidat) {
+    const { data: candidatRow, error: candidatError } = await supabase
+      .from("catechumenes")
+      .select(CANDIDAT_SELECT_WITH_RESPONSABLE)
+      .eq("id", id)
+      .maybeSingle();
+
+    if (candidatError) throw new Error(candidatError.message);
+    if (!candidatRow) notFound();
+
+    const candidat = normalizeCandidatRow(candidatRow);
+
+    return (
+      <main className="min-h-screen bg-muted">
+        <Topbar />
+        <div className="mx-auto max-w-3xl space-y-6 px-4 py-10">
+          <div className="flex items-center justify-between gap-4">
+            <Link
+              href="/responsable/archives"
+              className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              ← Archives
+            </Link>
+            <div className="flex items-center gap-3">
+              <ArchiveTransitionButton
+                catechumeneId={id}
+                direction="restore"
+              />
+              <Link
+                href={`/responsable/archives/${id}/edit`}
+                className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
+              >
+                Édition
+              </Link>
+            </div>
+          </div>
+
+          <CandidatDetail
+            candidat={candidat}
+            formatDate={formatDate}
+            currentUserProfileId={user.id}
+          />
+        </div>
+      </main>
+    );
   }
 
   const [{ data: linkedProfile, error: linkedError }, eventsResult, attendanceResult] =
@@ -103,13 +154,13 @@ export default async function ResponsableNeophyteDetailPage({
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-10">
         <div className="flex items-center justify-between gap-4">
           <Link
-            href="/responsable/neophytes"
+            href="/responsable/archives"
             className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
-            ← Néophytes
+            ← Archives
           </Link>
           <Link
-            href={`/responsable/neophytes/${id}/edit`}
+            href={`/responsable/archives/${id}/edit`}
             className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-medium text-muted-foreground shadow-sm transition hover:bg-muted"
           >
             Édition
@@ -117,11 +168,10 @@ export default async function ResponsableNeophyteDetailPage({
         </div>
 
         <CatechumeneDetail
-          catechumene={neophyte}
+          catechumene={person}
           formatDate={formatDate}
           isUserLinked={Boolean(linkedProfile)}
-          transition="to-catechumene"
-          archiveAction="to-archive"
+          archiveAction="restore"
         />
 
         <CatechumeneAttendanceRead

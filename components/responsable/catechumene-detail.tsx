@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getCatechumenePhotoUrl } from "@/lib/storage";
 import { CatechumeneLinkUserButton } from "@/components/catechumene/catechumene-link-user-button";
+import { ArchiveTransitionButton } from "@/components/responsable/archive-transition-button";
 import { NeophyteTransitionButton } from "@/components/responsable/neophyte-transition-button";
 import { MarkdownContent } from "@/components/ui/markdown-content";
 import type { CatechumeneWithFrat } from "@/lib/catechumenes";
@@ -10,6 +11,7 @@ type Props = {
   formatDate: (s: string | null) => string;
   isUserLinked: boolean;
   transition?: "to-neophyte" | "to-catechumene" | null;
+  archiveAction?: "to-archive" | "restore" | null;
 };
 
 function Field({
@@ -41,7 +43,8 @@ export function CatechumeneDetail({
   catechumene,
   formatDate,
   isUserLinked,
-  transition = null
+  transition = null,
+  archiveAction = null
 }: Props) {
   const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path);
   const borderColor =
@@ -75,6 +78,11 @@ export function CatechumeneDetail({
             </div>
           </div>
           <div className="min-w-0 flex-1">
+            {catechumene.est_archive ? (
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Archivé
+              </p>
+            ) : null}
             <h1 className="text-xl font-semibold tracking-tight text-foreground">
               {catechumene.prenom} {catechumene.nom}
             </h1>
@@ -91,12 +99,18 @@ export function CatechumeneDetail({
               </p>
             ) : null}
           </div>
-          <div className="mt-4 sm:mt-0">
+          <div className="mt-4 flex flex-col items-stretch gap-2 sm:mt-0 sm:items-end">
             <CatechumeneLinkUserButton
               catechumeneId={catechumene.id}
               email={catechumene.email ?? null}
               isLinked={isUserLinked}
             />
+            {archiveAction ? (
+              <ArchiveTransitionButton
+                catechumeneId={catechumene.id}
+                direction={archiveAction}
+              />
+            ) : null}
           </div>
         </div>
       </div>

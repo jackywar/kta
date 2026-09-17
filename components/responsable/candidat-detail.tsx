@@ -5,6 +5,7 @@ import {
   formatProfilDisplayName,
   type CandidatWithResponsable
 } from "@/lib/catechumenes";
+import { ArchiveTransitionButton } from "@/components/responsable/archive-transition-button";
 import { CandidatSelfAssign } from "@/components/responsable/candidat-self-assign";
 import { CandidatStatutField } from "@/components/responsable/candidat-statut-field";
 
@@ -12,6 +13,7 @@ type Props = {
   candidat: CandidatWithResponsable;
   formatDate: (s: string | null) => string;
   currentUserProfileId: string;
+  showArchive?: boolean;
 };
 
 function Field({
@@ -37,7 +39,8 @@ function Field({
 export function CandidatDetail({
   candidat,
   formatDate,
-  currentUserProfileId
+  currentUserProfileId,
+  showArchive = false
 }: Props) {
   const photoUrl = getCatechumenePhotoUrl(candidat.photo_path);
 
@@ -73,6 +76,14 @@ export function CandidatDetail({
               {candidat.prenom} {candidat.nom}
             </h1>
           </div>
+          {showArchive ? (
+            <div className="mt-4 sm:mt-0">
+              <ArchiveTransitionButton
+                catechumeneId={candidat.id}
+                direction="to-archive"
+              />
+            </div>
+          ) : null}
         </div>
       </div>
 

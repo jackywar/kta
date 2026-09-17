@@ -66,7 +66,8 @@ export async function POST(req: Request) {
     date_entree_catechumenat: d.date_entree_catechumenat?.trim() || null,
     frat_id: d.frat_id ?? null,
     est_candidat: d.est_candidat ?? false,
-    est_neophyte: false
+    est_neophyte: false,
+    est_archive: false
   });
 
   if (insertError) {

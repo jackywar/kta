@@ -10,10 +10,10 @@ import {
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Néophytes | KTA"
+  title: "Archives | KTA"
 };
 
-export default async function ResponsableNeophytesPage() {
+export default async function ResponsableArchivesPage() {
   const { user, profile } = await getCurrentUserProfile();
 
   if (!user) redirect("/login");
@@ -23,9 +23,7 @@ export default async function ResponsableNeophytesPage() {
   const { data, error } = await supabase
     .from("catechumenes")
     .select(CATECHUMENE_TILE_SELECT)
-    .eq("est_candidat", false)
-    .eq("est_neophyte", true)
-    .eq("est_archive", false)
+    .eq("est_archive", true)
     .order("prenom");
 
   if (error) throw new Error(error.message);
@@ -35,18 +33,17 @@ export default async function ResponsableNeophytesPage() {
       <Topbar />
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10">
         <header className="space-y-2">
-          <h1 className="text-2xl font-semibold tracking-tight">Néophytes</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Archives</h1>
           <p className="text-sm text-muted-foreground">
-            Catéchumènes baptisés ayant été basculés manuellement vers les
-            néophytes.
+            Fiches archivées (candidats, catéchumènes ou néophytes).
           </p>
         </header>
 
         <CatechumeneTilesWithFilter
           catechumenes={(data ?? []) as unknown as CatechumeneTileData[]}
           responsableFratIds={[]}
-          detailBasePath="/responsable/neophytes"
-          emptyLabel="Aucun néophyte."
+          detailBasePath="/responsable/archives"
+          emptyLabel="Aucune fiche archivée."
           showFratFilter={false}
         />
       </div>

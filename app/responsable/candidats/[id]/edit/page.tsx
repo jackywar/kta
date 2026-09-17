@@ -33,6 +33,9 @@ export default async function ResponsableCandidatEditPage({
 
   const c = row as Catechumene;
   const category = getCatechumeneCategory(c);
+  if (category === "archive") {
+    redirect(`/responsable/archives/${id}/edit`);
+  }
   if (category === "neophyte") {
     redirect(`/responsable/neophytes/${id}/edit`);
   }

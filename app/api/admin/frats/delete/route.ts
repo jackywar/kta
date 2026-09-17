@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { tryCreateSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const bodySchema = z.object({
   id: z.string().uuid()
 });
 
-/**
- * Basculer un candidat en catéchumène (est_candidat → false).
- */
 export async function POST(req: Request) {
   const supabase = await createSupabaseServerClient();
   const {
@@ -26,12 +22,11 @@ export async function POST(req: Request) {
     .eq("id", session.user.id)
     .maybeSingle();
 
-  if (meError || !me || me.role !== "responsable") {
+  if (meError || !me || me.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const json = await req.json().catch(() => null);
-  const parsed = bodySchema.safeParse(json);
+  const parsed = bodySchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid body", details: parsed.error.flatten() },
@@ -39,35 +34,33 @@ export async function POST(req: Request) {
     );
   }
 
-  const { id } = parsed.data;
-
-  const db = tryCreateSupabaseAdminClient() ?? supabase;
-
-  const { data: row, error: fetchError } = await db
+  const { count, error: countError } = await supabase
     .from("catechumenes")
-    .select("id, est_candidat")
-    .eq("id", id)
-    .maybeSingle();
+    .select("id", { count: "exact", head: true })
+    .eq("frat_id", parsed.data.id);
 
-  if (fetchError || !row) {
-    return NextResponse.json({ error: "Introuvable" }, { status: 404 });
+  if (countError) {
+    return NextResponse.json(
+      { error: countError.message ?? "Failed to check frat members" },
+      { status: 500 }
+    );
   }
 
-  if (!(row as { est_candidat: boolean }).est_candidat) {
+  if ((count ?? 0) > 0) {
     return NextResponse.json(
-      { error: "Cette fiche n'est pas un candidat." },
+      { error: "Impossible de supprimer une frat qui contient encore des membres." },
       { status: 400 }
     );
   }
 
-  const { error: updateError } = await db
-    .from("catechumenes")
-    .update({ est_candidat: false, est_neophyte: false, est_archive: false })
-    .eq("id", id);
+  const { error: deleteError } = await supabase
+    .from("frats")
+    .delete()
+    .eq("id", parsed.data.id);
 
-  if (updateError) {
+  if (deleteError) {
     return NextResponse.json(
-      { error: updateError.message ?? "Échec du basculement" },
+      { error: deleteError.message ?? "Failed to delete frat" },
       { status: 500 }
     );
   }

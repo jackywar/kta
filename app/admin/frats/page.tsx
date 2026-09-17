@@ -51,6 +51,19 @@ export default async function AdminFratsPage() {
 
   if (responsablesError) throw new Error(responsablesError.message);
 
+  const { data: memberRows, error: memberError } = await supabase
+    .from("catechumenes")
+    .select("frat_id")
+    .not("frat_id", "is", null);
+
+  if (memberError) throw new Error(memberError.message);
+
+  const memberCountByFratId: Record<string, number> = {};
+  for (const row of memberRows ?? []) {
+    if (!row.frat_id) continue;
+    memberCountByFratId[row.frat_id] = (memberCountByFratId[row.frat_id] ?? 0) + 1;
+  }
+
   return (
     <main className="min-h-screen bg-muted">
       <Topbar />
@@ -81,9 +94,10 @@ export default async function AdminFratsPage() {
             <h2 className="text-sm font-medium text-foreground">Frats</h2>
             <div className="mt-5">
               <FratsTable
-              frats={((frats ?? []) as unknown) as FratWithResponsables[]}
-              availableResponsables={responsables ?? []}
-            />
+                frats={((frats ?? []) as unknown) as FratWithResponsables[]}
+                availableResponsables={responsables ?? []}
+                memberCountByFratId={memberCountByFratId}
+              />
             </div>
           </section>
         </div>

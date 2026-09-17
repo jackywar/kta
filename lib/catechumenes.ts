@@ -67,6 +67,8 @@ export type Catechumene = {
   est_candidat?: boolean;
   /** Si true, néophyte baptisé (bascule manuelle, sans frat). */
   est_neophyte?: boolean;
+  /** Si true, fiche archivée (exclue des listes actives, sans frat). */
+  est_archive?: boolean;
   /** Responsable référent (profil). */
   responsable_profile_id?: string | null;
   /** Suivi candidat (fiches est_candidat). */
@@ -74,14 +76,28 @@ export type Catechumene = {
   created_at: string;
 };
 
-export type CatechumeneCategory = "candidat" | "catechumene" | "neophyte";
+export type CatechumeneCategory =
+  | "archive"
+  | "candidat"
+  | "catechumene"
+  | "neophyte";
 
 export function getCatechumeneCategory(
-  person: Pick<Catechumene, "est_candidat" | "est_neophyte">
+  person: Pick<Catechumene, "est_archive" | "est_candidat" | "est_neophyte">
 ): CatechumeneCategory {
+  if (person.est_archive) return "archive";
   if (person.est_candidat) return "candidat";
   if (person.est_neophyte) return "neophyte";
   return "catechumene";
+}
+
+/** Destination Responsable après restauration d'une archive. */
+export function getRestoredCategoryPath(
+  person: Pick<Catechumene, "est_candidat" | "est_neophyte">
+): string {
+  if (person.est_candidat) return "/responsable/candidats";
+  if (person.est_neophyte) return "/responsable/neophytes";
+  return "/responsable/catechumenes";
 }
 
 export type ProfilResponsableLite = {

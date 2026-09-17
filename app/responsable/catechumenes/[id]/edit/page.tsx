@@ -50,6 +50,9 @@ export default async function ResponsableCatechumeneEditPage({
   const catechumene = row as unknown as CatechumeneWithFrat;
   const category = getCatechumeneCategory(catechumene);
 
+  if (category === "archive") {
+    redirect(`/responsable/archives/${id}/edit`);
+  }
   if (category === "candidat") {
     redirect(`/responsable/candidats/${id}/edit`);
   }

@@ -46,6 +46,9 @@ export default async function ResponsableNeophyteEditPage({
 
   const neophyte = row as unknown as CatechumeneWithFrat;
   const category = getCatechumeneCategory(neophyte);
+  if (category === "archive") {
+    redirect(`/responsable/archives/${id}/edit`);
+  }
   if (category === "candidat") {
     redirect(`/responsable/candidats/${id}/edit`);
   }

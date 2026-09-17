@@ -26,6 +26,7 @@ export default async function ResponsableCandidatsPage() {
     .from("catechumenes")
     .select(CANDIDAT_SELECT_WITH_RESPONSABLE)
     .eq("est_candidat", true)
+    .eq("est_archive", false)
     .order("prenom");
 
   if (error) throw new Error(error.message);

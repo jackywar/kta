@@ -55,7 +55,7 @@ export async function POST(req: Request) {
 
   const { data: current, error: currentError } = await supabase
     .from("catechumenes")
-    .select("est_neophyte")
+    .select("est_neophyte, est_archive")
     .eq("id", d.id)
     .maybeSingle();
 
@@ -75,6 +75,13 @@ export async function POST(req: Request) {
         error:
           "Un néophyte doit conserver une date de baptême, rester sans frat et ne peut pas être candidat."
       },
+      { status: 400 }
+    );
+  }
+
+  if (current.est_archive && d.frat_id) {
+    return NextResponse.json(
+      { error: "Une fiche archivée ne peut pas être rattachée à une frat." },
       { status: 400 }
     );
   }

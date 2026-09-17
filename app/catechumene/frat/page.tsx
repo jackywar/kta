@@ -62,7 +62,7 @@ export default async function CatechumeneFratPage() {
     frat: FratWithResponsables;
   };
 
-  if (me.est_candidat || me.est_neophyte) {
+  if (me.est_candidat || me.est_neophyte || me.est_archive) {
     redirect("/");
   }
 
@@ -74,6 +74,7 @@ export default async function CatechumeneFratPage() {
     .eq("frat_id", fratId)
     .eq("est_candidat", false)
     .eq("est_neophyte", false)
+    .eq("est_archive", false)
     .order("prenom");
 
   if (membersError) {

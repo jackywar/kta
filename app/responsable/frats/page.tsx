@@ -44,7 +44,8 @@ export default async function ResponsableFratsPage() {
     .from("catechumenes")
     .select("frat_id")
     .eq("est_candidat", false)
-    .eq("est_neophyte", false);
+    .eq("est_neophyte", false)
+    .eq("est_archive", false);
 
   if (cfError) throw new Error(cfError.message);
 

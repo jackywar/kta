@@ -21,10 +21,12 @@ type RowState = {
 
 export function FratsTable({
   frats,
-  availableResponsables
+  availableResponsables,
+  memberCountByFratId
 }: {
   frats: FratWithResponsables[];
   availableResponsables: ResponsableOption[];
+  memberCountByFratId: Record<string, number>;
 }) {
   const router = useRouter();
   const [state, setState] = useState<Record<string, RowState>>(() =>
@@ -42,6 +44,7 @@ export function FratsTable({
   );
 
   const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
   const disabledGlobally = useMemo(
     () => isPending || frats.length === 0,
     [isPending, frats.length]
@@ -69,6 +72,7 @@ export function FratsTable({
     const row = state[id];
     if (!row) return;
 
+    setError(null);
     setState((prev) => ({
       ...prev,
       [id]: { ...prev[id], saving: true }
@@ -88,8 +92,54 @@ export function FratsTable({
     });
   }
 
+  async function handleDelete(id: string, name: string) {
+    if ((memberCountByFratId[id] ?? 0) > 0) return;
+    if (!confirm(`Supprimer la frat « ${name} » ? Cette action est définitive.`)) {
+      return;
+    }
+
+    setError(null);
+    setState((prev) => ({
+      ...prev,
+      [id]: { ...prev[id], saving: true }
+    }));
+
+    startTransition(async () => {
+      const response = await fetch("/api/admin/frats/delete", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+      const data: unknown = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        const message =
+          typeof data === "object" &&
+          data &&
+          "error" in data &&
+          typeof (data as { error?: unknown }).error === "string"
+            ? (data as { error: string }).error
+            : "La suppression a échoué.";
+        setError(message);
+        setState((prev) => ({
+          ...prev,
+          [id]: { ...prev[id], saving: false }
+        }));
+        return;
+      }
+
+      router.refresh();
+    });
+  }
+
   return (
-    <div className="overflow-hidden rounded-xl border border-border">
+    <div className="space-y-3">
+      {error ? (
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {error}
+        </div>
+      ) : null}
+      <div className="overflow-hidden rounded-xl border border-border">
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
           <thead className="bg-muted text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -113,6 +163,8 @@ export function FratsTable({
               );
 
               const isRowBusy = row.saving;
+              const memberCount = memberCountByFratId[f.id] ?? 0;
+              const canDelete = memberCount === 0;
 
               return (
                 <tr key={f.id} className="hover:bg-muted/70 align-top">
@@ -275,6 +327,19 @@ export function FratsTable({
                       >
                         <span className="text-xs">💾</span>
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(f.id, row.name || f.name)}
+                        disabled={disabledGlobally || isRowBusy || !canDelete}
+                        className="inline-flex h-8 items-center justify-center rounded-lg border border-destructive/30 bg-card px-3 text-xs text-destructive shadow-sm transition hover:bg-destructive/10 disabled:cursor-not-allowed disabled:opacity-50"
+                        title={
+                          canDelete
+                            ? "Supprimer la frat vide"
+                            : `Cette frat a ${memberCount} membre${memberCount > 1 ? "s" : ""}`
+                        }
+                      >
+                        Supprimer
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -283,6 +348,7 @@ export function FratsTable({
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 }

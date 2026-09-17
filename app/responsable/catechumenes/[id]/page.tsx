@@ -59,6 +59,9 @@ export default async function ResponsableCatechumeneDetailPage({
 
   const catechumene = row as unknown as CatechumeneWithFrat;
   const category = getCatechumeneCategory(catechumene);
+  if (category === "archive") {
+    redirect(`/responsable/archives/${id}`);
+  }
   if (category === "candidat") {
     redirect(`/responsable/candidats/${id}`);
   }
@@ -118,6 +121,7 @@ export default async function ResponsableCatechumeneDetailPage({
           formatDate={formatDate}
           isUserLinked={isUserLinked}
           transition={catechumene.date_bapteme ? "to-neophyte" : null}
+          archiveAction={catechumene.frat_id ? null : "to-archive"}
         />
 
         <CatechumeneAttendanceRead

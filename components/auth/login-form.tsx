@@ -21,6 +21,7 @@ export function LoginForm() {
     password: "",
     remember: true
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const canSubmit = useMemo(() => {
     return values.email.trim().length > 0 && values.password.length > 0;
@@ -78,19 +79,32 @@ export function LoginForm() {
         <label className="text-sm font-medium text-foreground" htmlFor="password">
           Mot de passe
         </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          value={values.password}
-          onChange={(e) =>
-            setValues((v) => ({ ...v, password: e.target.value }))
-          }
-          className="h-11 w-full rounded-xl border border-border bg-card px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
-          placeholder="••••••••••••"
-        />
+        <div className="relative">
+          <input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            value={values.password}
+            onChange={(e) =>
+              setValues((v) => ({ ...v, password: e.target.value }))
+            }
+            className="h-11 w-full rounded-xl border border-border bg-card px-3 pr-24 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/20"
+            placeholder="••••••••••••"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute inset-y-0 right-2 my-auto inline-flex h-8 items-center rounded-lg px-2 text-xs font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+            aria-pressed={showPassword}
+            aria-label={
+              showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"
+            }
+          >
+            {showPassword ? "Masquer" : "Afficher"}
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center justify-between gap-3">

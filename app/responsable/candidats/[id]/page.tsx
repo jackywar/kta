@@ -47,6 +47,9 @@ export default async function ResponsableCandidatDetailPage({
 
   const candidat = normalizeCandidatRow(row);
   const category = getCatechumeneCategory(candidat);
+  if (category === "archive") {
+    redirect(`/responsable/archives/${id}`);
+  }
   if (category === "neophyte") {
     redirect(`/responsable/neophytes/${id}`);
   }
@@ -77,6 +80,7 @@ export default async function ResponsableCandidatDetailPage({
           candidat={candidat}
           formatDate={formatDate}
           currentUserProfileId={user.id}
+          showArchive
         />
       </div>
     </main>

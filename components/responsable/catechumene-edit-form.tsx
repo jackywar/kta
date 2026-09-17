@@ -185,7 +185,7 @@ export function CatechumeneEditForm({
           <label className={labelClass} htmlFor="e-frat">Frat</label>
           <Select
             value={values.frat_id || NO_FRAT_VALUE}
-            disabled={Boolean(catechumene.est_neophyte)}
+            disabled={Boolean(catechumene.est_neophyte || catechumene.est_archive)}
             onValueChange={(v) => set("frat_id", v === NO_FRAT_VALUE ? "" : v)}
           >
             <SelectTrigger id="e-frat">
@@ -200,9 +200,11 @@ export function CatechumeneEditForm({
               ))}
             </SelectContent>
           </Select>
-          {catechumene.est_neophyte ? (
+          {catechumene.est_neophyte || catechumene.est_archive ? (
             <p className="text-xs text-muted-foreground">
-              Un néophyte ne peut pas être rattaché à une frat.
+              {catechumene.est_archive
+                ? "Une fiche archivée ne peut pas être rattachée à une frat."
+                : "Un néophyte ne peut pas être rattaché à une frat."}
             </p>
           ) : null}
         </div>

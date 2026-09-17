@@ -212,6 +212,7 @@ export function CatechumenesTable({
                 <th className="px-4 py-3">Email</th>
                 <th className="px-4 py-3">Candidat</th>
                 <th className="px-4 py-3">Néophyte</th>
+                <th className="px-4 py-3">Archivé</th>
                 <th className="px-4 py-3">Frat</th>
                 <th className="px-4 py-3">Entrée</th>
                 <th className="px-4 py-3">Baptême prév.</th>
@@ -256,6 +257,15 @@ export function CatechumenesTable({
                     {c.est_neophyte ? (
                       <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
                         Néophyte
+                      </span>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">Non</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    {c.est_archive ? (
+                      <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-foreground">
+                        Archivé
                       </span>
                     ) : (
                       <span className="text-xs text-muted-foreground">Non</span>
@@ -417,7 +427,7 @@ export function CatechumenesTable({
                 </label>
                 <Select
                   value={editValues.frat_id || NO_FRAT_VALUE}
-                  disabled={Boolean(editing?.est_neophyte)}
+                  disabled={Boolean(editing?.est_neophyte || editing?.est_archive)}
                   onValueChange={(v) => set("frat_id", v === NO_FRAT_VALUE ? "" : v)}
                 >
                   <SelectTrigger id="e-frat">
@@ -432,6 +442,11 @@ export function CatechumenesTable({
                     ))}
                   </SelectContent>
                 </Select>
+                {editing?.est_archive ? (
+                  <p className="text-xs text-muted-foreground">
+                    Une fiche archivée ne peut pas être rattachée à une frat.
+                  </p>
+                ) : null}
               </div>
 
               <div className="space-y-2">
