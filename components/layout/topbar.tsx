@@ -53,12 +53,12 @@ export async function Topbar() {
         label: isAdmin ? "Mes catéchumènes" : "Catéchumènes"
       },
       { href: "/responsable/neophytes", label: "Néophytes" },
-      { href: "/responsable/archives", label: "Archives" },
       { href: "/responsable/candidats", label: "Candidats" },
       {
         href: "/responsable/responsabilites",
         label: "Récap responsabilités"
-      }
+      },
+      { href: "/responsable/archives", label: "Archives" }
     );
   }
   if (isCatechumene) {
