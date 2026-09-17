@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { roleSchema } from "@/lib/roles";
+import { managedUserRoleSchema } from "@/lib/roles";
 
 const bodySchema = z.object({
   id: z.string().uuid(),
-  role: roleSchema,
+  role: managedUserRoleSchema,
   first_name: z.string().trim().optional().nullable(),
   last_name: z.string().trim().optional().nullable()
 });
@@ -41,6 +41,25 @@ export async function POST(req: Request) {
   }
 
   const admin = createSupabaseAdminClient();
+  const { data: target, error: targetError } = await admin
+    .from("profiles")
+    .select("role")
+    .eq("id", parsed.data.id)
+    .maybeSingle();
+
+  if (targetError || !target) {
+    return NextResponse.json(
+      { error: targetError?.message ?? "User not found" },
+      { status: targetError ? 500 : 404 }
+    );
+  }
+
+  if (target.role === "admin") {
+    return NextResponse.json(
+      { error: "The admin account cannot be modified here." },
+      { status: 403 }
+    );
+  }
 
   const updatePayload: {
     role: string;

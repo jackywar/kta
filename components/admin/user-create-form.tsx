@@ -3,18 +3,17 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { z } from "zod";
-import { roleSchema } from "@/lib/roles";
+import { managedUserRoleSchema } from "@/lib/roles";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
   email: z.string().email("Email invalide"),
-  role: roleSchema
+  role: managedUserRoleSchema
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const roleLabels: Record<FormValues["role"], string> = {
-  admin: "Admin",
   responsable: "Responsable",
   catechumene: "Catéchumène"
 };
@@ -94,13 +93,18 @@ export function UserCreateForm() {
         </label>
         <Select
           value={values.role}
-          onValueChange={(v) => setValues((prev) => ({ ...prev, role: roleSchema.parse(v) }))}
+          onValueChange={(v) =>
+            setValues((prev) => ({
+              ...prev,
+              role: managedUserRoleSchema.parse(v)
+            }))
+          }
         >
           <SelectTrigger id="new-role">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {roleSchema.options.map((r) => (
+            {managedUserRoleSchema.options.map((r) => (
               <SelectItem key={r} value={r}>
                 {roleLabels[r]}
               </SelectItem>

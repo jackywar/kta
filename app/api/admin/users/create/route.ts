@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { roleSchema } from "@/lib/roles";
+import { managedUserRoleSchema } from "@/lib/roles";
 import { getAdminEnv } from "@/lib/supabase/env";
 
 const bodySchema = z.object({
   email: z.string().email(),
-  role: roleSchema
+  role: managedUserRoleSchema
 });
 
 export async function POST(req: Request) {

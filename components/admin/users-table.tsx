@@ -2,7 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
-import { roleSchema, type Role } from "@/lib/roles";
+import {
+  managedUserRoleSchema,
+  type Role
+} from "@/lib/roles";
 import type { Responsabilite, ResponsableResponsabilite } from "@/lib/responsabilites";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -298,7 +301,7 @@ export function UsersTable({
                             ...prev,
                             [u.id]: {
                               ...prev[u.id],
-                              role: roleSchema.parse(v)
+                              role: managedUserRoleSchema.parse(v)
                             }
                           }))
                         }
@@ -308,7 +311,7 @@ export function UsersTable({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {roleSchema.options.map((r) => (
+                          {managedUserRoleSchema.options.map((r) => (
                             <SelectItem key={r} value={r}>
                               {roleLabels[r]}
                             </SelectItem>
