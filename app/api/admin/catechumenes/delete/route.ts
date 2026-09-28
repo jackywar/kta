@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { CATECHUMENE_PHOTOS_BUCKET } from "@/lib/storage";
+import { removeCatechumenePhotoFiles } from "@/lib/catechumene-photo-storage";
 
 const bodySchema = z.object({
   id: z.string().uuid()
@@ -44,12 +44,6 @@ export async function POST(req: Request) {
     .eq("id", parsed.data.id)
     .maybeSingle();
 
-  if (row?.photo_path) {
-    await admin.storage
-      .from(CATECHUMENE_PHOTOS_BUCKET)
-      .remove([row.photo_path]);
-  }
-
   const { error: deleteError } = await admin
     .from("catechumenes")
     .delete()
@@ -61,6 +55,8 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+
+  await removeCatechumenePhotoFiles(admin, row?.photo_path ?? null);
 
   return NextResponse.json({ ok: true }, { status: 200 });
 }

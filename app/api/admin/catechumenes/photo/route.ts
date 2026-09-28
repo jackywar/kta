@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import {
-  CATECHUMENE_PHOTOS_BUCKET,
-  catechumenePhotoPath
-} from "@/lib/storage";
+import { uploadCatechumenePhotoVariants } from "@/lib/catechumene-photo-storage";
 
 const MAX_FILE_SIZE_BYTES = 600 * 1024; // 600 Ko max accepté (après compression client ~500 Ko)
 
@@ -71,7 +68,6 @@ export async function POST(req: Request) {
   }
 
   const admin = createSupabaseAdminClient();
-  const path = catechumenePhotoPath(catechumeneId);
 
   const { data: existing } = await admin
     .from("catechumenes")
@@ -87,58 +83,42 @@ export async function POST(req: Request) {
   }
 
   const arrayBuffer = await file.arrayBuffer();
-  const buffer = new Uint8Array(arrayBuffer);
+  const buffer = Buffer.from(arrayBuffer);
 
-  let uploadError: { message?: string } | null = null;
-  const upload = () =>
-    admin.storage.from(CATECHUMENE_PHOTOS_BUCKET).upload(path, buffer, {
-      contentType: file.type || "image/jpeg",
-      upsert: true
-    });
-
-  const uploadResult = await upload();
-  uploadError = uploadResult.error;
-
-  if (uploadError?.message?.includes("Bucket not found")) {
-    const { error: createBucketError } = await admin.storage.createBucket(
-      CATECHUMENE_PHOTOS_BUCKET,
-      { public: true }
+  try {
+    const result = await uploadCatechumenePhotoVariants(
+      admin,
+      catechumeneId,
+      existing.photo_path ?? null,
+      buffer
     );
-    if (createBucketError) {
-      return NextResponse.json(
-        {
-          error:
-            "Bucket storage manquant. Créez le bucket « catechumene-photos » (public) dans Supabase."
-        },
-        { status: 500 }
-      );
-    }
-    const retry = await upload();
-    if (retry.error) {
-      return NextResponse.json(
-        { error: retry.error.message ?? "Upload failed" },
-        { status: 500 }
-      );
-    }
-  } else if (uploadError) {
     return NextResponse.json(
-      { error: uploadError.message ?? "Upload failed" },
-      { status: 500 }
+      {
+        ok: true,
+        photo_path: result.photo_path,
+        variants: {
+          small: {
+            width: result.generated.small.width,
+            height: result.generated.small.height,
+            bytes: result.generated.small.bytes
+          },
+          large: {
+            width: result.generated.large.width,
+            height: result.generated.large.height,
+            bytes: result.generated.large.bytes
+          }
+        }
+      },
+      { status: 200 }
+    );
+  } catch (err) {
+    const message =
+      err instanceof Error ? err.message : "Échec de l'upload de la photo.";
+    const isClient =
+      /illisible|format non supporté|dimensions exploitables/i.test(message);
+    return NextResponse.json(
+      { error: message },
+      { status: isClient ? 400 : 500 }
     );
   }
-
-  const { error: updateError } = await admin
-    .from("catechumenes")
-    .update({ photo_path: path })
-    .eq("id", catechumeneId);
-
-  if (updateError) {
-    await admin.storage.from(CATECHUMENE_PHOTOS_BUCKET).remove([path]);
-    return NextResponse.json(
-      { error: updateError.message ?? "Failed to update catechumene" },
-      { status: 500 }
-    );
-  }
-
-  return NextResponse.json({ ok: true, photo_path: path }, { status: 200 });
 }

@@ -12,4 +12,5 @@ pnpm-debug.log*
 # Données locales et script d'import
 donnees_a_importer/
 scripts/import-donnees-glide.sql
+scripts/.photo-measure-out/
 

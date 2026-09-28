@@ -142,7 +142,7 @@ export function CandidatTiles({ candidats }: { candidats: CandidatWithResponsabl
 }
 
 function CandidatTile({ candidat }: { candidat: CandidatWithResponsable }) {
-  const photoUrl = getCatechumenePhotoUrl(candidat.photo_path);
+  const photoUrl = getCatechumenePhotoUrl(candidat.photo_path, "large");
   const statutMeta = getCandidatSuiviStatutMeta(
     candidat.candidat_suivi_statut ?? null
   );
@@ -158,6 +158,7 @@ function CandidatTile({ candidat }: { candidat: CandidatWithResponsable }) {
             src={photoUrl}
             alt=""
             fill
+            unoptimized
             className="object-cover"
             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
           />

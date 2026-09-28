@@ -42,7 +42,7 @@ export function CandidatDetail({
   currentUserProfileId,
   showArchive = false
 }: Props) {
-  const photoUrl = getCatechumenePhotoUrl(candidat.photo_path);
+  const photoUrl = getCatechumenePhotoUrl(candidat.photo_path, "small");
 
   return (
     <article className="overflow-hidden rounded-2xl border-2 border-border bg-card shadow-sm">
@@ -55,6 +55,7 @@ export function CandidatDetail({
                   src={photoUrl}
                   alt=""
                   fill
+                  unoptimized
                   className="object-cover"
                   sizes="160px"
                 />
