@@ -22,7 +22,7 @@ export function CatechumenePhotoField({
   const [uploading, setUploading] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
 
-  const photoUrl = getCatechumenePhotoUrl(photoPath);
+  const photoUrl = getCatechumenePhotoUrl(photoPath, "small");
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -102,6 +102,7 @@ export function CatechumenePhotoField({
               src={photoUrl}
               alt="Photo du catéchumène"
               fill
+              unoptimized
               className="object-cover"
               sizes="96px"
             />

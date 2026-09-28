@@ -145,7 +145,7 @@ export function CatechumeneTile({
   clickable?: boolean;
   footer?: ReactNode;
 }) {
-  const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path);
+  const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path, "large");
   const borderColor =
     catechumene.frat?.color_oklch?.trim() || DEFAULT_BORDER_COLOR;
 
@@ -162,6 +162,7 @@ export function CatechumeneTile({
             src={photoUrl}
             alt=""
             fill
+            unoptimized
             className="object-cover"
             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
           />

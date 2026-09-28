@@ -46,7 +46,7 @@ export function CatechumeneDetail({
   transition = null,
   archiveAction = null
 }: Props) {
-  const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path);
+  const photoUrl = getCatechumenePhotoUrl(catechumene.photo_path, "small");
   const borderColor =
     catechumene.frat?.color_oklch?.trim() || "rgb(161 161 170)";
 
@@ -64,6 +64,7 @@ export function CatechumeneDetail({
                   src={photoUrl}
                   alt=""
                   fill
+                  unoptimized
                   className="object-cover"
                   sizes="160px"
                 />

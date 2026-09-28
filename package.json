@@ -14,7 +14,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate:catechumene-photos": "node --env-file=.env.local scripts/migrate-catechumene-photos.mjs",
+    "measure:catechumene-photos": "node scripts/measure-catechumene-photos.mjs"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",

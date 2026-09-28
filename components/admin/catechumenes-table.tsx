@@ -223,7 +223,7 @@ export function CatechumenesTable({
             </thead>
             <tbody className="divide-y divide-border bg-card">
               {catechumenes.map((c) => {
-                const photoUrl = getCatechumenePhotoUrl(c.photo_path);
+                const photoUrl = getCatechumenePhotoUrl(c.photo_path, "small");
                 return (
                 <tr key={c.id} className="hover:bg-muted/70">
                   <td className="px-4 py-3">
@@ -233,6 +233,7 @@ export function CatechumenesTable({
                           src={photoUrl}
                           alt=""
                           fill
+                          unoptimized
                           className="object-cover"
                           sizes="40px"
                         />
